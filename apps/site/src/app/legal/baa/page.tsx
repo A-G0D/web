@@ -32,7 +32,6 @@ const BAA_MAILTO = `mailto:${BAA_COMPLIANCE_EMAIL}?subject=${encodeURIComponent(
   "Web BAA Request",
 )}&body=${encodeURIComponent(BAA_MAIL_BODY)}`;
 
-// Review-preview page for a draft BAA layout; noindex until legal signs off.
 export const metadata = {
   ...createPageMetadata({
     title: "HIPAA Business Associate Agreement",
@@ -41,7 +40,6 @@ export const metadata = {
     path: "/legal/baa",
     ogKicker: "Legal",
   }),
-  robots: { index: false, follow: false },
 };
 
 const PLAIN_ENGLISH = {
@@ -66,12 +64,7 @@ const PLAIN_ENGLISH = {
 const KEY_TERMS = [
   {
     label: "Liability cap",
-    value: (
-      <>
-        $250,000 standard. You can raise it to $500,000 for an extra $70 a month, $199 a month in
-        total with the Business plan.
-      </>
-    ),
+    value: "$250,000 (see Sections VI and VIII of the agreement below).",
   },
   {
     label: "Breach notice",
@@ -85,7 +78,7 @@ const KEY_TERMS = [
   {
     label: "Term",
     value:
-      "Coterminous with your Services Agreement; you can terminate if Prisma does not cure a material breach within 30 days.",
+      "Coterminous with your Services Agreement; Company may terminate for Prisma's uncured material breach after a 30-day cure period, unless immediate termination is required by law.",
   },
   {
     label: "On termination",
@@ -177,7 +170,7 @@ export default function BaaPage() {
                 name and email.
               </AgreementStep>
               <AgreementStep n={4}>
-                Prisma sends the agreement for e-signature, usually within 2 business days.
+                Prisma sends the agreement for e-signature.
               </AgreementStep>
             </ol>
             <div className="mt-6 flex flex-wrap items-center gap-3">
