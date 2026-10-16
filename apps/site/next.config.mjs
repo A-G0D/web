@@ -327,6 +327,21 @@ const config = {
   transpilePackages: ["@prisma/eclipse"],
   async redirects() {
     return [
+      // ChatGPT ads landing pages (src/app/lp): noindex, linked only from the
+      // ads. `utm_term=lp-<slug>` names the landing variant on every tagged
+      // visit, so signups split by page even when variants share an ad
+      // campaign. The redirect is a no-op when the ad URL is complete (see the
+      // campaign URL in each page.tsx) and keeps the ad's own params and
+      // `oppref`. A visit with no `utm_source` at all is left alone: it is not
+      // evidence of a paid click, so the Console link falls back to
+      // `ref=prisma.io/lp/<slug>` like any other direct visit.
+      ...["compute", "postgres", "free"].map((slug) => ({
+        source: `/lp/${slug}`,
+        has: [{ type: "query", key: "utm_source" }],
+        missing: [{ type: "query", key: "utm_term" }],
+        destination: `/lp/${slug}?utm_term=lp-${slug}`,
+        permanent: false,
+      })),
       // Search Console 404s: published docs URLs missing the /docs base path.
       // Exact mappings preserve the /orm marketing page and unknown-path 404s.
       { source: "/ai/mcp-tools", destination: "/docs/ai/mcp-tools", permanent: true },
