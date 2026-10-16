@@ -25,6 +25,12 @@ const additionalPages: LlmsPage[] = [
       "Practical answers to choosing, hosting and running Postgres for your TypeScript app.",
   },
   {
+    path: "/compare",
+    title: "Prisma comparisons",
+    description:
+      "Prisma ORM and Prisma Postgres set beside the tools people weigh them against, with every figure sourced and dated.",
+  },
+  {
     path: "/changelog",
     title: "Prisma Changelog — Release Notes & Product Updates",
     description:

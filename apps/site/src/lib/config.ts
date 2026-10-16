@@ -56,6 +56,7 @@ export const siteConfig = {
       { label: "Docs", href: "/docs" },
       { label: "Postgres guides", href: "/postgres/guides" },
       { label: "Apps", href: "/apps" },
+      { label: "Compare", href: "/compare" },
       { label: "Extensions", href: "/extensions" },
       { label: "Data Guide", href: "https://www.prisma.io/dataguide" },
       { label: "Support", href: "/support" },
