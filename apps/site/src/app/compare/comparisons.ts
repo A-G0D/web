@@ -1,6 +1,9 @@
 import { CONVEX_DESCRIPTION, CONVEX_TITLE } from "./convex/_content";
 import { KYSELY_DESCRIPTION, KYSELY_TITLE } from "./kysely/_content";
 import { MONGOOSE_DESCRIPTION, MONGOOSE_TITLE } from "./mongoose/_content";
+import { NEON_DESCRIPTION, NEON_TITLE } from "./neon/_content";
+import { PLANETSCALE_DESCRIPTION, PLANETSCALE_TITLE } from "./planetscale/_content";
+import { SUPABASE_DESCRIPTION, SUPABASE_TITLE } from "./supabase/_content";
 
 export const COMPARISON_INDEX = {
   path: "/compare",
@@ -59,6 +62,27 @@ export const COMPARISONS = [
     competitor: "Mongoose",
     title: MONGOOSE_TITLE,
     description: MONGOOSE_DESCRIPTION,
+  },
+  {
+    slug: "neon",
+    category: "postgres",
+    competitor: "Neon",
+    title: NEON_TITLE,
+    description: NEON_DESCRIPTION,
+  },
+  {
+    slug: "planetscale",
+    category: "postgres",
+    competitor: "PlanetScale",
+    title: PLANETSCALE_TITLE,
+    description: PLANETSCALE_DESCRIPTION,
+  },
+  {
+    slug: "supabase",
+    category: "postgres",
+    competitor: "Supabase",
+    title: SUPABASE_TITLE,
+    description: SUPABASE_DESCRIPTION,
   },
 ] as const satisfies readonly ComparisonEntry[];
 

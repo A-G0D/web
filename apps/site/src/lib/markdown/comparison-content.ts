@@ -1,6 +1,11 @@
 import { Children, isValidElement, type ReactNode } from "react";
+import { CodeBlockTab, CodeBlockTabs, CodeBlockTabsTrigger } from "@prisma/eclipse";
 import { AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+import { AnchorHeading } from "@/app/compare/anchor-heading";
+import { CompareTable, type CompareTableProps } from "@/app/compare/compare-table";
+import { ComparisonPricingTable, type PricingTableProps } from "@/app/compare/pricing-table";
 import { CtaBurst } from "@/components/sections/cta-burst";
+import { PageAiActions } from "@/app/compare/page-ai-actions";
 import { RoleKicker } from "@/components/brand/role-kicker";
 import { Texture } from "@/components/brand/texture";
 import { ctaList, heading, joinBlocks, table } from "./blocks";
@@ -37,8 +42,41 @@ export function renderComparisonContent(node: ReactNode, path: string): string {
     if (Array.isArray(value)) return value.map(render).join("");
     if (!isValidElement<ContentProps>(value)) return "";
     const { type, props } = value;
-    if (props["aria-hidden"] === true || type === RoleKicker || type === Texture) return "";
-    if (type === "pre") return `\n\n\`\`\`\n${codeText(props.children)}\n\`\`\`\n\n`;
+    if (
+      props["aria-hidden"] === true ||
+      type === RoleKicker ||
+      type === Texture ||
+      type === PageAiActions
+    ) {
+      return "";
+    }
+    if (type === "pre") {
+      const language = typeof props["data-language"] === "string" ? props["data-language"] : "";
+      return `\n\n\`\`\`${language}\n${codeText(props.children)}\n\`\`\`\n\n`;
+    }
+    if (type === CodeBlockTabs) {
+      const labels = new Map<unknown, string>();
+      const panels: ReactNode[] = [];
+      const collect = (nodes: ReactNode) =>
+        Children.forEach(nodes, (child) => {
+          if (!isValidElement<ContentProps>(child)) return;
+          if (child.type === CodeBlockTabsTrigger) {
+            labels.set(child.props.value, codeText(child.props.children));
+          } else if (child.type === CodeBlockTab) {
+            panels.push(child);
+          } else {
+            collect(child.props.children);
+          }
+        });
+      collect(props.children);
+      return panels
+        .map((panel) => {
+          if (!isValidElement<ContentProps>(panel)) return "";
+          const label = labels.get(panel.props.value);
+          return `\n\n${label ? `**${escapeText(label)}**\n\n` : ""}${render(panel.props.children).trim()}\n\n`;
+        })
+        .join("");
+    }
     if (type === "code") {
       const text = codeText(props.children);
       const ticks = "`".repeat(
@@ -58,6 +96,32 @@ export function renderComparisonContent(node: ReactNode, path: string): string {
           props.secondaryCta as { label: string; href: string },
         ]),
       ])}\n\n`;
+    }
+
+    if (type === CompareTable) {
+      const { corner, columns, rows } = props as unknown as CompareTableProps;
+      const cell = (node: ReactNode) => render(node).trim().replace(/\s+/g, " ");
+      const labelled = Boolean(corner);
+      return `\n\n${table(
+        [
+          ...(labelled ? [escapeText(corner ?? "")] : []),
+          ...columns.map((column) => escapeText(column)),
+        ],
+        rows.map((row) => [
+          ...(labelled ? [escapeText(row.label ?? "")] : []),
+          ...row.cells.map(cell),
+        ]),
+      )}\n\n`;
+    }
+
+    if (type === ComparisonPricingTable) {
+      const { corner, columns, rows, note } = props as unknown as PricingTableProps;
+      const cell = (node: ReactNode) => render(node).trim().replace(/\s+/g, " ");
+      const grid = table(
+        [escapeText(corner), ...columns.map((column) => escapeText(column.label))],
+        rows.map((row) => [escapeText(row.label), ...row.cells.map(cell)]),
+      );
+      return `\n\n${joinBlocks([grid, note ? render(note).trim() : ""])}\n\n`;
     }
 
     if (type === "table") {
@@ -92,6 +156,9 @@ export function renderComparisonContent(node: ReactNode, path: string): string {
     if (type === "em" || type === "i") return `*${children}*`;
     if (type === "br") return "\n";
     if (type === "blockquote") return `\n\n> ${children.trim().replace(/\n/g, "\n> ")}\n\n`;
+    if (type === AnchorHeading) {
+      return `\n\n${"#".repeat(props.level as number)} ${children.trim()}\n\n`;
+    }
     if (type === AccordionTrigger) return `\n\n### ${children.trim()}\n\n`;
     if (type === AccordionContent) return `\n\n${children.trim()}\n\n`;
     if (typeof type === "string" && /^h[1-6]$/.test(type)) {
@@ -106,5 +173,7 @@ export function renderComparisonContent(node: ReactNode, path: string): string {
   return render(node)
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
+    .replace(/(`[^`]+`)\\([.])/g, "$1$2")
+    .replace(/(\]\([^)]+\))\\([.])/g, "$1$2")
     .trim();
 }

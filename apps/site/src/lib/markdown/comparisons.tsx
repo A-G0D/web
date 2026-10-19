@@ -7,9 +7,21 @@ import {
   type ComparisonPath,
   type ComparisonSlug,
 } from "@/app/compare/comparisons";
+import { CHECKED as CONVEX_CHECKED, CONVEX_UPDATED } from "@/app/compare/convex/_content";
 import { getConvexPageContent } from "@/app/compare/convex/_sections";
+import { CHECKED as KYSELY_CHECKED, KYSELY_UPDATED } from "@/app/compare/kysely/_content";
 import { getKyselyPageContent } from "@/app/compare/kysely/_sections";
+import { CHECKED as MONGOOSE_CHECKED, MONGOOSE_UPDATED } from "@/app/compare/mongoose/_content";
 import { getMongoosePageContent } from "@/app/compare/mongoose/_sections";
+import { CHECKED as NEON_CHECKED, NEON_UPDATED } from "@/app/compare/neon/_content";
+import { getNeonPageContent } from "@/app/compare/neon/_sections";
+import {
+  CHECKED as PLANETSCALE_CHECKED,
+  PLANETSCALE_UPDATED,
+} from "@/app/compare/planetscale/_content";
+import { getPlanetScalePageContent } from "@/app/compare/planetscale/_sections";
+import { CHECKED as SUPABASE_CHECKED, SUPABASE_UPDATED } from "@/app/compare/supabase/_content";
+import { getSupabasePageContent } from "@/app/compare/supabase/_sections";
 import type { MarkdownPage } from "@/lib/markdown-pages";
 import { heading, joinBlocks } from "./blocks";
 import { renderComparisonContent } from "./comparison-content";
@@ -18,7 +30,20 @@ export const comparisonContent = {
   convex: getConvexPageContent,
   kysely: getKyselyPageContent,
   mongoose: getMongoosePageContent,
+  neon: getNeonPageContent,
+  planetscale: getPlanetScalePageContent,
+  supabase: getSupabasePageContent,
 } satisfies Record<ComparisonSlug, () => ReactNode>;
+
+/** Last-checked date and modification time per comparison; every slug needs an entry. */
+const comparisonFreshness = {
+  convex: { checked: CONVEX_CHECKED, dateModified: CONVEX_UPDATED.iso },
+  kysely: { checked: KYSELY_CHECKED, dateModified: KYSELY_UPDATED.iso },
+  mongoose: { checked: MONGOOSE_CHECKED, dateModified: MONGOOSE_UPDATED.iso },
+  neon: { checked: NEON_CHECKED, dateModified: NEON_UPDATED.iso },
+  planetscale: { checked: PLANETSCALE_CHECKED, dateModified: PLANETSCALE_UPDATED.iso },
+  supabase: { checked: SUPABASE_CHECKED, dateModified: SUPABASE_UPDATED.iso },
+} satisfies Record<ComparisonSlug, { checked: string; dateModified: string }>;
 
 /** Register complete comparison renditions using the same trees as the HTML pages. */
 export function getComparisonMarkdownPages(): Record<ComparisonPath, MarkdownPage> {
@@ -56,6 +81,7 @@ export function getComparisonMarkdownPages(): Record<ComparisonPath, MarkdownPag
           h1: entry.title,
           subheadline: blocks[1],
           renderBody: () => blocks.slice(2).join("\n\n"),
+          ...comparisonFreshness[entry.slug],
         } satisfies MarkdownPage,
       ];
     }),
