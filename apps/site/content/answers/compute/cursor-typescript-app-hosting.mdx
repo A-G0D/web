@@ -19,10 +19,14 @@ faq:
 related:
   - title: "Sharing a deployed app with a client"
     href: "/compute/share-app-with-client"
+  - title: "Sharing an app that only opens on localhost"
+    href: "/compute/share-localhost-app"
   - title: "Protecting production with a separate test database"
     href: "/postgres/typescript-test-environment"
   - title: "Saving customer data from a prototype"
     href: "/postgres/prototype-customer-data"
+  - title: "Rolling back a deployment that broke login"
+    href: "/compute/roll-back-deployment"
 cta:
   title: "Put deployment setup in your TypeScript project"
   description: "Use Prisma Compute's deployment guide to prepare a Composer module, then let Cursor help inspect and test it."
@@ -105,7 +109,7 @@ Commit the deployment declaration and migration files with the app. Keep secrets
 
 ## When should I choose another setup?
 
-Choose another host if required dependencies need a runtime feature outside Prisma Compute's supported environment. For example, it does not provide a persistent writable filesystem or host WebSocket servers. You can still use Prisma Postgres from another application host.
+Choose another host if required dependencies need a runtime feature outside Prisma Compute's supported environment. For example, it does not provide a persistent writable filesystem or host WebSocket servers. Customer uploads belong in object storage on any host; see [where to store files that disappear after a redeploy](/compute/file-uploads-disappear-after-redeploy). You can still use Prisma Postgres from another application host.
 
 If the app already deploys correctly to Netlify or Vercel, improving that configuration can be less work than migrating. Cursor can help with those CLIs too. Restricting credentials and account access matters on every host: a natural-language instruction to avoid production is useful context, but it is not an account permission boundary.
 

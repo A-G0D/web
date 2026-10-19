@@ -9,7 +9,7 @@ updatedAt: "2026-10-17"
 readingTime: "5 min read"
 faq:
   - question: "Can I send my client a localhost link?"
-    answer: "A localhost address points to the device opening it. Your client cannot use it to reach your laptop. Publish the app to a host for a URL that continues working when your laptop is closed. A temporary tunnel can help with a supervised demo, but its availability depends on the process running on your machine."
+    answer: "A localhost address points to the device opening it. Your client cannot use it to reach your laptop. Publish the app to a host for a URL that continues working when your laptop is closed. A temporary tunnel can help with a supervised demo, but its availability depends on the process running on your machine. See [how to share a localhost app](/compute/share-localhost-app) for both options."
   - question: "Does HTTPS make a client demo private?"
     answer: "HTTPS encrypts traffic between the browser and host. It does not decide who may open the app or read a record. Use application login and authorization for sensitive demos, and check any hosting-level deployment protection before sharing the link."
   - question: "Do I need a custom domain before sharing the app?"
@@ -17,6 +17,8 @@ faq:
   - question: "Can I host the frontend elsewhere and keep Prisma Postgres?"
     answer: "Yes. Prisma Postgres works with any PostgreSQL client, so Prisma ORM is optional. Keep database credentials in the server environment on your chosen app host, and make browser requests through an authenticated API."
 related:
+  - title: "Sharing an app that only opens on localhost"
+    href: "/compute/share-localhost-app"
   - title: "Deploying a TypeScript app from Cursor"
     href: "/compute/cursor-typescript-app-hosting"
   - title: "A test app with a separate database"
@@ -85,10 +87,10 @@ The deploy command does not build the application for you. It deploys the prepar
 
 Open the URL in a separate browser profile, submit a form, reload the page and confirm the saved record remains. For a private demo, sign in with the intended demo account first, then try an API request without a session and confirm it cannot read private records. Check that login callbacks and links return to the deployed address.
 
-Use the assigned HTTPS URL for the review stage. [Custom domains](/docs/compute/domains) currently attach only to production apps. For a branded demo domain, use a separate demo project's production deployment and follow its DNS and certificate setup. Wait for HTTPS to work on the final address before sharing it. Remove review access and clean up demo resources when the review ends.
+Use the assigned HTTPS URL for the review stage. [Custom domains](/docs/compute/domains) currently attach only to production apps. For a branded demo domain, use a separate demo project's production deployment and follow its DNS and certificate setup. Wait for HTTPS to work on the final address before sharing it. If the generated URL works and the custom domain doesn't, see [what to configure when a custom domain fails](/compute/custom-domain-not-working). Remove review access and clean up demo resources when the review ends.
 
 ## When should I choose another setup?
 
-Choose another host if the application needs a runtime feature outside [Prisma Compute's limitations](/docs/compute/limitations), such as a persistent writable filesystem or a WebSocket server. Store persistent customer records in a database even when the application host offers local disk.
+Choose another host if the application needs a runtime feature outside [Prisma Compute's limitations](/docs/compute/limitations), such as a persistent writable filesystem or a WebSocket server. Store persistent customer records in a database, and [uploaded files in object storage](/compute/file-uploads-disappear-after-redeploy), even when the application host offers local disk.
 
 If your team relies on a host's built-in reviewer invitation or deployment protection workflow, verify that feature's availability on your plan and use it. Prisma Compute's HTTPS URL does not supply application authentication. For a simple public static mockup with no backend, publishing the compiled frontend to an existing static host may be all you need.
