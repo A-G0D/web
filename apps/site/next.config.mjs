@@ -271,6 +271,7 @@ const agentMarkdownPaths = [
   "/stack",
   "/enterprise",
   "/mcp",
+  "/free-postgresql-database",
   "/compare",
   "/compare/convex",
   "/compare/kysely",

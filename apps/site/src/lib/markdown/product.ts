@@ -80,6 +80,7 @@ export function renderProductMarkdown({
     // at the CTAs, the reassurance microline and the three benefits.
     ctaList([hero.primaryCta, hero.secondaryCta]),
     hero.microline,
+    hero.related ? `[${hero.related.label}](${hero.related.href})` : undefined,
     bulletList([...hero.benefits]),
     // product-tour.tsx shows one stop at a time behind a tab strip. Markdown
     // has no tabs, so every stop is listed.
