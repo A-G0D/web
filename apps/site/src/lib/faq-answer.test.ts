@@ -19,7 +19,9 @@ import { stripFaqAnswerMarkup } from "@/lib/faq-answer";
 
 const faq = postgresContent.faq ?? [];
 
-const MARKUP_PATTERN = /[`[\]()]|(?:^|[^!])\(https?:\/\//;
+// A real markup hint is a backtick or a `[` that starts a `[text](url)` link.
+// Ordinary parentheses in the restored FAQ answers are not markup.
+const MARKUP_PATTERN = /`|\[[^\]]+\]\(/;
 
 test("every /postgres FAQ answer strips cleanly to plain text", () => {
   assert.equal(faq.length, 6, "expected the pre-SEO FAQ plus the HIPAA item");
