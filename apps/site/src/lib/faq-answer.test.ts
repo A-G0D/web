@@ -13,8 +13,8 @@ import { stripFaqAnswerMarkup } from "@/lib/faq-answer";
  *    link and every inline-code backtick removed;
  *  - the stripped text keeps the visible words (anchor text, code content)
  *    so the structured copy matches what a reader sees;
- *  - the postgres FAQ is replaced word for word by faq-v2.json, and the
- *    source-of-truth copy for the two most-moved answers is pinned here.
+ *  - the HIPAA answer from #8495 is pinned here so a later edit cannot
+ *    move HIPAA back to Pro or drop the $129 Business opener.
  */
 
 const faq = postgresContent.faq ?? [];
@@ -22,7 +22,7 @@ const faq = postgresContent.faq ?? [];
 const MARKUP_PATTERN = /[`[\]()]|(?:^|[^!])\(https?:\/\//;
 
 test("every /postgres FAQ answer strips cleanly to plain text", () => {
-  assert.equal(faq.length, 9, "expected the 9-item v2 FAQ");
+  assert.equal(faq.length, 6, "expected the pre-SEO FAQ plus the HIPAA item");
 
   for (const item of faq) {
     const plain = stripFaqAnswerMarkup(item.answer);
@@ -39,23 +39,15 @@ test("every /postgres FAQ answer strips cleanly to plain text", () => {
   }
 });
 
-test("the HIPAA and backups answers carry the VP-approved opening sentences", () => {
+test("the HIPAA answer carries the Business-plan opening sentence", () => {
   const byQuestion = Object.fromEntries(faq.map((item) => [item.question, item.answer]));
-
-  assert.ok(byQuestion["Are backups included?"], "backups FAQ missing");
-  assert.ok(
-    byQuestion["Are backups included?"].startsWith(
-      "Yes, every paid plan includes daily [automatic backups](/docs/postgres/database/backups). Starter and Pro keep them for 7 days and Business keeps them for 30; the Free plan has none.",
-    ),
-    "backups FAQ opener does not match the VP-approved copy",
-  );
 
   assert.ok(byQuestion["Is Prisma Postgres HIPAA compliant?"], "HIPAA FAQ missing");
   assert.ok(
     byQuestion["Is Prisma Postgres HIPAA compliant?"].startsWith(
       "Yes, on the Business plan at $129 a month, with a signed Business Associate Agreement (BAA). HIPAA is not available on the Free, Starter or Pro plans.",
     ),
-    "HIPAA FAQ opener does not match the VP-approved copy",
+    "HIPAA FAQ opener does not match the Business-plan copy from #8495",
   );
 });
 
