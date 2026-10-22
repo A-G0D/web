@@ -806,6 +806,8 @@ await db.transaction(async (tx) => {
     .orderBy((j) => j.createdAt.asc())
     .forUpdate({ skipLocked: true })
     .first();
+  if (job === null) return;
+  await tx.orm.public.Job.where({ id: job.id }).update({ state: 'running' });
 });
 ```
 

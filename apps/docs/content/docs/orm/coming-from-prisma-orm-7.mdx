@@ -414,7 +414,7 @@ Also not available today:
 - `omit`, `relationLoadStrategy`, `Prisma.skip`, and the automatic batching of `findUnique` calls.
 - The `P2002` / `P2025` style error codes. Errors carry a `code` such as `RUNTIME.NO_ROWS` instead, and a database error such as a unique-constraint violation carries the standard SQL state code in `error.sqlState` (`23505` for a unique violation, on every database), so catch it with `if (error instanceof Error && "sqlState" in error && error.sqlState === "23505")`. See the [error reference](/orm/reference/error-reference).
 - `Prisma.sql`, `Prisma.join`, `Prisma.raw`, `Prisma.empty`, and TypedSQL. Use `db.raw.sql` (example above); [Raw queries](/orm/reference/raw-queries) covers building a query from pieces.
-- Soft delete, validation rules in the schema, lifecycle hooks on models, and read replicas. For soft delete, add a nullable `deletedAt` field and filter on it, with one [scope](/orm/reference/orm-client#query-fragments) that every model with the field can use. Validate in your application code. Use middleware for hooks. For read replicas, create one client per database.
+- Soft delete, validation rules in the schema, lifecycle hooks on models, and read replicas. For soft delete, add a nullable `deletedAt` field and filter on it, with one [query fragment](/orm/reference/orm-client#query-fragments) that every model with the field can use. Validate in your application code. Use middleware for hooks. For read replicas, create one client per database.
 
 ## Where to go next
 
