@@ -27,3 +27,7 @@ Node.js `^22.18.0 || ^24.11.0 || >=26.0.0` (`prisma`, `create-prisma`, `@prisma/
 ## Follow-up done in the same PR
 
 `cli/orm-init.mdx:62-63` said `"type": "module"` is added whenever the field is missing, and omitted that `node` is added to `types`. Both corrected from the source lines above.
+
+## Correction on 2026-10-22, after the CodeRabbit review of prisma/web#8572
+
+The "Node.js 26.8.2" claim from `skills/prisma-8/references/contract.md:120` is wrong for the official binaries: `mise exec node@26.0.0 -- node -p "typeof Temporal"` prints `object`, as does 26.8.2. Bun 1.4.0 prints `object` and 1.3.14 `undefined` (`npx bun@<version> -p`); Deno 2.7.1 prints `object` and 2.6.10 `undefined` (`npx deno@<version> eval`). The page now says Node.js 26, Bun 1.4, and Deno 2.7, with a probe per runtime. `RUNTIME.TEMPORAL_UNAVAILABLE` is raised by `requireTemporal` in `temporal-codec-helpers.ts` (decode) and `date-time-now-generators.ts` (`now()` defaults) at rc.20, not when an existing `Temporal` value is written; the page's sentence was scoped to match.
