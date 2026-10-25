@@ -58,6 +58,7 @@ async function get(url: URL, init?: RequestInit, startup = false): Promise<Respo
 }
 
 try {
+  let documentVary: string | null = null;
   for (const path of ["/", "/docs/composer", "/blog", "/handbook", "/eclipse"]) {
     const response: Response = await get(
       new URL(path, origin),
@@ -71,14 +72,72 @@ try {
       `${path}: escaped the local stack`,
     );
     const html = await response.text();
+    if (path === "/docs/composer") {
+      documentVary = response.headers.get("vary");
+    }
+    if (path === "/" || path === "/docs/composer") {
+      assert.ok(html.includes("brand-grain"), `${path}: missing brand grain`);
+      const urls: Set<string> = new Set<string>(
+        [...html.matchAll(/(?:src|srcset)="([^" ]*texture\.[^" ]+)"/gi)].map(
+          (match): string => new URL(match[1].replaceAll("&amp;", "&"), origin).href,
+        ),
+      );
+      for (const format of ["avif", "jpg"]) {
+        const src: string | undefined = [...urls].find((value) =>
+          new URL(value, origin).pathname.endsWith(`.${format}`),
+        );
+        assert.ok(src, `${path}: missing baked ${format} grain`);
+        const image = await get(new URL(src, origin));
+        assert.equal(image.status, 200, `Missing baked asset: ${src}`);
+        assert.equal(
+          image.headers.get("content-type"),
+          format === "avif" ? "image/avif" : "image/jpeg",
+        );
+        assert.match(image.headers.get("cache-control") ?? "", /immutable/);
+        assert.ok(
+          (await image.arrayBuffer()).byteLength < (format === "avif" ? 60_000 : 150_000),
+          `${path}: grain budget exceeded`,
+        );
+      }
+      console.log(`PASS ${path}: immutable baked grain, AVIF and JPEG fallback`);
+    }
+    if (path === "/docs/composer") {
+      // Next can emit resource hints as HTTP Link headers rather than tags.
+      const hints: string[] = [
+        ...[...html.matchAll(/<link\b[^>]+>/g)]
+          .map((match) => match[0])
+          .filter((tag) => tag.includes('rel="preload"') && tag.includes('as="font"'))
+          .map((tag) => tag.match(/href="([^"]+)"/)![1]),
+        ...[...(response.headers.get("link") ?? "").matchAll(/<([^>]+)>([^,]*)/g)]
+          .filter((entry) => /rel="?preload"?/.test(entry[2]) && /as="?font"?/.test(entry[2]))
+          .map((entry) => entry[1]),
+      ];
+      const cssUrls = new Set<string>();
+      for (const match of html.matchAll(/<link[^>]*href="([^"]+\.css(?:\?[^"]*)?)"[^>]*>/g)) {
+        const css = await get(new URL(match[1].replaceAll("&amp;", "&"), origin));
+        const text = await css.text();
+        for (const asset of text.matchAll(/url\(["']?([^\s)"']+\.woff2)["']?\)/g))
+          cssUrls.add(new URL(asset[1], css.url).href);
+      }
+      for (const name of ["InterVariable-latin.", "MonaSansMonoVF"]) {
+        const fontPath: string | undefined = hints.find((url) => url.includes(name));
+        assert.ok(fontPath, `docs: missing critical font hint: ${name}`);
+        const fontUrl = new URL(fontPath, origin);
+        const font = await get(fontUrl);
+        assert.equal(font.status, 200);
+        assert.ok((await font.arrayBuffer()).byteLength < 180_000);
+        assert.ok(cssUrls.has(fontUrl.href), `docs: preload/CSS URL mismatch: ${fontUrl.href}`);
+      }
+      console.log("PASS docs: matching body/code font preloads and subset budget");
+    }
     assert.match(html, /<html/);
-    if (["/", "/blog"].includes(path)) {
-      assert.equal(response.headers.get("cdn-cache-control"), "public, max-age=60", path);
+    if (["/", "/blog", "/docs/composer"].includes(path)) {
       assert.equal(
-        response.headers.get("cache-control"),
-        "public, max-age=0, must-revalidate",
+        response.headers.get("cdn-cache-control"),
+        "public, max-age=60, stale-while-revalidate=300",
         path,
       );
+      assert.equal(response.headers.get("cache-control"), "public, max-age=0", path);
     }
     if (["/", "/docs/composer", "/blog"].includes(path)) {
       assert.ok(response.headers.get("content-security-policy"), `${path}: missing CSP`);
@@ -95,6 +154,33 @@ try {
   assert.equal(markdown.status, 200);
   assert.match(markdown.headers.get("content-type") ?? "", /text\//);
   console.log("PASS docs Markdown");
+  // Compute's application directory is read-only: optimized images must use
+  // the bounded memory handler, and a CDN must honor their Accept variants.
+  const optimizedImage = new URL("/_next/image?url=%2Fbrand%2Ftexture.jpg&w=640&q=75", origin);
+  const docsImage = new URL(
+    "/docs/_next/image?url=%2Fdocs%2Fimg%2Fbrand%2Ftexture.jpg&w=640&q=75",
+    origin,
+  );
+  for (const image of [optimizedImage, docsImage])
+    for (const format of ["webp", "jpeg"]) {
+      let hit = false;
+      let previous: string | undefined;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const response = await get(image, { headers: { accept: `image/${format}` } });
+        assert.equal(response.status, 200);
+        assert.equal(response.headers.get("content-type"), `image/${format}`);
+        const digest = createHash("sha256")
+          .update(Buffer.from(await response.arrayBuffer()))
+          .digest("hex");
+        if (previous) assert.equal(digest, previous, "image bytes changed between cache reads");
+        previous = digest;
+        hit ||=
+          response.headers.get("x-nextjs-cache") === "HIT" ||
+          response.headers.get("cf-cache-status") === "HIT";
+      }
+      assert.ok(hit, `${image.pathname}: optimized ${format} never became a cache hit`);
+    }
+  console.log("PASS optimized images: origin cache reuse and separate WebP/JPEG variants");
   // Exercise original public files served by Next, including the largest file.
   // Select representatives from the checkout, without a runtime media catalog.
   const publicDir = fileURLToPath(new URL("../apps/blog/public/", import.meta.url));
@@ -123,6 +209,16 @@ try {
     // Full public files can take longer than a page from a distant client.
     const response = await get(url, { headers, signal: AbortSignal.timeout(120_000) });
     assert.equal(response.status, 200, file.path);
+    assert.equal(
+      response.headers.get("content-length"),
+      String(file.bytes),
+      `${file.path}: streamed GET length`,
+    );
+    assert.match(
+      response.headers.get("cdn-cache-control") ?? "",
+      /^public, max-age=60, stale-while-revalidate=300(?:, no-transform)?$/,
+      file.path,
+    );
     const bytes = Buffer.from(await response.arrayBuffer());
     const hash = createHash("sha256");
     for await (const chunk of createReadStream(file.source)) hash.update(chunk);
@@ -186,8 +282,18 @@ try {
     assert.equal(response.status, 200, pathname);
     assert.match(response.headers.get("content-type") ?? "", /text\/(markdown|plain)/, pathname);
     assert.ok((await response.text()).length > 0, pathname);
+    if (pathname === "/docs/composer") assert.equal(response.headers.get("vary"), documentVary);
   }
   console.log("PASS site/docs/blog Markdown negotiation through Next middleware");
+  const navigation = await get(new URL("/docs/composer", origin), {
+    headers: { rsc: "1", accept: "text/x-component" },
+    redirect: "manual",
+  });
+  assert.ok(documentVary, "docs HTML must declare negotiation inputs");
+  assert.equal(navigation.headers.get("vary"), documentVary);
+  assert.equal(navigation.headers.get("cdn-cache-control"), "no-store");
+  await navigation.arrayBuffer();
+  console.log("PASS one Vary schema for HTML, Markdown and uncached navigation");
 
   // Include content from different docs trees, rather than only a landing page.
   for (const pathname of [
@@ -197,7 +303,7 @@ try {
     "/docs/orm/v7/reference/prisma-schema-reference",
     "/docs/orm/v6/reference/prisma-client-reference",
   ]) {
-    const response = await get(new URL(pathname, origin));
+    const response = await get(new URL(pathname, origin), { headers: { accept: "text/html" } });
     assert.equal(response.status, 200, pathname);
     assert.equal(
       new URL(response.url).origin,
@@ -205,6 +311,11 @@ try {
       `${pathname}: escaped the local stack`,
     );
     assert.match(await response.text(), /<html/);
+    assert.equal(
+      response.headers.get("cdn-cache-control"),
+      "public, max-age=60, stale-while-revalidate=300",
+      pathname,
+    );
   }
   console.log("PASS blog and current/legacy docs articles");
 
