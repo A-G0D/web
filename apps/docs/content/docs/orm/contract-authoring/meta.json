@@ -3,7 +3,9 @@
   "pages": [
     "the-data-contract",
     "psl-syntax",
+    "editor-support",
     "typescript-schema-builder",
+    "advanced-postgresql",
     "the-contract-artifact",
     "capabilities"
   ]

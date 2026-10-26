@@ -9,7 +9,7 @@ metaDescription: 'Embed Prisma Studio in a Next.js application with @prisma/stud
 
 :::note[This guide uses Prisma ORM 7]
 
-The commands and code on this page target Prisma ORM 7, which remains fully supported. To start a new Prisma ORM 8 project, see the [Prisma ORM 8 quickstart](/prisma-orm/quickstart/postgresql); to add Prisma ORM 8 to an existing app, see [Add to an existing project](/prisma-orm/add-to-existing-project/postgresql). A Prisma ORM 8 version of this guide is planned.
+The commands and code on this page target Prisma ORM 7, which remains fully supported. To start a new Prisma ORM 8 project, see [Create a new app with PostgreSQL](/prisma-orm/quickstart/postgresql); to add Prisma ORM 8 to an existing app, see [Add Prisma ORM to an existing PostgreSQL database](/prisma-orm/add-to-existing-project/postgresql). A Prisma ORM 8 version of this guide is planned.
 
 :::
 
@@ -82,22 +82,22 @@ Install the required Prisma packages:
 ### Prisma Postgres (PostgreSQL)
 
 ```npm
-npm install prisma@7.10.0 tsx @types/pg --save-dev
-npm install @prisma/extension-accelerate @prisma/client@7.10.0 @prisma/adapter-pg dotenv pg
+npm install prisma@prev tsx @types/pg --save-dev
+npm install @prisma/extension-accelerate @prisma/client@7 @prisma/adapter-pg dotenv pg
 ```
 
 ### SQLite
 
 ```npm
-npm install prisma@7.10.0 tsx --save-dev
-npm install @prisma/client@7.10.0 @prisma/adapter-sqlite dotenv better-sqlite3
+npm install prisma@prev tsx --save-dev
+npm install @prisma/client@7 @prisma/adapter-sqlite dotenv better-sqlite3
 ```
 
 ### MySQL
 
 ```npm
-npm install prisma@7.10.0 tsx @types/mysql2 --save-dev
-npm install @prisma/client@7.10.0 @prisma/adapter-mysql dotenv mysql2
+npm install prisma@prev tsx @types/mysql2 --save-dev
+npm install @prisma/client@7 @prisma/adapter-mysql dotenv mysql2
 ```
 
 :::info

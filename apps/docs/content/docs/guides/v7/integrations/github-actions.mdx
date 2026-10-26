@@ -19,7 +19,7 @@ After the PR is closed, the database is automatically deleted. This allows you t
 
 Make sure you have the following:
 
-- Node.js 20 or later
+- Node.js 20.19+ on 20.x, 22.12+ on 22.x, or 24+
 - A [Prisma Data Platform](https://console.prisma.io?utm_source=actions_guide&utm_medium=docs) account
 - GitHub repository
 
@@ -43,11 +43,11 @@ By the end of this section, your project will be fully prepared to use Prisma bo
 To get started with Prisma, install the required dependencies:
 
 ```npm
-npm install prisma@7.10.0 tsx @types/pg dotenv --save-dev
+npm install prisma@prev tsx @types/pg dotenv --save-dev
 ```
 
 ```npm
-npm install @prisma/client@7.10.0 @prisma/adapter-pg pg
+npm install @prisma/client@7 @prisma/adapter-pg pg
 ```
 
 :::info

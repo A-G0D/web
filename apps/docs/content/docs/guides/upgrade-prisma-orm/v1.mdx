@@ -33,7 +33,7 @@ This guide covers migrating your project from Prisma 1 to Prisma ORM 7, the last
 - **Removed**: GraphQL API for database
 - **New**: Type-safe database client
 - **Improved**: Database introspection and migration tools
-- **Enhanced**: Support for more database features and types
+- **Improved**: Support for more database features and types
 
 ## Migration Strategy
 
@@ -44,7 +44,7 @@ This guide covers migrating your project from Prisma 1 to Prisma ORM 7, the last
 ```npm
 # Initialize a new project
 npm init -y
-npm install prisma@7.10.0 @prisma/client@7.10.0
+npm install prisma@prev @prisma/client@7
 
 # Initialize Prisma
 npx prisma init
@@ -358,7 +358,7 @@ This tool helps with:
 
 ## Next Steps
 
-Your project now runs on Prisma ORM 7. To move to the current release, follow the [Prisma ORM 7 to 8 guide](/guides/upgrade-prisma-orm/postgresql) (or the [MongoDB version](/guides/upgrade-prisma-orm/mongodb)).
+Your project now runs on Prisma ORM 7. To move to Prisma ORM 8, a [release candidate](/orm/release-status), follow the [Prisma ORM 7 to 8 guide](/guides/upgrade-prisma-orm/postgresql) (or the [MongoDB version](/guides/upgrade-prisma-orm/mongodb)).
 
 - [Prisma ORM Documentation](/orm/v7)
 - [Prisma Schema Reference](/orm/v7/reference/prisma-schema-reference)

@@ -11,8 +11,8 @@ Use `auth` commands to manage authentication for the platform commands. Signing 
 ## Usage
 
 ```npm
-npx prisma@latest auth login
-npx prisma@latest auth whoami
+npx prisma auth login
+npx prisma auth whoami
 ```
 
 ## Commands
@@ -26,4 +26,4 @@ npx prisma@latest auth whoami
 | `auth workspace use [id-or-name]`| Make one of your workspace sessions current           |
 | `auth workspace logout <id-or-name>` | End one workspace session                        |
 
-`auth login` signs you in through the browser. Afterward, anything running in that environment inherits the session, including coding agents. For CI, set [`PRISMA_SERVICE_TOKEN`](/cli/configuration#platform-environment-variables) instead.
+`auth login` signs you in through the browser. Afterward, anything running in that environment inherits the session, including coding agents. For CI, set [`PRISMA_SERVICE_TOKEN`](/cli/environment-variables) instead.

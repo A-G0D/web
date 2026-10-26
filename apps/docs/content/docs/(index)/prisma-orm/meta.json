@@ -3,10 +3,12 @@
   "defaultOpen": true,
   "pages": [
     "index",
-    "release-status",
-    "supported-databases",
-    "create-prisma",
+    "[Release status](/orm/release-status)",
+    "[Supported databases](/orm/supported-databases)",
+    "[Supported versions](/orm/supported-versions)",
     "quickstart",
-    "add-to-existing-project"
+    "local-database",
+    "[Editor setup](/orm/contract-authoring/editor-support)",
+    "create-prisma"
   ]
 }

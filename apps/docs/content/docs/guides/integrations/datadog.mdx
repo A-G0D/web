@@ -9,7 +9,7 @@ metaDescription: 'Learn how to configure Datadog tracing for a Prisma ORM projec
 
 :::note[This guide uses Prisma ORM 7]
 
-The commands and code on this page target Prisma ORM 7, which remains fully supported. To start a new Prisma ORM 8 project, see the [Prisma ORM 8 quickstart](/prisma-orm/quickstart/postgresql); to add Prisma ORM 8 to an existing app, see [Add to an existing project](/prisma-orm/add-to-existing-project/postgresql). A Prisma ORM 8 version of this guide is planned.
+The commands and code on this page target Prisma ORM 7, which remains fully supported. To start a new Prisma ORM 8 project, see [Create a new app with PostgreSQL](/prisma-orm/quickstart/postgresql); to add Prisma ORM 8 to an existing app, see [Add Prisma ORM to an existing PostgreSQL database](/prisma-orm/add-to-existing-project/postgresql). A Prisma ORM 8 version of this guide is planned.
 
 :::
 
@@ -20,7 +20,7 @@ In this guide, you'll learn how to set up Datadog tracing for a new Prisma proje
 ### Spans and tracing
 
 - **Spans** are the individual operations or units of work within a distributed system or complex application. Each database query, service call, or external request is represented by a span.
-- **Tracing** ties these spans together to form a complete, end-to-end picture of a request’s lifecycle. With tracing, you can visualize bottlenecks, identify problematic queries, and pinpoint where errors occur from your queries.
+- **Tracing** ties these spans together to form a complete, end-to-end picture of a request's lifecycle. With tracing, you can visualize bottlenecks, identify problematic queries, and pinpoint where errors occur from your queries.
 
 ### Datadog and Prisma ORM
 
@@ -41,7 +41,7 @@ With this in place, slow queries and errors show up in Datadog as they happen.
 
 Before you begin, ensure you have the following:
 
-- **Node.js** installed (v18+ recommended).
+- **Node.js** installed (22.12+ on 22.x or 24+).
 - A local or hosted **PostgreSQL** database.
 - A **Datadog** account. If you do not have one, [sign up here](https://www.datadoghq.com/).
 - The **Datadog Agent** installed and running on your machine or server where this application will run. You can follow the [Datadog Agent installation docs](https://docs.datadoghq.com/agent/) to set it up.
@@ -74,7 +74,7 @@ In this section, you will install Prisma, create your schema, and generate the P
 Run the following commands to install Prisma and a minimal TypeScript runner:
 
 ```npm
-npm install -D prisma@7.10.0 tsx
+npm install -D prisma@prev tsx
 ```
 
 Then initialize Prisma:

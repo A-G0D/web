@@ -29,7 +29,7 @@ Or follow the steps below to set it up manually.
 
 ## Prerequisites
 
-- [Node.js 20+](https://nodejs.org)
+- [Node.js 22.22.3+ on 22.x, 24.15+ on 24.x, or 26+](https://nodejs.org)
 
 ## 1. Create your NestJS project
 
@@ -66,11 +66,11 @@ In `package.json`, add the `type` field set to `"module"`:
 Install the necessary Prisma packages and database drivers:
 
 ```npm
-npm install prisma@7.10.0 --save-dev
+npm install prisma@prev --save-dev
 ```
 
 ```npm
-npm install @prisma/client@7.10.0 @prisma/adapter-pg pg
+npm install @prisma/client@7 @prisma/adapter-pg pg
 ```
 
 :::info
