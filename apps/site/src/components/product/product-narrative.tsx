@@ -14,7 +14,7 @@ export function ProductNarrative({
   headline: string;
   paragraphs: string[];
   illustration: React.ReactNode;
-  /** Vertically centre the copy against a full-height (e.g. square) graphic. */
+  /** Centre the copy vertically against the illustration instead of top-aligning it. */
   centerText?: boolean;
 }) {
   return (

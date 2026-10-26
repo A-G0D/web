@@ -47,9 +47,9 @@ function IconCards({
   return (
     <section className="bg-white px-4 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-site">
-        <div className="mx-auto flex max-w-3xl flex-col gap-4 text-center">
+        <div className="mx-auto flex max-w-3xl flex-col gap-4 text-left md:text-center">
           <Reveal>
-            <h2 className={cn("mx-auto max-w-[28ch]", HEADING)}>{headline}</h2>
+            <h2 className={cn("max-w-[28ch] md:mx-auto", HEADING)}>{headline}</h2>
           </Reveal>
           {intro.map((para, i) => (
             <Reveal key={i} delay={0.05 + i * 0.05}>

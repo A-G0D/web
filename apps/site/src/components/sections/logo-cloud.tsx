@@ -87,7 +87,16 @@ const FIT_CLASS = {
   lg: "max-h-12 w-auto max-w-14 object-contain",
 };
 
-function LogoTile({ logo, wide = false }: { logo: Logo; wide?: boolean }) {
+function LogoTile({
+  logo,
+  wide = false,
+  hidden = false,
+}: {
+  logo: Logo;
+  wide?: boolean;
+  /** The marquee's duplicate copy: aria-hidden, so its links must not take focus either. */
+  hidden?: boolean;
+}) {
   const tile = cn(
     "spectrum-border flex h-24 shrink-0 items-center justify-center rounded-2xl border border-neutral-200 bg-white",
     wide ? "w-44 px-6" : "w-24 p-4",
@@ -117,6 +126,7 @@ function LogoTile({ logo, wide = false }: { logo: Logo; wide?: boolean }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={logo.name}
+      tabIndex={hidden ? -1 : undefined}
       className={cn(
         tile,
         "transition-[transform,border-color] duration-500 ease-out hover:scale-[0.97] hover:border-transparent motion-reduce:hover:scale-100",
@@ -139,7 +149,7 @@ function TileTrack({
   return (
     <div className="flex shrink-0 items-center gap-x-5 pr-5" aria-hidden={hidden || undefined}>
       {logos.map((logo) => (
-        <LogoTile key={logo.name} logo={logo} wide={wide} />
+        <LogoTile key={logo.name} logo={logo} wide={wide} hidden={hidden} />
       ))}
     </div>
   );

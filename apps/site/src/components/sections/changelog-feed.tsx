@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import { ArrowRightBold } from "@/components/icons/forma";
 import { Reveal } from "@/components/motion/reveal";
 import {
@@ -9,7 +8,7 @@ import {
   CATEGORY_ORDER,
   type ChangelogCategory,
   type ChangelogEntry,
-} from "@/data/changelog";
+} from "@/lib/changelog-meta";
 import { cn } from "@/lib/utils";
 
 // The feed: a sticky category filter over a colour-coded release timeline.
@@ -33,25 +32,23 @@ const FMT = new Intl.DateTimeFormat("en-US", {
 
 type Filter = ChangelogCategory | "all";
 
-// `all` is every release note in content/changelog, newest first, shaped by
-// lib/changelog.ts on the server; this component only filters it.
-export function ChangelogFeed({ entries: all }: { entries: ChangelogEntry[] }) {
+export function ChangelogFeed({ entries: allEntries }: { entries: ChangelogEntry[] }) {
   const [filter, setFilter] = useState<Filter>("all");
 
-  // Counts per category — totals over the whole feed that never change with
-  // the active filter.
-  const counts = useMemo(
+  // Counts per category — totals over the whole feed that never change with the
+  // active filter.
+  const COUNTS = useMemo(
     () =>
       CATEGORY_ORDER.reduce<Record<string, number>>((acc, id) => {
-        acc[id] = all.filter((e) => e.category === id).length;
+        acc[id] = allEntries.filter((e) => e.category === id).length;
         return acc;
       }, {}),
-    [all],
+    [allEntries],
   );
 
   const entries = useMemo(
-    () => (filter === "all" ? all : all.filter((e) => e.category === filter)),
-    [all, filter],
+    () => (filter === "all" ? allEntries : allEntries.filter((e) => e.category === filter)),
+    [filter, allEntries],
   );
 
   return (
@@ -66,18 +63,18 @@ export function ChangelogFeed({ entries: all }: { entries: ChangelogEntry[] }) {
               active={filter === "all"}
               onClick={() => setFilter("all")}
               label="All updates"
-              count={all.length}
+              count={allEntries.length}
             />
             {/* Only categories that actually have entries — a zero-count tab
                 dead-ends to a blank timeline. Same rule blog-browser applies to
                 its topic chips. */}
-            {CATEGORY_ORDER.filter((id) => (counts[id] ?? 0) > 0).map((id) => (
+            {CATEGORY_ORDER.filter((id) => (COUNTS[id] ?? 0) > 0).map((id) => (
               <FilterPill
                 key={id}
                 active={filter === id}
                 onClick={() => setFilter(id)}
                 label={CATEGORY_META[id].label}
-                count={counts[id] ?? 0}
+                count={COUNTS[id] ?? 0}
                 dot={CATEGORY_META[id].dot}
                 glow={CATEGORY_META[id].glow}
               />
@@ -88,9 +85,12 @@ export function ChangelogFeed({ entries: all }: { entries: ChangelogEntry[] }) {
         {/* Timeline */}
         <ol className="relative">
           {entries.map((entry, i) => (
-            <Reveal key={entry.slug} delay={Math.min(i, 4) * 0.05}>
-              <TimelineRow entry={entry} isLast={i === entries.length - 1} />
-            </Reveal>
+            <TimelineRow
+              key={entry.date + entry.title}
+              entry={entry}
+              isLast={i === entries.length - 1}
+              delay={Math.min(i, 4) * 0.05}
+            />
           ))}
         </ol>
       </div>
@@ -145,43 +145,60 @@ function FilterPill({
   );
 }
 
-function TimelineRow({ entry, isLast }: { entry: ChangelogEntry; isLast: boolean }) {
+function TimelineRow({
+  entry,
+  isLast,
+  delay,
+}: {
+  entry: ChangelogEntry;
+  isLast: boolean;
+  delay: number;
+}) {
   const meta = CATEGORY_META[entry.category];
   return (
-    <li className="relative grid grid-cols-1 gap-x-8 md:grid-cols-[8.5rem_minmax(0,1fr)]">
-      {/* Date rail — desktop only, right-aligned onto the spine */}
-      <div className="hidden md:flex md:flex-col md:items-end md:pt-1.5 md:text-right">
-        <time dateTime={entry.date} className="text-sm font-semibold text-foreground">
-          {FMT.format(new Date(entry.date))}
-        </time>
-        <span className={cn("mt-1.5 text-xs font-semibold", meta.text)}>{meta.label}</span>
-      </div>
-
-      {/* Content column — the spine is this column's left border; consecutive
-          rows stack their borders into one continuous line. The node sits on
-          it, punched through with a background-colored ring. */}
-      <div
-        className={cn(
-          "relative md:border-l md:border-border md:pl-10",
-          isLast ? "pb-0" : "pb-14 sm:pb-16",
-        )}
+    // The li stays a direct child of the ol so the timeline reads as a list to
+    // assistive tech; Reveal sits inside it and carries the row's grid.
+    <li>
+      <Reveal
+        delay={delay}
+        className="relative grid grid-cols-1 gap-x-8 md:grid-cols-[8.5rem_minmax(0,1fr)]"
       >
-        {/* node */}
-        <span
-          aria-hidden
-          className="absolute -left-[7px] top-1.5 hidden size-3.5 items-center justify-center md:flex"
-        >
-          {entry.highlight && (
-            <span
-              className="absolute size-6 rounded-full opacity-30 blur-md"
-              style={{ background: meta.glow }}
-            />
-          )}
-          <span className={cn("relative size-3.5 rounded-full ring-4 ring-background", meta.dot)} />
-        </span>
+        {/* Date rail — desktop only, right-aligned onto the spine */}
+        <div className="hidden md:flex md:flex-col md:items-end md:pt-1.5 md:text-right">
+          <time dateTime={entry.date} className="text-sm font-semibold text-foreground">
+            {FMT.format(new Date(entry.date))}
+          </time>
+          <span className={cn("mt-1.5 text-xs font-semibold", meta.text)}>{meta.label}</span>
+        </div>
 
-        <EntryCard entry={entry} meta={meta} />
-      </div>
+        {/* Content column — the spine is this column's left border; consecutive
+            rows stack their borders into one continuous line. The node sits on
+            it, punched through with a background-colored ring. */}
+        <div
+          className={cn(
+            "relative md:border-l md:border-border md:pl-10",
+            isLast ? "pb-0" : "pb-14 sm:pb-16",
+          )}
+        >
+          {/* node */}
+          <span
+            aria-hidden
+            className="absolute -left-[7px] top-1.5 hidden size-3.5 items-center justify-center md:flex"
+          >
+            {entry.highlight && (
+              <span
+                className="absolute size-6 rounded-full opacity-30 blur-md"
+                style={{ background: meta.glow }}
+              />
+            )}
+            <span
+              className={cn("relative size-3.5 rounded-full ring-4 ring-background", meta.dot)}
+            />
+          </span>
+
+          <EntryCard entry={entry} meta={meta} />
+        </div>
+      </Reveal>
     </li>
   );
 }
@@ -194,7 +211,7 @@ function EntryCard({
   meta: (typeof CATEGORY_META)[ChangelogCategory];
 }) {
   return (
-    <Link
+    <a
       href={entry.href}
       className={cn(
         "group/card relative block overflow-hidden rounded-2xl border bg-card p-6 shadow-[0_1px_2px_rgba(21,21,21,0.04),0_10px_24px_-16px_rgba(21,21,21,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_1px_2px_rgba(21,21,21,0.05),0_18px_40px_-18px_rgba(21,21,21,0.22)] sm:p-7",
@@ -261,17 +278,14 @@ function EntryCard({
           </ul>
         )}
 
-        {/* "Read more" on its own is a generic anchor: the visible label
-            stays, the hidden half names the entry it opens. */}
         <span className="spectrum-underline mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
           Read more
-          <span className="sr-only">: {entry.title}</span>
           <ArrowRightBold
             className="size-3.5 transition-transform duration-300 group-hover/card:translate-x-0.5"
             aria-hidden
           />
         </span>
       </div>
-    </Link>
+    </a>
   );
 }

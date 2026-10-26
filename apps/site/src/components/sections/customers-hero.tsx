@@ -60,7 +60,7 @@ export function CustomersHero() {
                 and scale without wrestling their backend at every step.
               </p>
               <div className="mt-9 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                <PrismButton href="https://console.prisma.io" size="lg">
+                <PrismButton href="https://console.prisma.io/sign-up" size="lg">
                   Get started free
                 </PrismButton>
                 <PrismButtonOutline href="/contact" size="lg">

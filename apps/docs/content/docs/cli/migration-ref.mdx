@@ -25,25 +25,39 @@ You can also set it by hand with `migration ref set db <contract>`.
 ## Usage
 
 ```npm
-npx prisma@latest migration ref set production 4cb4256
-npx prisma@latest migration ref list
-npx prisma@latest migration ref delete production
+npx prisma migration ref set production 4cb4256
+npx prisma migration ref list
+npx prisma migration ref delete production
 ```
 
 ## Subcommands
 
 | Subcommand | What it does |
 | --- | --- |
-| `set <name> <contract>` | Points a ref at a contract. The contract is a hash or prefix, another ref name, a migration directory name, or `<dir>^` for that migration's source contract. |
+| `set <name> <contract>` | Points a ref at a contract. The contract is a [contract reference](/orm/migrations/the-migration-graph#contract-reference-forms): a hash or prefix, another ref name, a migration directory name, or `<dir>^` for that migration's source contract. |
 | `list` | Lists every ref with the contract hash it points at and the invariants recorded against it. |
 | `delete <name>` | Deletes a ref. The contract it pointed at is untouched. |
+
+## Data lines
+
+Without `--json`, the subcommands print these data lines on standard output:
+
+- `list`: one line per ref, with three fields separated by tabs: `name`, `hash`, and `invariants`. `invariants` lists, separated by commas, the ids of the data operations (their `invariantId`) that a migration to the ref must run.
+- `set`: one line, the contract hash the ref now points at.
+- `delete`: nothing. Its exit code says whether the ref was deleted, and `--json` carries the result.
+
+```bash
+npx prisma migration ref list | cut -f1
+```
+
+[Global flags](/cli/global-flags#data-lines-of-prisma-orm-commands) lists the rules data lines follow.
 
 ## Example workflow
 
 ```npm
-npx prisma@latest migration ref set production 20260101T1000_add_user
-npx prisma@latest migration status --db "$DATABASE_URL" --to production
-npx prisma@latest db migrate --db "$DATABASE_URL" --to production
+npx prisma migration ref set production 20260101T1000_add_user
+npx prisma migration status --db "$DATABASE_URL" --to production
+npx prisma db migrate --db "$DATABASE_URL" --to production
 ```
 
 Use refs when you want to name the contract state an environment should match, instead of always applying up to the latest migration on disk. If you pass `--advance-ref <name>` to a command that changes the database, that command also points the ref at the state it applied, once it succeeds.

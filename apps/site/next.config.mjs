@@ -1,4 +1,6 @@
+import { composerBuild, composerNextConfig } from "../../composer/next-config.mjs";
 import { createMDX } from "fumadocs-mdx/next";
+import { fileURLToPath } from "node:url";
 
 const withMDX = createMDX();
 
@@ -30,6 +32,7 @@ const imageRemoteHostnames = [
 
 if (
   process.env.NODE_ENV === "production" &&
+  !composerBuild &&
   (!process.env.NEXT_DOCS_ORIGIN || !process.env.NEXT_BLOG_ORIGIN)
 ) {
   throw new Error(
@@ -55,6 +58,7 @@ const ContentSecurityPolicy = `
     https://tally.so
     https://va.vercel-scripts.com
     https://www.googletagmanager.com
+    https://bzrcdn.openai.com
     https://widget.kapa.ai
     https://www.google.com
     https://www.gstatic.com
@@ -97,6 +101,7 @@ const ContentSecurityPolicy = `
   img-src 'self' data:
     http://localhost:3002 http://127.0.0.1:3002
     https://www.googletagmanager.com
+    https://bzr.openai.com
     https://www.prisma.io https://prisma.io
     https://cdn.sanity.io
     https://prisma.io
@@ -139,6 +144,8 @@ const ContentSecurityPolicy = `
     https://*.tally.so
     https://va.vercel-scripts.com
     https://www.googletagmanager.com
+    https://bzr.openai.com
+    https://bzrcdn.openai.com
     https://www.google.com
     https://www.gstatic.com
     https://kapa-widget-proxy-la7dkmplpq-uc.a.run.app
@@ -197,7 +204,6 @@ const ContentSecurityPolicy = `
     https://pagead2.googlesyndication.com
     https://googleads.g.doubleclick.net
     https://td.doubleclick.net
-    https://calculator.prisma.io/
     https://ppg-pricing-calculator.vercel.app
     https://hcaptcha.com
     https://*.hcaptcha.com;
@@ -253,8 +259,8 @@ const securityHeaders = [
 
 /**
  * The marketing pages that also have a Markdown rendition. Mirrors
- * AGENT_MARKDOWN_PATHS in src/lib/agent-markdown.ts and the matcher in
- * src/proxy.ts; src/lib/agent-markdown.test.ts asserts the three agree.
+ * AGENT_MARKDOWN_PATHS in src/lib/agent-markdown.ts;
+ * src/lib/agent-markdown.test.ts asserts the two agree.
  */
 const agentMarkdownPaths = [
   "/",
@@ -266,6 +272,14 @@ const agentMarkdownPaths = [
   "/stack",
   "/enterprise",
   "/mcp",
+  "/compare",
+  "/compare/convex",
+  "/compare/kysely",
+  "/compare/mongoose",
+  "/compare/neon",
+  "/compare/planetscale",
+  "/compare/supabase",
+  "/compare/vercel-neon-drizzle",
 ];
 
 /**
@@ -278,7 +292,7 @@ const agentMarkdownPaths = [
  *
  * `Vary: Accept` says the same URL has an HTML and a Markdown variant, so a
  * shared cache must key them apart. Under `next start` it does not reach the
- * client on these nine pages: Next writes its own RSC `Vary` onto an
+ * client on these pages: Next writes its own RSC `Vary` onto an
  * app-router response after both `headers()` and middleware headers have been
  * merged, and neither survives it (measured; a middleware `append` was tried
  * and dropped the same way, and apps/docs does not set it at all). It is
@@ -303,6 +317,33 @@ function agentMarkdownHeaders(path) {
   };
 }
 
+/**
+ * The product guides in content/answers, at `/postgres/<slug>` and
+ * `/compute/<slug>`, get the same two headers, with each guide's own `.md`
+ * URL in the `Link`. A guide URL is one lowercase, hyphenated slug segment
+ * that is not one of the static routes beside the guides. Keep the reserved
+ * segments in step with `ANSWER_PAGE_RESERVED_SEGMENTS` and `getAnswerPagePath`
+ * in src/lib/agent-markdown.ts; src/lib/answer-page-markdown.test.ts checks
+ * that the two agree.
+ */
+export const ANSWER_PAGE_HEADER_SOURCES = {
+  postgres: "/postgres/:slug((?!(?:guides|hipaa)$)[a-z0-9]+(?:-[a-z0-9]+)*)",
+  compute: "/compute/:slug((?!(?:guides)$)[a-z0-9]+(?:-[a-z0-9]+)*)",
+};
+
+function answerPageMarkdownHeaders([product, source]) {
+  return {
+    source,
+    headers: [
+      { key: "Vary", value: "Accept" },
+      {
+        key: "Link",
+        value: `</${product}/:slug.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="llms-txt"`,
+      },
+    ],
+  };
+}
+
 const allowedDevOrigins = (process.env.ALLOWED_DEV_ORIGINS ?? "localhost,127.0.0.1,192.168.1.48")
   .split(",")
   .map((origin) => origin.trim())
@@ -310,11 +351,16 @@ const allowedDevOrigins = (process.env.ALLOWED_DEV_ORIGINS ?? "localhost,127.0.0
 
 /** @type {import('next').NextConfig} */
 const config = {
+  ...composerNextConfig,
+  ...(composerBuild
+    ? { cacheHandler: fileURLToPath(new URL("../../composer/next-cache.cjs", import.meta.url)) }
+    : {}),
   reactCompiler: true,
   assetPrefix: "/site-static",
   allowedDevOrigins,
   reactStrictMode: true,
   images: {
+    ...(composerBuild ? { customCacheHandler: true } : {}),
     unoptimized: false,
     remotePatterns: imageRemoteHostnames.map((hostname) => ({
       protocol: "https",
@@ -324,6 +370,67 @@ const config = {
   transpilePackages: ["@prisma/eclipse"],
   async redirects() {
     return [
+      // ChatGPT ads landing pages (src/app/lp): noindex, linked only from the
+      // ads. `utm_term=lp-<slug>` names the landing variant on every tagged
+      // visit, so signups split by page even when variants share an ad
+      // campaign. The redirect is a no-op when the ad URL is complete (see the
+      // campaign URL in each page.tsx) and keeps the ad's own params and
+      // `oppref`. A visit with no `utm_source` at all is left alone: it is not
+      // evidence of a paid click, so the Console link falls back to
+      // `ref=prisma.io/lp/<slug>` like any other direct visit.
+      ...["compute", "postgres", "free", "1000-databases", "providers"].map((slug) => ({
+        source: `/lp/${slug}`,
+        has: [{ type: "query", key: "utm_source" }],
+        missing: [{ type: "query", key: "utm_term" }],
+        destination: `/lp/${slug}?utm_term=lp-${slug}`,
+        permanent: false,
+      })),
+      // Search Console 404s: published docs URLs missing the /docs base path.
+      // Exact mappings preserve the /orm marketing page and unknown-path 404s.
+      { source: "/ai/mcp-tools", destination: "/docs/ai/mcp-tools", permanent: true },
+      {
+        source: "/orm/v6/prisma-client/queries/pagination",
+        destination: "/docs/orm/v6/prisma-client/queries/pagination",
+        permanent: true,
+      },
+      {
+        source: "/orm/reference/migration-api",
+        destination: "/docs/orm/reference/migration-api",
+        permanent: true,
+      },
+      {
+        source: "/orm/v6/more/ai-tools/github-copilot",
+        destination: "/docs/orm/v6/more/ai-tools/github-copilot",
+        permanent: true,
+      },
+      {
+        source: "/orm/v6/overview/databases/sqlite",
+        destination: "/docs/orm/v6/overview/databases/sqlite",
+        permanent: true,
+      },
+      {
+        source: "/orm/v6/prisma-client/client-extensions/shared-extensions/permit-rbac",
+        destination: "/docs/orm/v6/prisma-client/client-extensions/shared-extensions/permit-rbac",
+        permanent: true,
+      },
+      {
+        source:
+          "/orm/v6/prisma-client/debugging-and-troubleshooting/troubleshooting-binary-size-issues",
+        destination:
+          "/docs/orm/v6/prisma-client/debugging-and-troubleshooting/troubleshooting-binary-size-issues",
+        permanent: true,
+      },
+      {
+        source: "/orm/v6/prisma-client/deployment/deploy-migrations-from-a-local-environment",
+        destination:
+          "/docs/orm/v6/prisma-client/deployment/deploy-migrations-from-a-local-environment",
+        permanent: true,
+      },
+      {
+        source: "/orm/v6/prisma-client/deployment/edge/deploy-to-cloudflare",
+        destination: "/docs/orm/v6/prisma-client/deployment/edge/deploy-to-cloudflare",
+        permanent: true,
+      },
       // 2026 rebrand: old-site URLs whose content moved in the redesign IA.
       { source: "/about", destination: "/company", permanent: true },
       { source: "/careers", destination: "/company/careers", permanent: true },
@@ -332,6 +439,7 @@ const config = {
       { source: "/privacy", destination: "/legal/privacy", permanent: true },
       { source: "/terms", destination: "/legal/terms", permanent: true },
       { source: "/sla", destination: "/legal/sla", permanent: true },
+      { source: "/security", destination: "/legal/security-and-compliance", permanent: true },
       { source: "/startups", destination: "/programs/startups", permanent: true },
       { source: "/partners", destination: "/programs/partners", permanent: true },
       { source: "/oss-friends", destination: "/programs/oss-friends", permanent: true },
@@ -363,12 +471,38 @@ const config = {
         destination: "https://www.prisma.io/:path*",
         permanent: true,
       },
+      // The www. variants are separate entries on purpose: a host value is
+      // matched as an anchored pattern (^value$), so the bare-host entry above
+      // never matches the www. variant, and a literal value can be checked at
+      // a glance where a pattern cannot.
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.prismagraphql.com",
+          },
+        ],
+        destination: "https://www.prisma.io/:path*",
+        permanent: true,
+      },
       {
         source: "/:path*",
         has: [
           {
             type: "host",
             value: "prisma.sh",
+          },
+        ],
+        destination: "https://www.prisma.io/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.prisma.sh",
           },
         ],
         destination: "https://www.prisma.io/:path*",
@@ -497,13 +631,19 @@ const config = {
       },
       {
         permanent: true,
+        source: "/blog/comparison-prisma-typeorm-A9nlX0Pb5G1X",
+        destination: "/docs/orm/v7/more/comparisons/prisma-and-typeorm",
+      },
+      // v1.prisma.io/forum and /tutorials 404. Exact /tutorials/postgres-* rules above still win.
+      {
+        permanent: true,
         source: "/forum/:any*",
-        destination: "https://v1.prisma.io/forum/:any*",
+        destination: "/community",
       },
       {
         permanent: true,
         source: "/tutorials/:any*",
-        destination: "https://v1.prisma.io/tutorials/:any*",
+        destination: "/docs/guides",
       },
       {
         permanent: true,
@@ -528,7 +668,7 @@ const config = {
       {
         permanent: true,
         source: "/with-rest",
-        destination: "/docs/understand-prisma/prisma-in-your-stack/rest",
+        destination: "/docs/orm/v7/core-concepts/api-patterns",
       },
       {
         permanent: true,
@@ -619,11 +759,13 @@ const config = {
         destination: "/data-platform/:any*",
         permanent: true,
       },
-      // Point straight at the final 200 destination: /accelerate and /optimize
-      // are themselves redirected to / by vercel.json, and /pulse to /postgres.
+      // Point straight at the final 200 destination, matching vercel.json:
+      // Accelerate keeps its docs until it retires on December 1, 2026, and
+      // Optimize was replaced by Query Insights (there is no /optimize page in
+      // apps/docs). /pulse goes to /postgres.
       {
         source: "/data-platform/accelerate",
-        destination: "/",
+        destination: "/docs/accelerate",
         permanent: true,
       },
       {
@@ -633,7 +775,7 @@ const config = {
       },
       {
         source: "/data-platform/optimize",
-        destination: "/",
+        destination: "/docs/query-insights",
         permanent: true,
       },
       {
@@ -643,7 +785,7 @@ const config = {
       },
       {
         source: "/optimise",
-        destination: "/",
+        destination: "/docs/query-insights",
         permanent: true,
       },
       {
@@ -790,6 +932,7 @@ const config = {
   },
 
   async rewrites() {
+    const crossZone = (rule) => !composerBuild || !/^\/(docs|blog)(?:[/:.-]|$)/.test(rule.source);
     return {
       beforeFiles: [
         {
@@ -893,7 +1036,7 @@ const config = {
           destination: `${BLOG_ORIGIN}/blog-static/:path*`,
           missing: [{ type: "host", value: BLOG_ORIGIN_HOST }],
         },
-      ],
+      ].filter(crossZone),
       afterFiles: [
         // Markdown renditions of the marketing pages: /orm.md, /pricing.md,
         // /index.md for the homepage, and so on, all handled by
@@ -945,13 +1088,14 @@ const config = {
       // Extends, rather than replaces, the rule above: Next.js applies every
       // matching headers() entry.
       ...agentMarkdownPaths.map(agentMarkdownHeaders),
+      ...Object.entries(ANSWER_PAGE_HEADER_SOURCES).map(answerPageMarkdownHeaders),
       {
         source: "/console-analytics.html",
         headers: [
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'none'; script-src 'self' https://www.googletagmanager.com; connect-src https://*.google-analytics.com https://*.analytics.google.com https://*.doubleclick.net https://www.google.com https://www.google.es; img-src https:; frame-ancestors https://console.prisma.io; base-uri 'none'; form-action 'none'",
+              "default-src 'none'; script-src 'self' https://www.googletagmanager.com https://bzrcdn.openai.com; connect-src https://*.google-analytics.com https://*.analytics.google.com https://*.doubleclick.net https://www.google.com https://www.google.es https://bzr.openai.com https://bzrcdn.openai.com; img-src https:; frame-ancestors https://console.prisma.io; base-uri 'none'; form-action 'none'",
           },
           { key: "Referrer-Policy", value: "origin" },
           { key: "X-Robots-Tag", value: "noindex, nofollow" },

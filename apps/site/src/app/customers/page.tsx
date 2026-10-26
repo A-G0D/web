@@ -64,7 +64,7 @@ export default function CustomersPage() {
           },
           { label: "Trusted by 500K+ developers globally", color: "text-prism-red-500" },
         ]}
-        primaryCta={{ label: "Get started free", href: "https://console.prisma.io" }}
+        primaryCta={{ label: "Get started free", href: "https://console.prisma.io/sign-up" }}
         secondaryCta={{ label: "Talk to us", href: "/contact" }}
       />
     </>

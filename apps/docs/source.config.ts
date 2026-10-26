@@ -15,9 +15,9 @@ function convertLine(cmd: string, pm: "npm" | "pnpm" | "yarn" | "bun"): string {
   return cmd
     .split("\n")
     .map((line) => {
-      // `pnpm dlx` and `yarn dlx` always download a package, but `tsc` is a
-      // binary from the locally installed `typescript` package.
-      if ((pm === "pnpm" || pm === "yarn") && /^npx tsc\b/.test(line)) {
+      // `pnpm dlx` and `yarn dlx` always download a package, but `tsc` and an
+      // unpinned `prisma` are binaries from locally installed packages.
+      if ((pm === "pnpm" || pm === "yarn") && /^npx (tsc|prisma)(?=\s|$)/.test(line)) {
         return line.replace(/^npx/, pm);
       }
 
@@ -48,6 +48,8 @@ function convertLine(cmd: string, pm: "npm" | "pnpm" | "yarn" | "bun"): string {
 export const docs = defineDocs({
   dir: "content/docs",
   docs: {
+    // Keep hundreds of compiled MDX modules out of Compute's startup heap.
+    async: process.env.COMPOSER_BUILD === "1",
     schema: frontmatterSchema.extend({
       image: z.string().optional(),
       badge: z.enum(BADGE_TYPES).optional(),
@@ -69,7 +71,9 @@ export const docs = defineDocs({
     },
   },
   meta: {
-    schema: metaSchema,
+    schema: metaSchema.extend({
+      hiddenPages: z.array(z.string()).optional(),
+    }),
   },
 });
 

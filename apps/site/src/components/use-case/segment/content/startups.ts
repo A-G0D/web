@@ -2,7 +2,7 @@ import type { SegmentUseCaseContent } from "../types";
 
 // "Startups & Founders" use case, at /use-cases/startups. Copy is André's doc,
 // transcribed verbatim — no line added, removed, tightened or reworded.
-const CONSOLE = "https://console.prisma.io";
+const CONSOLE = "https://console.prisma.io/sign-up";
 const CONTACT = "/contact";
 
 export const startupsUseCase: SegmentUseCaseContent = {

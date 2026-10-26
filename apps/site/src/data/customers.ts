@@ -81,10 +81,10 @@ export type CustomerLogo = {
 export const CUSTOMER_STORIES: CustomerStory[] = [
   {
     slug: "reflag",
-    name: "Bucket",
-    title: "How Bucket Uses Prisma ORM to Make Shipping Feature Releases Faster",
+    name: "Reflag",
+    title: "How Reflag ships reliably with a lean team on Prisma ORM",
     excerpt:
-      "Discover how Bucket, a fast-growing feature management platform, uses Prisma ORM to simplify complex relational queries and accelerate feature releases. Learn how their lean team delivers high-quality features faster while managing evolving database needs with ease.",
+      "Reflag, a feature-management platform out of Copenhagen, runs its product on Node.js and PostgreSQL with a team of eight. It uses Prisma ORM to manage the complex relationships between features, users, and feedback without slowing development down.",
     stack: ["prisma"],
     href: "https://prisma.io/blog/how-bucket-uses-prisma-orm",
     logo: "/logos/customers/reflag-white.png",

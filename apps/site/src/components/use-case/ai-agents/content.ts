@@ -20,7 +20,7 @@ import type { ProductPageContent } from "@/components/product/types";
 //  - The doc's hero has no visual and no stats microline, so neither is
 //    invented: the hero visual is filled with the existing Console illustration
 //    (see ai-agents-page.tsx) and the microline is left off.
-const CONSOLE = "https://console.prisma.io";
+const CONSOLE = "https://console.prisma.io/sign-up";
 const CONTACT = "/contact";
 
 type Cta = { label: string; href: string };

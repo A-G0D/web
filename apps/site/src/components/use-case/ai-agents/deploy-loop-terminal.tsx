@@ -122,6 +122,9 @@ export function DeployLoopTerminal({ label }: { label: string }) {
   // and clears when it wraps — the loop restarting.
   const shown = reduce ? STAGES : STAGES.slice(0, step + 1);
   const flat = shown.flatMap((s, si) => s.lines.map((line, li) => ({ line, si, li })));
+  // The summary only claims success once the redeploy has run: during build,
+  // deploy and the debug stage's TypeError it reads as still in progress.
+  const done = reduce || step === STAGES.length - 1;
 
   return (
     <div
@@ -203,11 +206,31 @@ export function DeployLoopTerminal({ label }: { label: string }) {
           style={{ backgroundImage: SPECTRUM }}
         />
         <div className="relative flex items-center gap-2">
-          <CheckCircle className="size-4 shrink-0 text-prism-cyan-500" aria-hidden />
-          <span className="text-[0.8125rem] font-semibold text-foreground">Deployed</span>
-          <span className="ml-auto flex items-center gap-1.5 rounded-full bg-prism-cyan-100 px-2 py-0.5 text-[0.5625rem] font-semibold text-prism-cyan-800">
-            <span className="size-1.5 animate-status-pulse rounded-full bg-prism-cyan-400 motion-reduce:animate-none" />
-            live
+          {done ? (
+            <CheckCircle className="size-4 shrink-0 text-prism-cyan-500" aria-hidden />
+          ) : (
+            <span aria-hidden className="flex size-4 shrink-0 items-center justify-center">
+              <span className="size-2 animate-status-pulse rounded-full bg-border" />
+            </span>
+          )}
+          <span className="text-[0.8125rem] font-semibold text-foreground">
+            {done ? "Deployed" : "Deploying"}
+          </span>
+          <span
+            className={cn(
+              "ml-auto flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.5625rem] font-semibold",
+              done ? "bg-prism-cyan-100 text-prism-cyan-800" : "bg-muted text-muted-foreground",
+            )}
+          >
+            <span
+              className={cn(
+                "size-1.5 rounded-full",
+                done
+                  ? "animate-status-pulse bg-prism-cyan-400 motion-reduce:animate-none"
+                  : "bg-border",
+              )}
+            />
+            {done ? "live" : "in progress"}
           </span>
         </div>
 

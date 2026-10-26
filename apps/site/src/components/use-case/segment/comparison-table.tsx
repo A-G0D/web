@@ -25,11 +25,23 @@ export type ComparisonContent = {
   pointHeader: string;
   /** Header for the assembled/fragmented column, e.g. "Assembled SaaS stack". */
   assembledHeader: string;
+  /** Header for the Prisma column. Defaults to "Prisma". */
+  prismaHeader?: string;
+  /** The "Recommended" marker beside the Prisma header. Defaults to shown. */
+  recommended?: boolean;
   rows: ComparisonRow[];
 };
 
 export function ComparisonTable({ comparison }: { comparison: ComparisonContent }) {
-  const { headline, intro, pointHeader, assembledHeader, rows } = comparison;
+  const {
+    headline,
+    intro,
+    pointHeader,
+    assembledHeader,
+    prismaHeader = "Prisma",
+    recommended = true,
+    rows,
+  } = comparison;
   return (
     <section className="overflow-x-clip bg-white px-4 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-site">
@@ -78,7 +90,7 @@ export function ComparisonTable({ comparison }: { comparison: ComparisonContent 
                       className="absolute inset-x-0 top-0 h-[3px]"
                       style={{ backgroundImage: SPECTRUM }}
                     />
-                    <p className="text-[0.6875rem] font-semibold text-foreground">Prisma</p>
+                    <p className="text-[0.6875rem] font-semibold text-foreground">{prismaHeader}</p>
                     <p className="mt-1 text-sm leading-relaxed text-foreground">{row.prisma}</p>
                   </div>
                 </div>
@@ -114,8 +126,8 @@ export function ComparisonTable({ comparison }: { comparison: ComparisonContent 
                       style={{ backgroundImage: SPECTRUM }}
                     />
                     <span className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-foreground">Prisma</span>
-                      <Marker>Recommended</Marker>
+                      <span className="text-sm font-semibold text-foreground">{prismaHeader}</span>
+                      {recommended ? <Marker>Recommended</Marker> : null}
                     </span>
                   </th>
                 </tr>

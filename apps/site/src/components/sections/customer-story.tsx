@@ -40,7 +40,7 @@ export function CustomerStory({ story }: { story: CustomerStoryDetail }) {
           label,
           color: CHECK_COLORS[i % CHECK_COLORS.length],
         }))}
-        primaryCta={{ label: "Get started free", href: "https://console.prisma.io" }}
+        primaryCta={{ label: "Get started free", href: "https://console.prisma.io/sign-up" }}
         secondaryCta={{ label: "Talk to us", href: "/contact" }}
       />
     </>
@@ -247,7 +247,7 @@ function StoryHero({ story }: { story: CustomerStoryDetail }) {
                 {story.hero.support && <p>{story.hero.support}</p>}
               </div>
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <PrismButton href="https://console.prisma.io" size="lg">
+                <PrismButton href="https://console.prisma.io/sign-up" size="lg">
                   Get started free
                 </PrismButton>
                 <PrismButtonOutline href="/contact" size="lg">

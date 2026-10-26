@@ -1,42 +1,63 @@
+import { Fragment } from "react";
 import { createPageMetadata } from "@/lib/page-metadata";
-import { PlatformHero } from "@/components/sections/platform-hero";
-import { PlatformCompare } from "@/components/sections/platform-compare";
-import { PlatformFlow } from "@/components/sections/platform-flow";
-import { PlatformProducts } from "@/components/sections/platform-products";
-import { PlatformOpen } from "@/components/sections/platform-open";
-import { AgentLoop } from "@/components/sections/agent-loop";
-import { TestimonialsReveal } from "@/components/sections/testimonials-reveal";
+import { ProductHero } from "@/components/product/product-hero";
 import { CtaBurst } from "@/components/sections/cta-burst";
+import { StackBento } from "@/components/sections/stack-bento";
+import { ComparisonTable } from "@/components/use-case/segment/comparison-table";
+import { SegmentWhen } from "@/components/use-case/segment/sections";
+import { BestFor } from "./best-for";
+import { bestFor, comparison, cta, hero, stack, when } from "./content";
+import { StackHeroVisual } from "./stack-hero-visual";
 
 export const metadata = createPageMetadata({
   title: "The Prisma Stack | ORM, Postgres, and Compute for TypeScript",
-  // The approved SEO copy (scripts/seo-page-metadata.test.ts), kept across the
-  // page redesign.
   description:
     "ORM, Postgres, and Compute, one platform for your app and its database, with one shared context across your stack.",
   path: "/stack",
   ogKicker: "The Prisma Stack",
 });
 
-// Narrative order, per the client's structure note: what it is → how it works →
-// why it matters. Core value, then the system diagram, then the build/deploy/
-// debug path, then the products, then what you get and what stays replaceable,
-// then proof and the ask.
-// Section rhythm: the wrapped panels (hero, flow, closing CTA) break up the runs
-// of sections that sit on the page's own white.
-export default function StackPage() {
+/** The copy marks inline code with backticks (content.ts stays React-free); set it in <code>. */
+function withInlineCode(text: string) {
+  return text.split(/(`[^`]+`)/g).map((part, i) =>
+    part.startsWith("`") && part.endsWith("`") ? (
+      <code key={i} className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.8125em]">
+        {part.slice(1, -1)}
+      </code>
+    ) : (
+      <Fragment key={i}>{part}</Fragment>
+    ),
+  );
+}
+
+// Separate from /stack. Built from existing sections in the copy's order: the
+// product-page hero carrying a stack abstraction, the homepage stack bento
+// (unwrapped, since the hero directly above is the wrapped panel), the segment
+// pages' comparison table and "when to use" cards, a ruled audience list, and
+// the site's closing CTA.
+export default function PrismaStackPage() {
   return (
     <>
-      <PlatformHero />
-      <PlatformCompare />
-      <PlatformFlow />
-      <PlatformProducts />
-      <AgentLoop heading="What changes when your stack works as one" />
-      <PlatformOpen />
-      <TestimonialsReveal />
-      {/* the homepage's closing CTA, unchanged — same copy as the copy deck's
-          closing block, same cloud loop, same prismatic burst on the buttons */}
-      <CtaBurst />
+      <ProductHero
+        name="The Prisma Stack"
+        accent="orm"
+        hero={hero}
+        visual={<StackHeroVisual />}
+        visualAspect={false}
+      />
+      <StackBento
+        content={{ ...stack, cli: { body: withInlineCode(stack.cli.body) } }}
+        wrapped={false}
+      />
+      <ComparisonTable comparison={comparison} />
+      <SegmentWhen when={when} />
+      <BestFor bestFor={bestFor} />
+      <CtaBurst
+        headline={cta.headline}
+        body={cta.body}
+        bodyMaxWidth="max-w-[60ch]"
+        checks={cta.checks}
+      />
     </>
   );
 }

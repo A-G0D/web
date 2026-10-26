@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+import Link from "next/link";
 import { CheckBold } from "@/components/icons/forma";
 import { GlassGlide } from "@/components/brand/glass-glide";
 import { PrismButton, PrismButtonOutline } from "@/components/brand/prism-button";
@@ -44,27 +46,26 @@ export function ProductHero({
   accent,
   hero,
   visual,
+  visualAspect = true,
   placeholderLabel = "[Product abstraction]",
   benefitsPlacement = "below-cta",
 }: Pick<ProductPageContent, "name" | "hero"> & {
   /**
    * A Platform product's canonical accent, or a raw `bg-*` class for pages
-   * that aren't a product — use-case pages carry the same hero but must not
+   * that aren't a product: use-case pages carry the same hero but must not
    * claim a product identity in the kicker dot.
    */
   accent: ProductAccentName | `bg-${string}`;
-  /**
-   * A ready-made visual for the right column, rendered ahead of the tour /
-   * illustration / placeholder fallbacks. Use-case pages carry no product
-   * tour, so they pass an existing site abstraction here (e.g. the Console
-   * illustration) rather than reserving a labelled slot.
-   */
-  visual?: React.ReactNode;
+  // Optional custom hero visual. When provided, it replaces the illustration /
+  // product tour / placeholder in the visual slot. `visualAspect={false}` lets
+  // the visual set its own height instead of the default 4:3 mobile aspect.
+  visual?: ReactNode;
+  visualAspect?: boolean;
   /** What the reserved illustration slot is waiting for, when there isn't one yet. */
   placeholderLabel?: string;
   /**
    * Where the three benefits sit relative to the CTA. Product pages keep
-   * `below-cta` — the 2026-08-06 review moved them there because they were
+   * `below-cta`: the 2026-08-06 review moved them there because they were
    * pushing the CTA below the fold on /orm. Use-case pages ask for
    * `above-cta`, which is the order their approved copy is written in
    * (André, 2026-08-13); their copy is short enough to carry it.
@@ -159,10 +160,6 @@ export function ProductHero({
                   </p>
                 ),
               )}
-              {/* Benefits support the CTA rather than delaying it — on product
-                  pages they sit below it, so they carry their original weight
-                  without competing. It was the position that pushed the CTA
-                  down, not the type. */}
               {benefitsAbove ? benefits : null}
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <PrismButton href={hero.primaryCta.href} size="lg">
@@ -175,6 +172,20 @@ export function ProductHero({
               {hero.microline ? (
                 <p className="mt-3.5 text-sm text-muted-foreground">{hero.microline}</p>
               ) : null}
+              {hero.related ? (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  <Link
+                    href={hero.related.href}
+                    className="font-medium text-foreground underline underline-offset-4 decoration-black/20 transition-colors hover:decoration-black/60"
+                  >
+                    {hero.related.label}
+                  </Link>
+                </p>
+              ) : null}
+              {/* Benefits support the CTA rather than delaying it. On product
+                  pages they sit below it, so they carry their original weight
+                  without competing: it's the position that was pushing the CTA
+                  down, not the type. */}
               {benefitsAbove ? null : benefits}
             </div>
 
@@ -193,7 +204,7 @@ export function ProductHero({
                     it would render a tour whose `% stops.length` is NaN, giving
                     an empty card with no tabs instead of falling through here */}
                 {visual ? (
-                  <div className="max-md:aspect-[4/3] md:flex md:h-full md:items-center">
+                  <div className={cn("md:h-full", visualAspect && "max-md:aspect-[4/3]")}>
                     {visual}
                   </div>
                 ) : hero.tour?.length ? (

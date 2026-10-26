@@ -2,7 +2,7 @@ import type { SegmentUseCaseContent } from "../types";
 
 // "Engineering Teams" use case, at /use-cases/engineering-teams. Copy is
 // André's doc, transcribed verbatim — no line added, removed, or reworded.
-const CONSOLE = "https://console.prisma.io";
+const CONSOLE = "https://console.prisma.io/sign-up";
 const CONTACT = "/contact";
 
 export const engineeringTeamsUseCase: SegmentUseCaseContent = {
