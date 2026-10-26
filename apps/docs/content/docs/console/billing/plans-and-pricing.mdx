@@ -43,7 +43,7 @@ The [Prisma Postgres FAQ](/postgres/faq#what-is-an-operation) covers operations 
 
 ## Free plan limits
 
-The Free plan has no usage charges. Instead it has hard monthly limits on Prisma Postgres operations (pooled across every database in the workspace), storage, and databases per workspace, plus its own Prisma Compute limits. For the current values, see the [pricing page](https://www.prisma.io/pricing).
+The Free plan has no usage charges. Instead it has hard limits. Prisma Postgres operations (pooled across every database in the workspace) and Prisma Compute usage have monthly limits that reset each month. Storage and the number of databases per workspace are fixed limits that don't reset, so to get under them you remove data or databases, or upgrade. For the current values, see the [pricing page](https://www.prisma.io/pricing).
 
 When a Free workspace uses all its operations, its databases stop accepting queries until you upgrade to a paid plan or the next calendar month starts. Upgrading lifts the block, usually within a minute. See [Usage limits and blocks](/console/billing/usage-limits-and-blocks).
 
@@ -91,7 +91,7 @@ Yes. The Enterprise plan is a custom contract. Use the contact form on the [Ente
 
 ### What happens when I go over my plan's included operations?
 
-On a paid plan, operations above the allowance are billed at your plan's per-million rate on the next invoice. On the Free plan, your databases are blocked until you upgrade or the next month starts. To cap usage charges on a paid plan, set a [spend limit](/console/billing/spend-limits).
+On a paid plan, operations above the allowance are billed at your plan's per-operation rate on the next invoice. On the Free plan, your databases are blocked until you upgrade or the next month starts. To cap usage charges on a paid plan, set a [spend limit](/console/billing/spend-limits).
 
 ### Which plan is cheapest for high usage?
 

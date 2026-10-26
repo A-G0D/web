@@ -45,7 +45,7 @@ Changes apply to invoices issued from then on. Invoices that were already issued
 
 ## Tax residency certificates and tax forms
 
-Prisma doesn't publish tax documents such as a tax residency certificate, a W-8, or a W-9 in the Console. To request one, [contact support](/console/more/support) from the email on your Prisma account, and say which document and which tax year you need. Support passes the request to Prisma's finance team. These documents are issued by the tax authority, so they can take some time.
+Prisma doesn't publish tax documents such as a tax residency certificate, a W-8, or a W-9 in the Console. To request one, [contact support](/console/more/support) from the email on your Prisma account, and say which document and which tax year you need. Support passes the request to Prisma's finance team, which completes forms such as a W-8 or W-9. A tax residency certificate is issued by the tax authority, so it can take longer.
 
 ## Currency
 
@@ -64,9 +64,11 @@ A failed payment doesn't block your workspace straight away. This is the timelin
 
 Stripe retries a failed payment automatically over the following days. You don't have to wait for the next retry: after you update your card, select **Pay your outstanding balance** in the Console banner, or use the payment link in the email, and pay the open invoice straight away.
 
-If your bank declined the payment, contact your bank or update your payment method, then pay the open invoice. Paying late doesn't move your billing month: billing periods follow the calendar month, so a new month's invoice can arrive soon after you pay an overdue one.
+If your bank declined the payment, contact your bank or update your payment method, then pay the open invoice. Paying late doesn't move your renewal day, so the next period's invoice can arrive soon after you pay an overdue one.
 
-While the workspace is blocked for an unpaid invoice, you can't change its plan or delete it. See [Usage limits and blocks](/console/billing/usage-limits-and-blocks#unpaid-invoice-block) for what the block stops.
+While the workspace is blocked for an unpaid invoice, you can't change its plan or delete it.
+
+For a workspace billed through Vercel, the banner link reads **Resolve billing in Vercel** and opens your Vercel dashboard instead, because the invoice is paid in Vercel. See [Usage limits and blocks](/console/billing/usage-limits-and-blocks#unpaid-invoice-block) for what the block stops.
 
 ## A payment that's still processing
 
@@ -115,7 +117,7 @@ You weren't: Prisma charges in USD only. Your card issuer converted the charge a
 
 ### Can I get a tax residency certificate or a W-9?
 
-Contact support from your account email with the document and tax year you need, and support passes the request to Prisma's finance team. It can take some time because the tax authority issues these documents.
+Contact support from your account email with the document and tax year you need, and support passes the request to Prisma's finance team. Prisma's finance team completes forms such as a W-9. A tax residency certificate takes longer, because the tax authority issues it.
 
 ### My payment failed. When will my database stop working?
 

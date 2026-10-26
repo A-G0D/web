@@ -8,7 +8,7 @@ metaDescription: Learn about backups in Prisma Postgres
 
 ## Overview
 
-On [Starter, Pro, and Business plans](https://www.prisma.io/pricing), Prisma Postgres automatically creates snapshots of your database to support recovery and backup workflows. Navigate to the **Backups** tab of your Prisma Postgres instance in the [Prisma Console](https://console.prisma.io) to view and re-instantiate your available backups.
+On [Starter, Pro, and Business plans](https://www.prisma.io/pricing), Prisma Postgres automatically creates snapshots of your database to support recovery and backup workflows. Navigate to the **Backups** tab of your Prisma Postgres instance in the [Prisma Console](https://console.prisma.io) to view your available backups and [restore them](#restoring-a-backup).
 
 Snapshots are created only on days when the database has activity. How long snapshots are kept depends on your plan; for each plan's retention period, see the [pricing page](https://www.prisma.io/pricing).
 
@@ -16,10 +16,12 @@ Database changes or events that occurred after the most recent snapshot may not 
 
 On the current Starter, Pro, and Business plans, you can restore any listed snapshot yourself from the **Backups** tab. Workspaces still on an earlier version of the Starter plan have no snapshots, and the tab says **Upgrade to Starter, Pro, or Business to enable backups.** Contact [support](/console/more/support) if you see that message on a paid plan.
 
+To recover rows that were deleted by mistake without overwriting newer data, [restore a snapshot to a new database](#restoring-a-backup) and copy the missing rows back. [Recover deleted records from a hosted Postgres database](https://www.prisma.io/postgres/recover-deleted-records) walks through the steps.
+
 For more details about backup availability and plan-specific features, visit our [pricing page](https://www.prisma.io/pricing).
 
 :::note
-In the future, Prisma Postgres will provide more fine-grained backup mechanisms based on user specific configurations and with point-in-time restore functionality.
+Point-in-time recovery is coming to Prisma Postgres in November 2026. It will restore a database to a moment you choose, rather than to a retained daily snapshot.
 :::
 
 ## What triggers a snapshot
@@ -40,35 +42,31 @@ Snapshots older than your plan's retention period expire during a block like any
 
 The Free plan has no backups. Snapshots are only taken on Starter, Pro, and Business. On the Free plan, keep your own copy with [`pg_dump`](#manually-creating-a-backup-file-via-pg_dump).
 
-## Restore a snapshot
+## Restoring a backup
 
-Restore a snapshot from the **Backups** tab of your database in the [Prisma Console](https://console.prisma.io):
+In the **Backups** tab, select **Restore backup** next to a completed backup and choose where the backup goes:
 
-1. Open your project and select the database.
-2. Open the **Backups** tab. It lists the snapshots available on your plan, with their timestamp, size, and status.
-3. In the row of the snapshot you want, click the **Restore backup** icon. Only snapshots with the status **Completed** can be restored.
-4. In the **Restore Backup** dialog, choose where to restore:
-   - **Restore to a new database**: enter a name. Prisma creates a new database in the same project and region and copies the snapshot into it. The original database is not changed. The new database counts toward your plan's database limit and has its own connection strings.
-   - **Restore to an existing database**: pick a database in the project. Its data and structure are replaced with the snapshot in place, and it keeps its connection strings. Anything written to it after the snapshot was taken is lost.
-5. Click **Restore Backup**.
+- **Restore to a new database** creates a new database from the backup in the same project and leaves the original database as it is. The original database's connection strings don't reach the new database, so [generate a connection string](/postgres/database/connecting-to-your-database#get-your-connection-strings) for it and point your app at that, or copy the rows you need back into the original database.
+- **Restore to an existing database**, with the database you are restoring selected as the target, rolls that database back to the backup in place. All of its data is overwritten with the backup, and anything written after the backup was taken is lost. Open connections are closed while the restore runs. The database keeps its connection strings, so your app can use the same `DATABASE_URL` once the restore completes.
 
-Console opens the target database and shows **Database is being restored to the selected backup**. The database is unavailable until the restore finishes, and you can't generate connection strings for it during that time. You can't start a second restore while one is running. How long a restore takes depends on the size of the database: a small database restores quickly, while a large one can take much longer.
+Restoring a backup into a different database that already exists is not supported. Restore it to a new database instead.
 
-If the database is connected to Vercel, choose **Restore to an existing database** and select the same database, so its connection strings and the Vercel integration keep working.
+Only backups with the status **Completed** can be restored. A database restored as a new database counts toward your plan's database limit. While a restore runs, Console shows **Database is being restored to the selected backup**, the target database is unavailable, and you can't start a second restore. How long a restore takes depends on the size of the database.
 
-### Restore with the REST API
+If the database is connected to Vercel through the integration, restore it in place so the connection strings in your Vercel project keep working.
 
-The REST API [Restore database](/rest-api/endpoints/databases/post-databases-by-target-database-id-restore) endpoint restores a backup into an existing database in place. It replaces all data in the target database with the contents of the backup, and keeps the database's connection strings and credentials. Anything written to the target after the backup was taken is lost, and the operation can't be undone. List the backups of a database with [Get list of backups](/rest-api/endpoints/database-backups/get-databases-by-database-id-backups).
+### Restoring with the REST API, CLI, or MCP server
 
-Before you restore in place, take a `pg_dump` of the current data if there is anything in it you might want to keep.
+- [`POST /v1/databases/{targetDatabaseId}/restore`](/rest-api/endpoints/databases/post-databases-by-target-database-id-restore) and [`prisma postgres backup restore <database>`](/cli/postgres) restore in place, like **Restore to an existing database**.
+- [`POST /v1/projects/{projectId}/databases`](/rest-api/endpoints/databases/post-projects-by-project-id-databases) with a `source` of type `backup` creates a new database from a backup. The response includes the new database's connection string.
+- The `create_prisma_postgres_recovery` [MCP tool](/ai/mcp-tools) restores a backup into a new database.
 
-## Point-in-time recovery
-
-Point-in-time recovery (PITR), restoring to an exact moment between snapshots, is not available. You can restore only to one of the daily snapshots.
+A restore in place can't be undone. Before you restore in place, take a `pg_dump` of the current data if there is anything in it you might want to keep. List the backups of a database with [Get list of backups](/rest-api/endpoints/database-backups/get-databases-by-database-id-backups).
 
 ## Restore a deleted database
 
 A deleted database can't be restored, by you or by Prisma support. Its backups are deleted with it. To keep a copy, [export your data](/postgres/database/export-data) before you delete a database, project, or workspace.
+
 ## Recovery point and recovery time
 
 | Objective                      | Value          |

@@ -26,21 +26,21 @@ The new plan applies immediately. If the workspace was blocked for reaching the 
 
 ### How upgrades are charged
 
-- **From Free to a paid plan:** your first invoice charges the plan fee for the rest of the current month only (prorated). From the 1st of the next month you pay the full fee in advance.
-- **From one paid plan to a higher one:** the plan fee difference for the rest of the month is prorated and invoiced at once.
+- **From Free to a paid plan:** a new subscription starts, and it renews at 00:00 UTC on that day each month. Your first invoice charges the plan fee from the moment you upgrade until the first renewal, which is a full month minus the hours already gone that day (UTC).
+- **From one paid plan to a higher one:** the plan fee difference for the rest of the current billing period is prorated and invoiced at once. The renewal day doesn't change.
 
-Usage is never prorated: it is billed in arrears at the end of the month at the rates of your plan.
+Usage is never prorated: it is billed in arrears at the end of the billing period at the rates of your plan.
 
-For example, a workspace that upgrades from Free to Starter on April 16 pays half the monthly Starter fee on April 16 for April 16 to April 30. On May 1 it pays the full Starter fee for May plus any operations above the Starter allowance used from April 16 to April 30.
+For example, a workspace that upgrades from Free to Starter at 12:00 UTC on April 16 pays slightly less than the monthly Starter fee on April 16, for April 16 12:00 to May 16 00:00. On May 16 it pays the full Starter fee for the next period plus any operations above the Starter allowance used from April 16 to May 15.
 
 ## Downgrade to a lower paid plan
 
 1. Open **Workspace Settings > Billing**.
 2. Select **Manage subscription** and choose the lower plan.
 
-The downgrade is scheduled for the end of the current billing period. Until then, the workspace keeps the higher plan and its limits, and you've already paid for that month. Downgrades are not prorated, and no part of the current month's fee is returned.
+The downgrade is scheduled for the end of the current billing period. Until then, the workspace keeps the higher plan and its limits, and you've already paid for that period. Downgrades are not prorated, and no part of the current period's fee is returned.
 
-Downgrading mid-month does not reduce usage already counted in the current period. That usage is billed at the end of the month.
+Downgrading partway through a period does not reduce usage already counted in it. That usage is billed at the end of the period.
 
 ## Cancel a paid plan
 
@@ -50,6 +50,8 @@ Cancelling moves the workspace back to the Free plan at the end of the current b
 2. Select **Manage subscription**.
 3. Choose the **Free** plan.
 4. Select **Schedule cancellation**.
+
+The Console confirms with "Subscription cancellation scheduled. Your current plan stays active until the end of the current billing period." Until then, the **Subscription** card shows the date the plan ends.
 
 The paid plan stays active, with its limits, until the end of the current billing period. No part of the period is credited back. A cancellation made in Console doesn't end the plan early, so there is no unused time to credit: you keep the paid plan, and pay for it, until the end of the period you already paid for.
 
@@ -61,11 +63,11 @@ Usage is billed in arrears, so you receive one more invoice after the paid plan 
 
 ### Undo a scheduled cancellation
 
-Until the period ends, you can keep the paid plan. Open **Workspace Settings > Billing** and choose **Continue subscription**. The plan then renews on the 1st as usual.
+Until the period ends, you can keep the paid plan. Open **Workspace Settings > Billing** and choose **Continue subscription**. The plan then renews on its usual day.
 
 ### Subscribe again later
 
-If you upgrade again after the cancellation has taken effect, select **Upgrade**. Console treats it as a new paid subscription and opens checkout, with the first plan fee prorated for the rest of the month.
+If you upgrade again after the cancellation has taken effect, select **Upgrade**. Console treats it as a new paid subscription and opens checkout. The new subscription renews on the day you subscribe again, not on your old renewal day.
 
 ### Delete the workspace after cancelling
 
@@ -87,15 +89,15 @@ See [Vercel Marketplace billing](/console/billing/vercel-marketplace) for how th
 
 Two cases are common. Either you cancelled partway through a period, and the charge is the final invoice for usage during that period, billed in arrears, or the charge comes from a different workspace that is still on a paid plan, so check **Workspace Settings > Billing** in every workspace you belong to.
 
-### If I downgrade mid-month, do I get money back?
+### If I downgrade partway through a billing period, do I get money back?
 
 No. Downgrades take effect at the end of the billing period and aren't prorated. You keep the higher plan until then.
 
-### Why was my first invoice less than the plan fee?
+### Why was my first invoice slightly less than the plan fee?
 
-When you upgrade from Free partway through a month, the first plan fee covers only the days left in that month.
+The first billing period starts when you upgrade and ends at 00:00 UTC on the same day next month, so it's a full month minus the hours already gone on the day you upgraded. Subscriptions created before signup-day renewals, which renew on the 1st, had a first fee that covered only the days left in that month.
 
-### Do I get credit for the rest of the month when I cancel?
+### Do I get credit for the rest of the period when I cancel?
 
 No. The paid plan stays active until the end of the period you've paid for, so there's no unused time to credit.
 

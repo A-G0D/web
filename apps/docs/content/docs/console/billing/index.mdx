@@ -3,7 +3,7 @@ title: How billing works
 description: How Prisma bills a workspace, including the monthly billing cycle, plan fees charged in advance, usage charged in arrears, currency, and where to find invoices in Prisma Console.
 url: /console/billing
 metaTitle: How billing works | Prisma Console
-metaDescription: How Prisma billing works per workspace, the monthly cycle anchored to the 1st, plan fees charged in advance, operations, storage and Compute usage charged in arrears, and USD invoices.
+metaDescription: How Prisma billing works per workspace, the monthly cycle that renews on your signup day, plan fees charged in advance, operations, storage and Compute usage charged in arrears, and USD invoices.
 ---
 
 Each Prisma workspace has its own plan and its own invoices. This page explains when you're charged, what each invoice contains, and where to look in [Prisma Console](https://console.prisma.io) when a charge doesn't match what you expected.
@@ -16,20 +16,22 @@ If you belong to several workspaces, each one has its own plan. Upgrading one wo
 
 ## The billing cycle
 
-Paid subscriptions run on calendar months: each billing period starts on the 1st of the month and ends on the last day of that month. The date you signed up or upgraded does not change this anchor, and paying an invoice late does not move it either.
+Each billing period lasts one month and renews on the same day every month, at 00:00 UTC. For a new paid subscription, that day is the day you upgraded: a workspace that upgrades on April 17 renews on May 17, June 17, and so on. Paying an invoice late does not move the renewal day.
 
-If you start a paid plan partway through a month, your first plan fee covers only the remaining days of that month, and from then on you're billed on the 1st.
+Subscriptions created before Prisma switched to signup-day renewals keep renewing on the 1st of each month until they're cancelled. If you upgrade on the 29th, 30th, or 31st, a shorter month renews on its last day, and the subscription stays on that day from then on.
 
-Billing periods follow UTC: each period starts at 00:00 UTC on the 1st and ends at the end of the last day of the month, UTC. Depending on your time zone, the new period, its invoice, and the reset of your included usage can land on the evening of the last day of the month or later on the 1st in your local time.
+To see the renewal day for your workspace, open **Workspace Settings > Billing** and look at the **Subscription** card, which shows when the current billing period renews. **View Invoices** on the same page opens your invoice list, and each invoice shows the period it covers.
+
+Billing periods follow UTC, so depending on your time zone, the new period and its invoice can land on the evening before the renewal day in your local time.
 
 ## What you pay in advance and what you pay in arrears
 
 A paid plan has two kinds of charges, and they're billed at different times:
 
-- **The plan fee is charged in advance.** On the 1st of each month you pay the plan fee for the month that is starting.
-- **Usage is charged in arrears.** Usage above what your plan includes is measured during the month and billed after the month ends. This covers Prisma Postgres operations, Prisma Postgres storage, and Prisma Compute usage (requests, provisioned memory, active CPU, and outbound bandwidth).
+- **The plan fee is charged in advance.** At the start of each billing period you pay the plan fee for the period that is starting.
+- **Usage is charged in arrears.** Usage above what your plan includes is measured during the billing period and billed after the period ends. This covers Prisma Postgres operations, Prisma Postgres storage, and Prisma Compute usage (requests, provisioned memory, active CPU, and outbound bandwidth).
 
-So a regular invoice on the 1st usually has two parts: the plan fee for the new month and any usage charges for the month that just ended. For example, on the Starter plan, an invoice issued on May 1 contains the Starter fee for May 1 to May 31 and the charge for operations above the Starter allowance used from April 1 to April 30.
+So a regular invoice usually has two parts: the plan fee for the new period and any usage charges for the period that just ended. For example, a Starter workspace that renews on the 17th gets an invoice on May 17 with the Starter fee for May 17 to June 16 and the charge for operations above the Starter allowance used from April 17 to May 16.
 
 Because usage is billed after the fact, you receive one final usage invoice after you cancel a paid plan. See [Change or cancel your plan](/console/billing/change-or-cancel-plan) for the timing.
 
@@ -61,7 +63,7 @@ To check usage and your next invoice before it's issued, open **Usage** in the w
 
 The estimate updates every few hours, so very recent usage may not be in it yet. Accelerate usage for databases hosted outside Prisma isn't included; check it from the project instead.
 
-The **Subscription** card under **Workspace Settings > Billing** also shows how many of your plan's included Prisma Postgres operations you've used this month and when they reset. For a single Prisma Postgres database, the [`postgres usage`](/cli/postgres) CLI command prints its usage metrics.
+The **Subscription** card under **Workspace Settings > Billing** also shows how many of your plan's included Prisma Postgres operations you've used this billing period and when they reset. For a single Prisma Postgres database, the [`postgres usage`](/cli/postgres) CLI command prints its usage metrics.
 
 ## Workspaces created through the Vercel Marketplace
 
@@ -84,11 +86,11 @@ Cancellation takes effect at the end of the current billing period, and usage is
 
 ### Why does my invoice include last month's usage and next month's plan fee?
 
-The plan fee is charged in advance for the month that is starting, and usage is charged in arrears for the month that just ended. Both land on the invoice issued on the 1st.
+The plan fee is charged in advance for the billing period that is starting, and usage is charged in arrears for the period that just ended. Both land on the same invoice, issued on your renewal day.
 
 ### Can I change my billing date?
 
-Every paid subscription is billed on the 1st of the month. Your billing period always runs from 00:00 UTC on the 1st to the end of the calendar month, UTC.
+No. A subscription renews at 00:00 UTC on the day it started, and the date can't be moved. The **Subscription** card under **Workspace Settings > Billing** shows when the current period renews.
 
 ### How can I see what my next invoice will be?
 

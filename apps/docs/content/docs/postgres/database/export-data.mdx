@@ -20,7 +20,7 @@ Prisma support can't export a database for you. Run the export yourself while th
 ## Prerequisites
 
 - PostgreSQL command-line tools version 17 (`pg_dump` and `pg_restore`). Prisma Postgres runs Postgres 17. See [Install PostgreSQL command-line tools](/postgres/database/backups#1-install-postgresql-command-line-tools).
-- A connection string for the database. Generate one in the [Prisma Console](https://console.prisma.io) under your database's connection strings. See [Connecting to your database](/postgres/database/connecting-to-your-database).
+- A direct connection string for the database (host `db.prisma.io`), not the pooled one. Generate one in the [Prisma Console](https://console.prisma.io) under your database's connection strings. See [Connecting to your database](/postgres/database/connecting-to-your-database).
 - A workspace that isn't blocked. A blocked database accepts no connections, including `pg_dump`. See [Export from a blocked Free database](#export-from-a-blocked-free-database).
 
 ## 1. Export the database
@@ -83,4 +83,4 @@ A deleted database accepts no connections, so export it before you delete it. Se
 
 ### How do I move a database to another workspace or region?
 
-Export it, create a database in the target workspace or region, and import the dump there. To move a whole project between workspaces, see [Workspace members](/console/workspaces/members).
+Stop your application from writing to the old database, export it, create a database in the target workspace or region, and import the dump there. Keep writes stopped until your application uses the new database, because writes made after the export starts are not copied. To move a whole project between workspaces, see [Workspace members](/console/workspaces/members).

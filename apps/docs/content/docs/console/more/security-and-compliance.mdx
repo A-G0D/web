@@ -74,7 +74,7 @@ Each Prisma Postgres database runs in its own virtual machine, isolated from oth
 
 Prisma uses Stripe to process card payments. Your card details are stored by Stripe, and Prisma doesn't store card numbers.
 
-If you see an unexpected charge attempt on a card you use for Prisma, check your invoices in **Workspace Settings > Billing**. If the charge doesn't match an invoice there, it didn't come from Prisma; contact your card issuer. See [Invoices and payments](/console/billing/invoices-and-payments).
+If you see an unexpected charge attempt on a card you use for Prisma, check your invoices in **Workspace Settings > Billing** for every workspace you belong to, and check your Vercel invoices too, because Vercel bills workspaces created through the Vercel Marketplace. If the charge matches neither, it didn't come from Prisma; contact your card issuer. See [Invoices and payments](/console/billing/invoices-and-payments).
 
 Workspaces created through the Vercel Marketplace pay Vercel, and Prisma holds no payment method for them.
 
@@ -127,7 +127,7 @@ TLS ends at Prisma's connection proxy, so the database only sees the local conne
 
 ### Did Prisma leak my card details?
 
-Prisma doesn't store card numbers; Stripe does. If a charge doesn't match an invoice in **Workspace Settings > Billing**, it didn't come from Prisma.
+Prisma doesn't store card numbers; Stripe does. If a charge matches neither an invoice in **Workspace Settings > Billing** nor a Prisma charge on your Vercel invoice, it didn't come from Prisma.
 
 ### Do you have a bug bounty?
 

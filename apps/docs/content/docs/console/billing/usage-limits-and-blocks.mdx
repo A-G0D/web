@@ -18,7 +18,7 @@ There are three kinds of block, each with its own cause and its own way out. If 
 | --------------------- | ---------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------- |
 | Free plan usage limit | Free plan  | "Database queries are blocked because this workspace reached its monthly plan limit."                        | You upgrade to a paid plan, or the next calendar month starts.        |
 | Spend limit           | Paid plans | "Usage blocked: your workspace has reached its spending limit."                                              | You raise or remove the spend limit above your current usage charges. |
-| Unpaid invoice        | Paid plans | "Your Workspace is blocked due to an unpaid invoice. Pay your outstanding balance to unlock this Workspace." | The invoice that failed is paid successfully.                         |
+| Unpaid invoice        | Paid plans, and Free workspaces with an unpaid final invoice after cancelling | "Your Workspace is blocked due to an unpaid invoice. Pay your outstanding balance to unlock this Workspace." | The invoice that failed is paid successfully.                         |
 
 The database list in the Console shows a matching tooltip on each blocked database:
 
@@ -80,15 +80,15 @@ A spend limit is an optional cap you set on a paid workspace's usage charges. Wh
 
 The spend limit counts every usage charge, including Prisma Compute.
 
-You get a warning email at 75% of the limit and a block email at 100%. To lift the block, raise the limit with **Set Limit** or remove it with **Clear Limit** under **Workspace Settings > Billing**, typing the workspace name to confirm. The block lifts as soon as you confirm, but only if the new limit is above the usage charges you've already accrued this month; a limit at or below them re-blocks the workspace within minutes.
+You get a warning email at 75% of the limit and a block email at 100%. To lift the block, raise the limit with **Set Limit** or remove it with **Clear Limit** under **Workspace Settings > Billing**, typing the workspace name to confirm. The block lifts as soon as you confirm, but only if the new limit is above the usage charges you've already accrued this billing period; a limit at or below them re-blocks the workspace within minutes.
 
-If you don't change the limit, the block lifts on its own at 00:00 UTC on the 1st of the next month.
+If you don't change the limit, the block lifts on its own when the next billing period starts, at 00:00 UTC on your renewal day.
 
 Paying an invoice doesn't lift a spend-limit block. See [Spend limits](/console/billing/spend-limits) for the full details.
 
 ## Unpaid invoice block
 
-When a payment for an invoice fails, the workspace goes through two stages.
+When a payment for an invoice fails, the workspace goes through two stages. This also applies to a workspace that has moved back to the Free plan after cancelling, if the final usage invoice for its last paid period isn't paid.
 
 ### 1. At risk
 

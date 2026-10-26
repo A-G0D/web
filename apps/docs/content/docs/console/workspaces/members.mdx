@@ -8,6 +8,8 @@ metaDescription: Invite members to a Prisma Console workspace, accept an invite,
 
 A workspace can have several members, and every member can see and manage everything in it: projects, databases, billing, and other members. You manage members under **Workspace Settings > Members**.
 
+To delete a database, a project, or a whole workspace, see [Delete your account, workspace, project, or database](/console/account/delete-account).
+
 ## Roles and permissions
 
 Every member of a workspace is an Admin. There is no role picker when you invite someone, and there are no read-only or billing-only roles.
@@ -20,9 +22,9 @@ Any member can invite someone:
 
 1. Open the workspace in the [Console](https://console.prisma.io).
 2. Go to **Workspace Settings > Members**.
-3. Click **Invite member**, enter the person's email address, and send the invite.
+3. Click **Invite member**, add one or more email addresses, then click **Send Invites**.
 
-The person receives an invite email. If they don't have a Prisma account yet, they need to create one with that same email before they accept. See [Sign in to the Console](/console/account/sign-in).
+Each person receives an invite email. If they don't have a Prisma account yet, they need to create one with that same email before they accept. See [Sign in to the Console](/console/account/sign-in). While an invitation is pending, you can resend or revoke it from the same page.
 
 ## Accept an invite
 
@@ -37,10 +39,12 @@ If an invite seems not to arrive, check whether it was sent to the address you s
 
 ## Remove a member or leave a workspace
 
-- To remove someone, go to **Workspace Settings > Members** and click **Remove member** next to them.
-- To remove yourself, choose **Leave workspace**.
+On **Workspace Settings > Members**, open the menu at the end of a member's row:
 
-The last member of a workspace can't be removed and can't leave. To get rid of a workspace you're the only member of, [delete the workspace](/console/account/delete-account#delete-a-workspace) instead.
+- On someone else's row, choose **Remove member**. They lose access to the workspace and its projects straight away.
+- On your own row, choose **Leave workspace**. You lose access until someone invites you again.
+
+If you are the last member, leaving deletes the workspace, along with all of its projects, databases, and services. The Console asks you to type the workspace name to confirm, and the same conditions apply as in [Delete a workspace](/console/account/delete-account#delete-a-workspace).
 
 Removing a member doesn't change the workspace's billing email. If the billing email belongs to the person leaving, update it under **Workspace Settings > Billing > Manage billing information**. See [Invoices and payments](/console/billing/invoices-and-payments).
 
@@ -48,11 +52,13 @@ Removing a member doesn't change the workspace's billing email. If the billing e
 
 Because workspaces have no owner, there's nothing to transfer. To hand a workspace to someone else:
 
-1. Invite them as a member.
-2. Once they've accepted, remove yourself with **Leave workspace**, or let them remove you.
-3. Update the billing email if it's yours.
+1. [Invite](#invite-a-member) them as a member, and wait for them to accept.
+2. Update the billing email under **Workspace Settings > Billing > Manage billing information**, so invoices and payment emails go to the new person. Removing a member does not change it.
+3. [Leave the workspace](#remove-a-member-or-leave-a-workspace), or let them remove you.
 
 The same steps move your own workspaces to a new email address. See [Change your account email](/console/account/change-email).
+
+For a workspace created through the Vercel Marketplace, the billing email follows your Vercel team's contact, and is changed in Vercel.
 
 ## Regain access when no member is reachable
 
@@ -93,11 +99,11 @@ If anyone else is still a member, they can invite you. If no one is, contact sup
 
 ### Can another member remove me from a workspace I created?
 
-Yes. Workspaces have no owner, and any member can remove any other member, including the creator. Only the last member can't be removed.
+Yes. Workspaces have no owner, and any member can remove any other member, including the creator.
 
 ### How do I transfer ownership of my workspace?
 
-There's no owner to transfer. Invite the new person, then leave the workspace or let them remove you, and update the billing email.
+There's no owner to transfer. Invite the new person, update the billing email, then leave the workspace or let them remove you.
 
 ### Can I move a project or database to a different workspace?
 

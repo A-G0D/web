@@ -3,6 +3,7 @@
   "version": "0.2",
   "language": "en",
   "words": [
+    "authtoken",
     "dsphere",
     "nowait",
     "fastupdate",
@@ -497,7 +498,8 @@
     "subprocessors",
     "Subprocessors",
     "SQLSTATE",
-    "subprocessor"
+    "subprocessor",
+    "BYPASSRLS"
   ],
   "patterns": [
     {

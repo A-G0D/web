@@ -10,6 +10,8 @@ This guide is for existing Prisma Postgres applications that connect through a h
 
 The hosted Accelerate connection will be retired on December 1, 2026. This guide does not apply to [Local Postgres](/local-development/postgres) URLs such as `prisma+postgres://localhost:51213`.
 
+If your application gets `P6000` errors with the message "Worker exceeded resource limits" (Cloudflare error 1102), the limit was hit inside Accelerate, not in your own code, so switching to one of the connection methods in this guide fixes them. Larger queries and results make the error more likely. Until you switch, fetch fewer rows per query with a lower `take`, and remove relations you don't need from `include`. See [Accelerate troubleshooting](/accelerate/more/troubleshoot#p6000-and-cloudflare-error-1102).
+
 :::warning[Query caching is not replaced]
 
 Both replacement paths retain Prisma Postgres connection pooling. Neither path retains Accelerate query caching. Prisma Postgres does not currently provide replacement query caching, so remove every Accelerate caching API before you switch.
@@ -289,7 +291,3 @@ When you compare timings before and after the switch, record:
 - where the application runs and which region the database is in
 
 If your application runs near the database with `relationJoins` enabled and is still much slower than on Accelerate, contact [support](/console/more/support) with these numbers and the versions of `prisma`, `@prisma/client`, and the driver adapter you use.
-
-### Error 1102 before you switch
-
-While your application still uses Accelerate, a query can fail with Cloudflare error 1102, `Worker exceeded resource limits`. It means the edge worker handling that request hit its CPU limit, which grows with the size of the query and its response. It is not caused by how long your own function has been running. Until you switch, fetch smaller pages and flatter `select` shapes. After you move to a pooled TCP connection, this error no longer occurs. See [Accelerate troubleshooting](/accelerate/more/troubleshoot#p6000-and-cloudflare-error-1102).

@@ -170,13 +170,13 @@ Certain processes, such as bulk data imports, ETL operations, or extended CRON j
 
 ## `P6000` and Cloudflare error 1102
 
-`P6000` (`ServerError`) is a generic Accelerate error. When it comes with Cloudflare error 1102, `Worker exceeded resource limits`, the edge worker handling the request hit its per-request CPU limit or was recycled by Cloudflare. These errors are transient, are not specific to your project, and have no configuration fix.
+`P6000` (`ServerError`) is a generic Accelerate error. When it comes with Cloudflare error 1102, `Worker exceeded resource limits`, the edge worker handling the request exceeded Cloudflare's CPU-time or memory limit for that request. A retry can succeed when the failure was a one-off, but a query that is too large can fail the same way every time, so reduce the size of the query and its response as well.
 
 ### Possible causes for `P6000` with error 1102
 
 #### Large queries or responses
 
-The worker's CPU use grows with the size of the query and its response. Queries that fetch many rows or deeply nested relations are more likely to hit the limit. The time your own function has been running does not cause 1102, and a missing index shows up as [`P6004`](#p6004-querytimeout) rather than 1102.
+The worker's CPU and memory use grow with the size of the query and its response. Queries that fetch many rows or deeply nested relations are more likely to hit the limit. The time your own function has been running does not cause 1102, and a missing index shows up as [`P6004`](#p6004-querytimeout) rather than 1102.
 
 **Suggested solution:**
 

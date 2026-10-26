@@ -6,7 +6,7 @@ metaTitle: Regions in Prisma Postgres
 metaDescription: The regions where you can create a Prisma Postgres database, how to choose one for low latency, and how to move a database to another region.
 ---
 
-Every Prisma Postgres database runs in one region, which you pick when you create it. Each query travels from your application to that region and back, so the region you choose sets the minimum latency your application sees.
+Every Prisma Postgres database runs in one region, which you pick when you create it. The **Connect to your database** dialog in Console shows the region next to the database's name. Each query travels from your application to that region and back, so the region you choose sets the minimum latency your application sees.
 
 ## Available regions
 
@@ -40,22 +40,24 @@ You choose the region in these places:
 You can't change the region of an existing database. To move your data, create a new database in the target region and copy the data across with `pg_dump` and `pg_restore`:
 
 1. Create a new Prisma Postgres database in the target region and generate its connection strings.
-2. Dump the old database over its direct connection:
+2. Stop your application from writing to the old database. Writes made after `pg_dump` starts are not copied.
+3. Dump the old database over its direct connection:
 
    ```bash
    pg_dump -Fc -d "postgres://USER:PASSWORD@db.prisma.io:5432/postgres?sslmode=require" -f old.dump
    ```
 
-3. Restore the dump into the new database over its direct connection:
+4. Restore the dump into the new database over its direct connection:
 
    ```bash
    pg_restore --no-owner --no-privileges -d "postgres://NEW_USER:NEW_PASSWORD@db.prisma.io:5432/postgres?sslmode=require" old.dump
    ```
 
-4. Point your application at the new connection strings and redeploy.
-5. Delete the old database once you've confirmed the new one has all your data.
+5. Check that the new database has all your data, then point your application at the new connection strings and redeploy.
+6. Let your application write again only once it is using the new database.
+7. Delete the old database once you've confirmed the new one has all your data.
 
-Writes that reach the old database after you start `pg_dump` are not copied. Pause writes, or plan a short maintenance window in your application, for the duration of the copy. [Migrate a local Postgres database to Prisma Postgres](/postgres/import-from-existing-database) covers `pg_dump` and `pg_restore` options and how to verify the copy. The new database starts with no snapshots of its own; see [Backups](/postgres/database/backups).
+Keep writes stopped from the start of the dump until your application has switched to the new database, through the copy, the validation, and the redeploy. Plan a maintenance window in your application for that time. [Migrate a local Postgres database to Prisma Postgres](/postgres/import-from-existing-database) covers `pg_dump` and `pg_restore` options and how to verify the copy. The new database starts with no snapshots of its own; see [Backups](/postgres/database/backups).
 
 ## Common questions
 

@@ -25,7 +25,7 @@ A Vercel-billed workspace can't also have a Prisma-billed subscription, so doubl
 
 ## Who bills you
 
-For a Vercel Marketplace workspace, Vercel collects payment. Prisma doesn't hold a payment method for you and can't charge or retry your card. You pay, and dispute charges, on your Vercel invoice.
+For a Vercel Marketplace workspace, Vercel collects payment. Prisma doesn't hold a payment method for you and can't charge or retry your card. You pay, and dispute charges, on your Vercel invoice. The invoices listed in the Console show a zero balance for these workspaces.
 
 The plans and rates are the same as for any Prisma workspace. See the [pricing page](https://www.prisma.io/pricing).
 
@@ -86,7 +86,9 @@ The default connection string for a Vercel database is created by Vercel. The Co
 
 **Rotate Secrets** in Vercel creates new credentials and gives your Vercel project new values for the environment variables the integration manages, such as `DATABASE_URL`. It replaces only the credentials Vercel created. Connection strings you created yourself in the Console aren't changed and stay valid until you delete them in the Console. Redeploy your Vercel project after rotating so it uses the new values. The step-by-step flow is in [Rotating your Prisma integration secrets in Vercel](/guides/postgres/vercel#rotating-your-prisma-integration-secrets-in-vercel).
 
-With a delay period of `0`, the old Vercel credentials are deleted straight away. With a delay, they're deleted when the delay ends. If you need to be certain every old credential is revoked, for example after a rotation that reported an error, create new connection strings in the Console and delete all the old ones. See [Database roles and credentials](/postgres/database/roles-and-credentials).
+With a delay period of `0`, the old Vercel credentials are deleted straight away. With a delay, they're deleted when the delay ends.
+
+If a rotation reports an error, don't assume the old Vercel credentials were revoked. Deleting connection strings in the Console only revokes the ones you created there, not the one Vercel created. Run **Rotate Secrets** again, and then contact [Prisma support](/console/more/support) to confirm the old password no longer works. See [Databases created through Vercel](/postgres/database/connecting-to-your-database#databases-created-through-vercel).
 
 ## Deleting databases and uninstalling
 
