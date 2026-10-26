@@ -95,7 +95,13 @@ const PAGE_SOURCES: Record<AgentMarkdownPath, string[]> = {
     "src/app/mcp/_components/mcp-capabilities-section.tsx",
     "src/app/mcp/_components/mcp-cta-section.tsx",
   ],
-  "/free-postgresql-database": ["src/app/free-postgresql-database/_sections.tsx"],
+  // Headings moved into the product sections (expressions), same as /postgres.
+  // The two literals left are the platform h2 and the Compare Prisma h2.
+  "/free-postgresql-database": [
+    "src/app/free-postgresql-database/_sections.tsx",
+    "src/components/product/product-platform.tsx",
+    "src/components/sections/compare-links.tsx",
+  ],
 };
 
 /**
@@ -118,7 +124,7 @@ const MIN_LITERAL_HEADINGS: Record<AgentMarkdownPath, number> = {
   "/stack": 1,
   "/enterprise": 3,
   "/mcp": 4,
-  "/free-postgresql-database": 8,
+  "/free-postgresql-database": 2,
   "/compare": 1,
   "/compare/convex": 10,
   "/compare/kysely": 10,

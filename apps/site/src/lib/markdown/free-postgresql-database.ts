@@ -1,3 +1,4 @@
+import { COMPARE_PRISMA_LINKS } from "@/components/sections/compare-links-data";
 import {
   BUILD_CARDS,
   COMPARE_NEON_PRICING,
@@ -24,28 +25,52 @@ import { bulletList, ctaList, heading, joinBlocks, numberedList, paragraphs } fr
 export const FREE_POSTGRES_MARKDOWN_H1 = FREE_POSTGRES_H1;
 export const FREE_POSTGRES_MARKDOWN_SUBHEADLINE = FREE_POSTGRES_SUBHEADLINE;
 
-/** Markdown rendition of /free-postgresql-database. */
+function spec(labels: readonly (typeof FREE_PLAN_FACTS)[number]["label"][]) {
+  return labels
+    .map((label) => {
+      const row = FREE_PLAN_FACTS.find((item) => item.label === label);
+      if (!row) return label;
+      const value = /[.!?]$/.test(row.value) ? row.value : `${row.value}.`;
+      return `${row.label}: ${value}`;
+    })
+    .join(" ");
+}
+
+/** Markdown rendition of /free-postgresql-database. Mirrors the visible section order. */
 export function renderFreePostgresqlDatabaseMarkdown(): string {
   return joinBlocks([
-    paragraphs(
-      `A copyable command: \`${CREATE_DB_COMMAND}\`. A Postgres database and connection string in seconds. No account needed.`,
-    ),
     ctaList([
       { label: "Create a free database", href: CONSOLE_SIGN_UP_URL },
       { label: "Create in the browser", href: CREATE_DB_WEB_URL },
     ]),
+    paragraphs("No credit card."),
+    paragraphs("[Prisma Postgres works with any Postgres client.](/postgres)"),
     bulletList([
       "2 GB of storage and 200,000 operations a month",
       "Up to 50 databases, no credit card",
       "Host the app next to it on Prisma Compute, on the same plan",
     ]),
+    paragraphs("Or run it in a terminal."),
+    paragraphs(
+      `A copyable command: \`${CREATE_DB_COMMAND}\`. A Postgres database and connection string in seconds. No account needed.`,
+    ),
+    heading(3, "Database"),
+    paragraphs("A Postgres database and connection string in seconds. No account needed."),
+    heading(3, "Studio"),
+    paragraphs("Query Insights and Prisma Studio."),
+    heading(3, "Compute"),
+    paragraphs("Host the app next to it on Prisma Compute, on the same plan."),
 
     heading(2, "What you get on the Free plan"),
     paragraphs(
-      `A managed [Prisma Postgres](/postgres) workspace you can keep. The numbers below are the same ones on [pricing](/pricing): storage, operations, databases and connections, with no card and no expiry. ${FREE_POSTGRES_UPDATED_LABEL}.`,
+      `A managed [Prisma Postgres](/postgres) workspace you can keep. The numbers below are the same ones on [pricing](/pricing): storage, operations, databases and connections, with no card and no expiry. Prisma Postgres Free plan. ${FREE_POSTGRES_UPDATED_LABEL}.`,
     ),
-    bulletList(FREE_PLAN_FACTS.map((fact) => `**${fact.label}**: ${fact.value}`)),
-    paragraphs("Backups and spend limits start on Starter at $10 a month."),
+    bulletList([
+      `**Operations and storage.** ${spec(["Operations", "Storage", "Usage reset"])}`,
+      `**Databases and connections.** ${spec(["Databases", "Connections", "Data transfer"])}`,
+      `**Engine, regions and tools.** ${spec(["Engine", "Extensions", "Regions", "Tools"])}`,
+      `**Payment and backups.** ${spec(["Payment", "Backups"])} Backups and spend limits start on Starter at $10 a month.`,
+    ]),
 
     heading(2, "Start in under a minute"),
     paragraphs(
@@ -62,29 +87,30 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     ),
     bulletList(BUILD_CARDS.map((card) => `**${card.title}**: ${card.body}`)),
 
+    heading(2, "Built to work with the rest of Prisma"),
+    paragraphs(
+      "Host your app for free, too. The same Free plan includes [Prisma Compute](/compute) for Node.js, Bun and Next.js apps: 1 million requests, 360 GB-hours of memory, 4 active vCPU-hours and 10 GB of outbound bandwidth a month. App and database live in one project, with one config.",
+    ),
+    bulletList([
+      "**1 million requests.** Included each month on the Free plan.",
+      "**360 GB-hours of memory.** Plus 4 active vCPU-hours and 10 GB of outbound bandwidth.",
+      "**One project.** Declare the app and the database together. An idle app scales to zero.",
+    ]),
+    paragraphs("**Best together. Swappable when needed.**"),
+
     heading(2, "How the free limit works"),
     paragraphs(
       `${FREE_POSTGRES_UPDATED_LABEL}. The catch is stated here so you can decide before you build on it.`,
     ),
-    bulletList([
-      "**What counts**: One query is one operation: a simple read, a write, or a join. 200,000 operations a month is about 6,600 queries a day. Idle time is not billed.",
-      "**When the database is idle**: Idle databases scale to zero and cost nothing. The next query wakes them. You do not wake one by hand.",
-      `**At the operations limit**: The workspace's databases stop accepting queries until the 1st of the next month, or until you upgrade. A one-time 24 hour restore in the Console lets you export first. On paid plans this never happens: extra operations are billed, with a spend limit you set. Read the [docs FAQ on the free limit](${DOCS_FREE_LIMIT}).`,
-      "**Storage and backups**: The Free plan includes 2 GB of storage and has no backups. Daily backups kept 7 days start on Starter.",
+    paragraphs([
+      "What counts. One query is one operation: a simple read, a write, or a join. 200,000 operations a month is about 6,600 queries a day. Idle time is not billed.",
+      "When the database is idle. Idle databases scale to zero and cost nothing. The next query wakes them. You do not wake one by hand.",
+      `At the operations limit. The workspace's databases stop accepting queries until the 1st of the next month, or until you upgrade. A one-time 24 hour restore in the Console lets you export first. On paid plans this never happens: extra operations are billed, with a spend limit you set. Read the [docs FAQ on the free limit](${DOCS_FREE_LIMIT}).`,
+      "Storage and backups. The Free plan includes 2 GB of storage and has no backups. Daily backups kept 7 days start on Starter.",
     ]),
     paragraphs(
       "TO CONFIRM WITH ENGINEERING: What happens when a database reaches 2 GB of storage.",
     ),
-
-    heading(2, "Host your app for free, too"),
-    paragraphs(
-      "The same Free plan includes [Prisma Compute](/compute) for Node.js, Bun and Next.js apps: 1 million requests, 360 GB-hours of memory, 4 active vCPU-hours and 10 GB of outbound bandwidth a month. App and database live in one project, with one config.",
-    ),
-    bulletList([
-      "**1 million requests**: Included each month on the Free plan.",
-      "**360 GB-hours of memory**: Plus 4 active vCPU-hours and 10 GB of outbound bandwidth.",
-      "**One project**: Declare the app and the database together. An idle app scales to zero.",
-    ]),
 
     heading(2, "When to upgrade"),
     paragraphs(
@@ -102,21 +128,21 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
       "TO CONFIRM WITH ENGINEERING: Whether upgrading a workspace keeps the same connection string.",
     ),
 
-    heading(2, "Comparing free Postgres options?"),
+    heading(2, "Compare Prisma"),
     paragraphs(
-      "Free tiers differ in storage, how many databases you get, and what happens when you are idle or reach a limit. Prisma Postgres includes 2 GB, up to 50 databases, unlimited data transfer and free app hosting on the same plan.",
+      "Comparing free Postgres options? Free tiers differ in storage, how many databases you get, and what happens when you are idle or reach a limit. Prisma Postgres includes 2 GB, up to 50 databases, unlimited data transfer and free app hosting on the same plan.",
     ),
     paragraphs(
       `For a longer look at serverless Postgres providers, read the [comparison of free Postgres hosting](${COMPARE_SERVERLESS}) and the [Prisma Postgres vs Neon pricing](${COMPARE_NEON_PRICING}) post. Extensions and regions are in the [extensions](${DOCS_EXTENSIONS}) and [regions](${DOCS_REGIONS}) docs. Connection pooling is [built in](${DOCS_POOLING}).`,
+    ),
+    bulletList(
+      COMPARE_PRISMA_LINKS.map((item) => `[${item.label}](${item.href}): ${item.description}`),
     ),
 
     heading(2, "Frequently asked questions"),
     ...FREE_POSTGRES_FAQ.flatMap((item) => [heading(3, item.question), paragraphs(item.answer)]),
 
     heading(2, "Create your free database"),
-    paragraphs(
-      `A copyable command: \`${CREATE_DB_COMMAND}\`. A Postgres database and connection string in seconds. No account needed.`,
-    ),
     paragraphs(
       "A managed PostgreSQL 17 database in seconds. Paste the connection string into any Postgres client, then claim it into a Free workspace when you want to keep it.",
     ),

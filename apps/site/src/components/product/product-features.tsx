@@ -92,7 +92,10 @@ export function ProductFeatures({ features }: Pick<ProductPageContent, "features
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-                {features.bridge}
+                {/* Same no-op as card descriptions: plain bridges (the
+                    /postgres page) render verbatim, and a bridge that names
+                    a page with `[label](/path)` becomes a link. */}
+                {renderFaqAnswer(features.bridge)}
               </p>
             </Reveal>
           </div>

@@ -47,12 +47,32 @@ export function ProductHero({
   hero,
   visual,
   visualAspect = true,
+  headlineMeasure = "max-w-[min(16ch,100%)]",
+  columns = "md:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]",
+  belowBenefits,
 }: Pick<ProductPageContent, "name" | "accent" | "hero"> & {
   // Optional custom hero visual. When provided, it replaces the illustration /
   // product tour / placeholder in the visual slot. `visualAspect={false}` lets
   // the visual set its own height instead of the default 4:3 mobile aspect.
   visual?: ReactNode;
   visualAspect?: boolean;
+  /**
+   * Headline measure. 16ch is the default so a nowrap glass phrase cannot run
+   * into the illustration. Pass a wider measure when the approved emphasis is
+   * itself longer than 16ch.
+   */
+  headlineMeasure?: string;
+  /**
+   * Split between copy and the visual. The default gives the demo the larger
+   * half. A page whose nowrap glass phrase is longer than that column can
+   * pass a wider copy track so the phrase clears the visual.
+   */
+  columns?: string;
+  /**
+   * Extra hero content under the benefit list. It cannot sit above the CTA:
+   * the CTA follows the subheadline so it clears the fold at 1440x800.
+   */
+  belowBenefits?: ReactNode;
 }) {
   const Illustration = hero.illustration ? PRODUCT_ILLUSTRATIONS[hero.illustration] : null;
 
@@ -87,7 +107,12 @@ export function ProductHero({
               so the gap under the navbar matches the wrapper's bottom */}
           {/* the demo takes the larger half — the copy column is short enough
               now that an even split left it stranded beside a tall panel */}
-          <div className="mx-auto grid max-w-site items-center gap-12 pb-20 pt-36 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] md:pb-28 md:pt-48 lg:gap-16">
+          <div
+            className={cn(
+              "mx-auto grid max-w-site items-center gap-12 pb-20 pt-36 md:pb-28 md:pt-48 lg:gap-16",
+              columns,
+            )}
+          >
             {/* copy */}
             <div className="flex flex-col items-start">
               {/* the site's standard tagline: sentence case, ink at 70%, colour
@@ -98,7 +123,12 @@ export function ProductHero({
                   resolves wider than this column, so the column has to be the
                   hard limit — otherwise a headline with a long nowrap emphasis
                   runs into the illustration beside it. */}
-              <h1 className="isolate mt-4 max-w-[min(16ch,100%)] text-balance text-[clamp(2.5rem,4vw,3.5rem)] leading-[1.06]">
+              <h1
+                className={cn(
+                  "isolate mt-4 text-balance text-[clamp(2.5rem,4vw,3.5rem)] leading-[1.06]",
+                  headlineMeasure,
+                )}
+              >
                 <Headline headline={hero.headline} emphasis={hero.headlineEmphasis} />
               </h1>
               <p className="mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -143,6 +173,7 @@ export function ProductHero({
                   </li>
                 ))}
               </ul>
+              {belowBenefits ? <div className="mt-8 w-full">{belowBenefits}</div> : null}
             </div>
 
             {/* the demo: the ray crosses the panel behind it — light passing

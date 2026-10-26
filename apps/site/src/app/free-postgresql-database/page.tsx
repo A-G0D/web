@@ -45,8 +45,8 @@ export default function FreePostgresqlDatabasePage() {
       <FreeWhatYouGet />
       <FreeStartSteps />
       <FreeBuilds />
-      <FreeLimits />
       <FreeCompute />
+      <FreeLimits />
       <FreeUpgrade />
       <FreeCompare />
       <FreeFaq />

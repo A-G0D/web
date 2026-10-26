@@ -1,16 +1,21 @@
-import Link from "next/link";
-import { AppWindow, Database, GitBranch, Sparkles } from "lucide-react";
-import { CheckBold } from "@/components/icons/forma";
-import { GlassGlide } from "@/components/brand/glass-glide";
-import { IconTile } from "@/components/brand/icon-tile";
-import { PrismButton, PrismButtonOutline } from "@/components/brand/prism-button";
-import { PrismRay } from "@/components/brand/prism-ray";
-import { RoleKicker } from "@/components/brand/role-kicker";
-import { Texture } from "@/components/brand/texture";
+import type { ProductIconName } from "@/components/product/icons";
+import {
+  PRODUCT_ILLUSTRATIONS,
+  type ProductIllustrationName,
+} from "@/components/product/illustrations";
+import { RayFrame } from "@/components/product/illustrations/parts";
+import { ProductCta } from "@/components/product/product-cta";
+import { ProductDetailBlocks } from "@/components/product/product-detail-blocks";
+import { ProductFeatures } from "@/components/product/product-features";
+import { ProductHero } from "@/components/product/product-hero";
+import { ProductNarrative } from "@/components/product/product-narrative";
+import { ProductPlatform } from "@/components/product/product-platform";
+import { ProductProblem } from "@/components/product/product-problem";
+import { ProductTour } from "@/components/product/product-tour";
+import type { ProductTourStop } from "@/components/product/types";
 import { CopyCommand } from "@/components/extensions/copy-command";
-import { CtaBurst } from "@/components/sections/cta-burst";
+import { CompareLinks } from "@/components/sections/compare-links";
 import { Faq } from "@/components/sections/faq";
-import { cn } from "@/lib/utils";
 import {
   BUILD_CARDS,
   COMPARE_NEON_PRICING,
@@ -26,14 +31,76 @@ import {
   DOCS_REGIONS,
   FREE_PLAN_FACTS,
   FREE_POSTGRES_FAQ,
+  FREE_POSTGRES_H1,
   FREE_POSTGRES_SUBHEADLINE,
   FREE_POSTGRES_UPDATED_LABEL,
   START_STEPS,
   UPGRADE_POINTS,
 } from "./_content";
 
-const INLINE_LINK =
-  "font-medium text-foreground underline underline-offset-4 decoration-black/20 transition-colors hover:decoration-black/60";
+const POSTGRES_PHOTO = "bg-[url('/brand/feature-postgres.jpg')] bg-[position:50%_55%]";
+const COMPUTE_PHOTO = "bg-[url('/brand/feature-compute.jpg')] bg-[position:20%_90%]";
+
+const StartIllustration = PRODUCT_ILLUSTRATIONS.noLockIn;
+const UpgradeIllustration = PRODUCT_ILLUSTRATIONS.compliance;
+
+const HERO_TOUR: ProductTourStop[] = [
+  {
+    label: "Database",
+    caption: "A Postgres database and connection string in seconds. No account needed.",
+    illustration: "databasePanel",
+  },
+  {
+    label: "Studio",
+    caption: "Query Insights and Prisma Studio.",
+    illustration: "studioTable",
+  },
+  {
+    label: "Compute",
+    caption: "Host the app next to it on Prisma Compute, on the same plan.",
+    illustration: "runApps",
+  },
+];
+
+const BUILD_ICONS: ProductIconName[] = ["rocket", "bot", "console", "layoutGrid"];
+
+function spec(labels: readonly (typeof FREE_PLAN_FACTS)[number]["label"][]) {
+  return labels
+    .map((label) => {
+      const row = FREE_PLAN_FACTS.find((item) => item.label === label);
+      if (!row) return label;
+      const value = /[.!?]$/.test(row.value) ? row.value : `${row.value}.`;
+      return `${row.label}: ${value}`;
+    })
+    .join(" ");
+}
+
+const PLAN_FEATURES: {
+  name: string;
+  description: string;
+  illustration: ProductIllustrationName;
+}[] = [
+  {
+    name: "Operations and storage",
+    illustration: "spendLimits",
+    description: spec(["Operations", "Storage", "Usage reset"]),
+  },
+  {
+    name: "Databases and connections",
+    illustration: "isolatedBranches",
+    description: spec(["Databases", "Connections", "Data transfer"]),
+  },
+  {
+    name: "Engine, regions and tools",
+    illustration: "noLockIn",
+    description: spec(["Engine", "Extensions", "Regions", "Tools"]),
+  },
+  {
+    name: "Payment and backups",
+    illustration: "compliance",
+    description: `${spec(["Payment", "Backups"])} Backups and spend limits start on Starter at $10 a month.`,
+  },
+];
 
 /** Temporary callout. Delete this once engineering answers the two open facts. */
 export function EngineeringConfirm({ children }: { children: React.ReactNode }) {
@@ -52,566 +119,175 @@ export function EngineeringConfirm({ children }: { children: React.ReactNode }) 
 
 export function FreePostgresHero() {
   return (
-    <section className="bg-white px-3 pt-3 sm:px-4 sm:pt-4">
-      <div className="relative mx-auto max-w-[96rem] overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[30rem] overflow-hidden"
-        >
-          <div
-            className="absolute -bottom-1/3 left-1/2 h-[120%] w-[160%] -translate-x-1/2"
-            style={{
-              background: [
-                "radial-gradient(52% 40% at 30% 100%, color-mix(in srgb, var(--color-prism-cyan-400) 34%, transparent), transparent 68%)",
-                "radial-gradient(44% 36% at 52% 100%, color-mix(in srgb, var(--color-prism-yellow-300) 26%, transparent), transparent 66%)",
-                "radial-gradient(42% 30% at 74% 100%, color-mix(in srgb, var(--color-prism-red-400) 28%, transparent), transparent 68%)",
-              ].join(","),
-            }}
-          />
-          <div className="absolute bottom-[-24rem] left-[10%] h-[60rem] w-36 origin-bottom rotate-[-28deg] bg-prism-cyan-300/50 blur-[64px]" />
-          <div className="absolute bottom-[-26rem] left-1/2 h-[62rem] w-44 origin-bottom -translate-x-1/2 rotate-[5deg] bg-prism-yellow-200/60 blur-[72px]" />
-          <div className="absolute bottom-[-28rem] right-[8%] h-[60rem] w-36 origin-bottom rotate-[28deg] bg-prism-red-300/50 blur-[64px]" />
-          <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-t from-transparent via-white/60 to-white" />
-        </div>
-        <Texture opacity={0.06} blend="multiply" />
-
-        <div className="relative px-4 sm:px-8">
-          <div className="mx-auto grid max-w-site items-center gap-12 pb-20 pt-36 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] md:pb-28 md:pt-48 lg:gap-16">
-            <div className="flex flex-col items-start">
-              <RoleKicker color="bg-prism-yellow-400">Prisma Postgres</RoleKicker>
-              <h1 className="isolate mt-4 max-w-[min(18ch,100%)] text-balance text-[clamp(2.5rem,4vw,3.5rem)] leading-[1.06]">
-                Free Postgres hosting, with <GlassGlide>2 GB and 50 databases</GlassGlide> included
-              </h1>
-              <p className="mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-muted-foreground">
-                {FREE_POSTGRES_SUBHEADLINE}
-              </p>
-              <div className="mt-8 w-full max-w-md">
-                <CopyCommand command={CREATE_DB_COMMAND} tone="ink" />
-                <p className="mt-2.5 text-sm text-muted-foreground">
-                  A Postgres database and connection string in seconds. No account needed.
-                </p>
-              </div>
-              <div className="mt-6 flex flex-wrap items-center gap-4">
-                <PrismButton href={CONSOLE_SIGN_UP_URL} size="lg">
-                  Create a free database
-                </PrismButton>
-                <PrismButtonOutline href={CREATE_DB_WEB_URL} size="lg">
-                  Create in the browser
-                </PrismButtonOutline>
-              </div>
-              <p className="mt-3.5 text-sm text-muted-foreground">
-                No credit card.{" "}
-                <Link href="/postgres" className={INLINE_LINK}>
-                  Prisma Postgres
-                </Link>{" "}
-                works with any Postgres client.
-              </p>
-              <ul className="mt-8 flex flex-col gap-2.5 border-t border-black/[0.07] pt-7">
-                {[
-                  {
-                    label: "2 GB of storage and 200,000 operations a month",
-                    color: "text-prism-cyan-500",
-                  },
-                  {
-                    label: "Up to 50 databases, no credit card",
-                    color: "text-prism-yellow-400",
-                  },
-                  {
-                    label: "Host the app next to it on Prisma Compute, on the same plan",
-                    color: "text-prism-red-500",
-                  },
-                ].map(({ label, color }) => (
-                  <li
-                    key={label}
-                    className="flex items-start gap-2 text-[0.9375rem] font-semibold text-foreground"
-                  >
-                    <CheckBold className={cn("mt-0.5 size-4 shrink-0", color)} aria-hidden />
-                    {label}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="relative max-md:mt-4 md:self-stretch">
-              <PrismRay
-                className="left-[75%] top-1/2 h-12 w-[32rem] -translate-x-1/2 -translate-y-1/2 md:h-24 md:w-[64rem]"
-                angle={-50}
-                intensity="hero"
-              />
-              <div className="relative md:h-full">
-                <FreePlanCard />
-              </div>
-            </div>
+    <ProductHero
+      name="Prisma Postgres"
+      accent="postgres"
+      headlineMeasure="max-w-[min(18ch,100%)]"
+      columns="md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]"
+      visualAspect={false}
+      visual={<ProductTour id="free-postgres" stops={HERO_TOUR} />}
+      belowBenefits={
+        <div className="max-w-md">
+          <p className="text-sm font-semibold text-foreground">Or run it in a terminal</p>
+          <div className="mt-2">
+            <CopyCommand command={CREATE_DB_COMMAND} tone="ink" />
           </div>
+          <p className="mt-2.5 text-sm text-muted-foreground">
+            A Postgres database and connection string in seconds. No account needed.
+          </p>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function FreePlanCard() {
-  const rows = [
-    { label: "Plan", value: "Free" },
-    { label: "Storage", value: "2 GB" },
-    { label: "Operations", value: "200,000 / month" },
-    { label: "Databases", value: "50 per workspace" },
-    { label: "Engine", value: "PostgreSQL 17", mono: true },
-  ];
-
-  return (
-    <div
-      role="img"
-      aria-label="Illustration of a Prisma Postgres Free workspace with 2 GB of storage, 200,000 operations a month and 50 databases"
-      className="pointer-events-none relative flex h-full w-full select-none flex-col overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[0_1px_2px_rgba(21,21,21,0.04),0_8px_16px_-4px_rgba(21,21,21,0.06),0_32px_64px_-16px_rgba(21,21,21,0.14)]"
-    >
-      <div className="flex items-center gap-2 border-b border-border/70 px-5 py-3.5">
-        <span className="size-2 rounded-full bg-border" />
-        <span className="size-2 rounded-full bg-border" />
-        <span className="ml-1.5 font-mono text-xs text-foreground">
-          weekend-app / postgres / free
-        </span>
-      </div>
-      <div className="flex flex-1 flex-col justify-center gap-5 p-5 sm:p-6">
-        <div className="flex items-center gap-3">
-          <span className="flex size-10 items-center justify-center rounded-xl border border-black/[0.06] bg-prism-yellow-50">
-            <Database className="size-5 text-prism-yellow-800" aria-hidden />
-          </span>
-          <div>
-            <p className="text-[0.9375rem] font-semibold text-foreground">Prisma Postgres</p>
-            <p className="text-[0.8125rem] text-muted-foreground">Free workspace, no card</p>
-          </div>
-          <span className="ml-auto rounded-full border border-prism-yellow-300 bg-prism-yellow-50 px-2.5 py-1 text-[0.6875rem] font-semibold text-prism-yellow-800">
-            $0
-          </span>
-        </div>
-        <div className="flex flex-col gap-2">
-          {rows.map(({ label, value, mono }) => (
-            <div
-              key={label}
-              className="flex items-center gap-3 rounded-lg border border-border/80 bg-card px-3 py-2.5"
-            >
-              <span className="size-2 shrink-0 rounded-full bg-prism-yellow-400" />
-              <span className="text-[0.8125rem] text-muted-foreground">{label}</span>
-              <span
-                className={cn(
-                  "ml-auto text-right text-[0.8125rem] font-semibold text-foreground",
-                  mono && "font-mono",
-                )}
-              >
-                {value}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <p className="border-t border-border/70 bg-muted/40 px-5 py-3 text-[0.8125rem] text-muted-foreground">
-        Connection pooling and SSL are on. Backups start on Starter.
-      </p>
-    </div>
+      }
+      hero={{
+        headline: FREE_POSTGRES_H1,
+        headlineEmphasis: "2 GB and 50 databases",
+        subheadline: FREE_POSTGRES_SUBHEADLINE,
+        benefits: [
+          "2 GB of storage and 200,000 operations a month",
+          "Up to 50 databases, no credit card",
+          "Host the app next to it on Prisma Compute, on the same plan",
+        ],
+        primaryCta: { label: "Create a free database", href: CONSOLE_SIGN_UP_URL },
+        secondaryCta: { label: "Create in the browser", href: CREATE_DB_WEB_URL },
+        microline: "No credit card.",
+        related: {
+          label: "Prisma Postgres works with any Postgres client.",
+          href: "/postgres",
+        },
+      }}
+    />
   );
 }
 
 export function FreeWhatYouGet() {
   return (
-    <section className="bg-white px-4 py-24 sm:px-8 sm:py-32" aria-labelledby="what-you-get">
-      <div className="mx-auto max-w-site">
-        <div className="mx-auto max-w-3xl text-center max-md:text-left">
-          <h2
-            id="what-you-get"
-            className="text-balance text-[clamp(1.75rem,2.75vw,2.375rem)] leading-[1.1]"
-          >
-            What you get on the Free plan
-          </h2>
-          <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-            A managed{" "}
-            <Link href="/postgres" className={INLINE_LINK}>
-              Prisma Postgres
-            </Link>{" "}
-            workspace you can keep. The numbers below are the same ones on{" "}
-            <Link href="/pricing" className={INLINE_LINK}>
-              pricing
-            </Link>
-            : storage, operations, databases and connections, with no card and no expiry.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-14 max-w-5xl overflow-hidden rounded-2xl border border-black/[0.08] bg-white shadow-[0_1px_2px_rgba(21,21,21,0.04),0_24px_64px_-32px_rgba(21,21,21,0.2)]">
-          <div className="flex items-center gap-4 border-b border-black/[0.06] px-5 py-4 sm:px-7">
-            <p className="text-[0.8125rem] font-semibold text-foreground">
-              Prisma Postgres Free plan{" "}
-              <span className="font-normal text-muted-foreground">
-                {FREE_POSTGRES_UPDATED_LABEL}
-              </span>
-            </p>
-          </div>
-          <table className="w-full border-collapse">
-            <tbody>
-              {FREE_PLAN_FACTS.map(({ label, value }) => (
-                <tr key={label} className="border-b border-black/[0.06] last:border-b-0">
-                  <th
-                    scope="row"
-                    className="w-[38%] px-5 py-3.5 text-left text-[0.9375rem] font-semibold text-foreground sm:px-7"
-                  >
-                    {label}
-                  </th>
-                  <td className="px-5 py-3.5 text-[0.9375rem] text-muted-foreground sm:px-7">
-                    {value}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="mx-auto mt-5 max-w-5xl text-[0.9375rem] leading-relaxed text-muted-foreground">
-          Backups and spend limits start on Starter at $10 a month.
-        </p>
-      </div>
-    </section>
+    <ProductFeatures
+      features={{
+        headline: "What you get on the Free plan",
+        bridge: `A managed [Prisma Postgres](/postgres) workspace you can keep. The numbers below are the same ones on [pricing](/pricing): storage, operations, databases and connections, with no card and no expiry. Prisma Postgres Free plan. ${FREE_POSTGRES_UPDATED_LABEL}.`,
+        items: PLAN_FEATURES,
+      }}
+    />
   );
 }
 
 export function FreeStartSteps() {
   return (
-    <section id="start" className="bg-white px-3 py-3 sm:px-4">
-      <div
-        className="relative mx-auto max-w-[96rem] overflow-hidden rounded-[1.5rem] border border-black/[0.06]"
-        style={{ background: "#F8F8F7" }}
-      >
-        <div className="relative mx-auto max-w-site px-4 py-20 sm:px-8 sm:py-24">
-          <div className="mx-auto max-w-3xl text-center max-md:text-left">
-            <h2 className="text-balance text-[clamp(1.75rem,2.75vw,2.375rem)] leading-[1.1]">
-              Start in under a minute
-            </h2>
-            <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-              You do not need an account to get a connection string. Claim the database within 24
-              hours if you want to keep it.
-            </p>
-          </div>
-
-          <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
-            {START_STEPS.map((step, i) => (
-              <div key={step.title} className="h-full">
-                <div className="flex h-full flex-col items-start gap-4 rounded-xl border border-black/[0.06] bg-white p-6">
-                  <span className="flex size-9 items-center justify-center rounded-full bg-black text-sm font-semibold text-white">
-                    {i + 1}
-                  </span>
-                  <h3 className="text-lg leading-snug">{step.title}</h3>
-                  <p className="text-pretty text-[0.9375rem] leading-relaxed text-muted-foreground">
-                    {step.body.includes("`") ? <StepBody text={step.body} /> : step.body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <p className="mx-auto mt-8 max-w-3xl text-center text-[0.9375rem] leading-relaxed text-muted-foreground max-md:text-left">
-            The{" "}
-            <Link href={DOCS_CREATE_DB} className={INLINE_LINK}>
-              npx create-db docs
-            </Link>{" "}
-            cover flags, regions and claiming. Connecting later is a standard{" "}
-            <Link href={DOCS_CONNECT} className={INLINE_LINK}>
-              Postgres connection string
-            </Link>
-            .
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function StepBody({ text }: { text: string }) {
-  const parts = text.split(/(`[^`]+`)/g);
-  return (
-    <>
-      {parts.map((part, i) =>
-        part.startsWith("`") && part.endsWith("`") ? (
-          <code
-            key={i}
-            className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.9em] text-foreground"
-          >
-            {part.slice(1, -1)}
-          </code>
-        ) : (
-          <span key={i}>{part}</span>
-        ),
-      )}
-    </>
+    <ProductNarrative
+      id="start"
+      headline="Start in under a minute"
+      centerText
+      paragraphs={[
+        "You do not need an account to get a connection string. Claim the database within 24 hours if you want to keep it.",
+        ...START_STEPS.map((step) => `${step.title}. ${step.body}`),
+        `The [npx create-db docs](${DOCS_CREATE_DB}) cover flags, regions and claiming. Connecting later is a standard [Postgres connection string](${DOCS_CONNECT}).`,
+      ]}
+      illustration={
+        <RayFrame photo={POSTGRES_PHOTO} className="h-full min-h-[28rem]">
+          <StartIllustration />
+        </RayFrame>
+      }
+    />
   );
 }
 
 export function FreeBuilds() {
-  const icons = [
-    <GitBranch className="size-5 text-foreground" strokeWidth={1.6} aria-hidden key="git" />,
-    <Sparkles className="size-5 text-foreground" strokeWidth={1.6} aria-hidden key="ai" />,
-    <Database className="size-5 text-foreground" strokeWidth={1.6} aria-hidden key="db" />,
-    <AppWindow className="size-5 text-foreground" strokeWidth={1.6} aria-hidden key="app" />,
-  ];
-
   return (
-    <section
-      className="bg-white px-4 py-24 sm:px-8 sm:py-32"
-      aria-labelledby="what-developers-build"
-    >
-      <div className="mx-auto max-w-site">
-        <div className="mx-auto max-w-3xl text-center max-md:text-left">
-          <h2
-            id="what-developers-build"
-            className="text-balance text-[clamp(1.75rem,2.75vw,2.375rem)] leading-[1.1]"
-          >
-            What developers build on it
-          </h2>
-          <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-            The Free plan is for work that needs a real hosted Postgres: a side project, an
-            embedding demo, a throwaway database for an agent, or a separate database per test.
-          </p>
-        </div>
-        <div className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {BUILD_CARDS.map((card, i) => (
-            <div
-              key={card.title}
-              className="flex h-full flex-col items-start gap-4 rounded-xl border border-black/[0.06] bg-white p-6 sm:p-7"
-            >
-              <IconTile>{icons[i]}</IconTile>
-              <h3 className="text-xl leading-snug">{card.title}</h3>
-              <p className="text-pretty leading-relaxed text-muted-foreground">
-                <StepBody text={card.body} />
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function FreeLimits() {
-  return (
-    <section
-      id="limits"
-      className="scroll-mt-28 bg-white px-4 pb-24 sm:px-8 sm:pb-32"
-      aria-labelledby="how-the-free-limit-works"
-    >
-      <div className="mx-auto max-w-site">
-        <div className="mx-auto max-w-3xl text-center max-md:text-left">
-          <h2
-            id="how-the-free-limit-works"
-            className="text-balance text-[clamp(1.75rem,2.75vw,2.375rem)] leading-[1.1]"
-          >
-            How the free limit works
-          </h2>
-          <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-            {FREE_POSTGRES_UPDATED_LABEL}. The catch is stated here so you can decide before you
-            build on it.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-14 grid max-w-5xl gap-4 md:grid-cols-2">
-          <div className="rounded-2xl border border-black/[0.06] bg-white p-7">
-            <p className="text-sm font-semibold text-foreground/70">What counts</p>
-            <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-              One query is one operation: a simple read, a write, or a join. 200,000 operations a
-              month is about 6,600 queries a day. Idle time is not billed.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-black/[0.06] bg-white p-7">
-            <p className="text-sm font-semibold text-foreground/70">When the database is idle</p>
-            <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-              Idle databases scale to zero and cost nothing. The next query wakes them. You do not
-              wake one by hand.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-black/[0.06] bg-white p-7">
-            <p className="text-sm font-semibold text-foreground/70">At the operations limit</p>
-            <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-              The workspace&apos;s databases stop accepting queries until the 1st of the next month,
-              or until you upgrade. A one-time 24 hour restore in the Console lets you export first.
-              On paid plans this never happens: extra operations are billed, with a spend limit you
-              set. Read the{" "}
-              <Link href={DOCS_FREE_LIMIT} className={INLINE_LINK}>
-                docs FAQ on the free limit
-              </Link>
-              .
-            </p>
-          </div>
-          <div className="rounded-2xl border border-black/[0.06] bg-white p-7">
-            <p className="text-sm font-semibold text-foreground/70">Storage and backups</p>
-            <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
-              The Free plan includes 2 GB of storage and has no backups. Daily backups kept 7 days
-              start on Starter.
-            </p>
-            <EngineeringConfirm>
-              What happens when a database reaches 2 GB of storage.
-            </EngineeringConfirm>
-          </div>
-        </div>
-      </div>
-    </section>
+    <ProductDetailBlocks
+      headline="What developers build on it"
+      bridge="The Free plan is for work that needs a real hosted Postgres: a side project, an embedding demo, a throwaway database for an agent, or a separate database per test."
+      blocks={BUILD_CARDS.map((card, i) => ({
+        icon: BUILD_ICONS[i] ?? "database",
+        name: card.title,
+        description: card.body,
+      }))}
+    />
   );
 }
 
 export function FreeCompute() {
   return (
-    <section className="bg-white px-3 py-3 sm:px-4">
-      <div className="relative mx-auto max-w-[96rem] overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[30rem] overflow-hidden"
-        >
-          <div
-            className="absolute -bottom-1/3 left-1/2 h-[120%] w-[160%] -translate-x-1/2"
-            style={{
-              background: [
-                "radial-gradient(52% 40% at 30% 100%, color-mix(in srgb, var(--color-prism-cyan-400) 34%, transparent), transparent 68%)",
-                "radial-gradient(44% 36% at 52% 100%, color-mix(in srgb, var(--color-prism-yellow-300) 26%, transparent), transparent 66%)",
-                "radial-gradient(42% 30% at 74% 100%, color-mix(in srgb, var(--color-prism-red-400) 28%, transparent), transparent 68%)",
-              ].join(","),
-            }}
-          />
-          <div className="absolute bottom-[-24rem] left-[10%] h-[60rem] w-36 origin-bottom rotate-[-28deg] bg-prism-cyan-300/50 blur-[64px]" />
-          <div className="absolute bottom-[-26rem] left-1/2 h-[62rem] w-44 origin-bottom -translate-x-1/2 rotate-[5deg] bg-prism-yellow-200/60 blur-[72px]" />
-          <div className="absolute bottom-[-28rem] right-[8%] h-[60rem] w-36 origin-bottom rotate-[28deg] bg-prism-red-300/50 blur-[64px]" />
-          <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-t from-transparent via-white/60 to-white" />
-        </div>
-        <Texture opacity={0.06} blend="multiply" />
+    <ProductPlatform
+      platform={{
+        body: "Host your app for free, too. The same Free plan includes [Prisma Compute](/compute) for Node.js, Bun and Next.js apps: 1 million requests, 360 GB-hours of memory, 4 active vCPU-hours and 10 GB of outbound bandwidth a month. App and database live in one project, with one config.",
+      }}
+      points={[
+        { title: "1 million requests", body: "Included each month on the Free plan." },
+        {
+          title: "360 GB-hours of memory",
+          body: "Plus 4 active vCPU-hours and 10 GB of outbound bandwidth.",
+        },
+        {
+          title: "One project",
+          body: "Declare the app and the database together. An idle app scales to zero.",
+        },
+      ]}
+    />
+  );
+}
 
-        <div className="relative mx-auto max-w-site px-4 py-20 sm:px-8 sm:py-24">
-          <div className="mx-auto max-w-3xl text-center max-md:text-left">
-            <h2 className="text-balance text-[clamp(1.75rem,2.75vw,2.375rem)] leading-[1.1]">
-              Host your app for free, too
-            </h2>
-            <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-              The same Free plan includes{" "}
-              <Link href="/compute" className={INLINE_LINK}>
-                Prisma Compute
-              </Link>{" "}
-              for Node.js, Bun and Next.js apps: 1 million requests, 360 GB-hours of memory, 4
-              active vCPU-hours and 10 GB of outbound bandwidth a month. App and database live in
-              one project, with one config.
-            </p>
-          </div>
-
-          <div className="mx-auto mt-14 grid max-w-5xl gap-4 md:grid-cols-3">
-            {[
-              { title: "1 million requests", body: "Included each month on the Free plan." },
-              {
-                title: "360 GB-hours of memory",
-                body: "Plus 4 active vCPU-hours and 10 GB of outbound bandwidth.",
-              },
-              {
-                title: "One project",
-                body: "Declare the app and the database together. An idle app scales to zero.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="flex h-full flex-col gap-3 rounded-xl border border-black/[0.06] bg-white p-6 sm:p-7"
-              >
-                <h3 className="text-xl leading-snug">{item.title}</h3>
-                <p className="text-pretty leading-relaxed text-muted-foreground">{item.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+export function FreeLimits() {
+  return (
+    <ProductProblem
+      id="limits"
+      afterBody={
+        <EngineeringConfirm>
+          What happens when a database reaches 2 GB of storage.
+        </EngineeringConfirm>
+      }
+      problem={{
+        headline: "How the free limit works",
+        body: [
+          `${FREE_POSTGRES_UPDATED_LABEL}. The catch is stated here so you can decide before you build on it.`,
+          "What counts. One query is one operation: a simple read, a write, or a join. 200,000 operations a month is about 6,600 queries a day. Idle time is not billed.",
+          "When the database is idle. Idle databases scale to zero and cost nothing. The next query wakes them. You do not wake one by hand.",
+          `At the operations limit. The workspace's databases stop accepting queries until the 1st of the next month, or until you upgrade. A one-time 24 hour restore in the Console lets you export first. On paid plans this never happens: extra operations are billed, with a spend limit you set. Read the [docs FAQ on the free limit](${DOCS_FREE_LIMIT}).`,
+          "Storage and backups. The Free plan includes 2 GB of storage and has no backups. Daily backups kept 7 days start on Starter.",
+        ],
+        outcomes: [
+          { icon: "repeat", label: "What counts" },
+          { icon: "server", label: "When the database is idle" },
+          { icon: "shield", label: "At the operations limit" },
+          { icon: "database", label: "Storage and backups" },
+        ],
+      }}
+    />
   );
 }
 
 export function FreeUpgrade() {
   return (
-    <section className="bg-white px-4 py-24 sm:px-8 sm:py-32" aria-labelledby="when-to-upgrade">
-      <div className="mx-auto max-w-site">
-        <div className="mx-auto max-w-3xl text-center max-md:text-left">
-          <h2
-            id="when-to-upgrade"
-            className="text-balance text-[clamp(1.75rem,2.75vw,2.375rem)] leading-[1.1]"
-          >
-            When to upgrade
-          </h2>
-          <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-            Stay on Free while 200,000 operations and 2 GB are enough. Move up when you need
-            backups, a spend limit, or more room. The full grid is on{" "}
-            <Link href="/pricing" className={INLINE_LINK}>
-              pricing
-            </Link>
-            ;{" "}
-            <Link href="/postgres" className={INLINE_LINK}>
-              everything Prisma Postgres includes
-            </Link>{" "}
-            is on the product page.
-          </p>
-        </div>
-        <ul className="mx-auto mt-14 flex max-w-3xl flex-col gap-5">
-          {UPGRADE_POINTS.map((point) => (
-            <li key={point.plan} className="flex items-start gap-3">
-              <CheckBold className="mt-1 size-4 shrink-0 text-prism-cyan-500" aria-hidden />
-              <p className="text-pretty leading-relaxed text-muted-foreground">
-                <span className="font-semibold text-foreground">{point.plan}.</span> {point.body}{" "}
-                {point.plan.startsWith("Business") ? (
-                  <>
-                    See{" "}
-                    <Link href="/postgres/hipaa" className={INLINE_LINK}>
-                      HIPAA on the Business plan
-                    </Link>
-                    .
-                  </>
-                ) : null}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <div className="mx-auto mt-8 max-w-3xl">
-          <EngineeringConfirm>
-            Whether upgrading a workspace keeps the same connection string.
-          </EngineeringConfirm>
-        </div>
-      </div>
-    </section>
+    <ProductNarrative
+      headline="When to upgrade"
+      centerText
+      paragraphs={[
+        "Stay on Free while 200,000 operations and 2 GB are enough. Move up when you need backups, a spend limit, or more room. The full grid is on [pricing](/pricing); [everything Prisma Postgres includes](/postgres) is on the product page.",
+        ...UPGRADE_POINTS.map((point) => {
+          const hipaa = point.plan.startsWith("Business")
+            ? " See [HIPAA on the Business plan](/postgres/hipaa)."
+            : "";
+          return `${point.plan}. ${point.body}${hipaa}`;
+        }),
+      ]}
+      footer={
+        <EngineeringConfirm>
+          Whether upgrading a workspace keeps the same connection string.
+        </EngineeringConfirm>
+      }
+      illustration={
+        <RayFrame photo={COMPUTE_PHOTO} className="h-full min-h-[28rem]">
+          <UpgradeIllustration />
+        </RayFrame>
+      }
+    />
   );
 }
 
 export function FreeCompare() {
   return (
-    <section className="bg-white px-4 pb-8 sm:px-8" aria-labelledby="comparing-free-options">
-      <div className="mx-auto max-w-5xl rounded-2xl border border-black/[0.06] bg-white p-7 sm:p-9">
-        <h2
-          id="comparing-free-options"
-          className="text-balance text-[clamp(1.75rem,2.75vw,2.375rem)] leading-[1.1]"
-        >
-          Comparing free Postgres options?
-        </h2>
-        <p className="mt-5 max-w-3xl text-pretty leading-relaxed text-muted-foreground">
-          Free tiers differ in storage, how many databases you get, and what happens when you are
-          idle or reach a limit. Prisma Postgres includes 2 GB, up to 50 databases, unlimited data
-          transfer and free app hosting on the same plan.
-        </p>
-        <p className="mt-4 max-w-3xl text-pretty leading-relaxed text-muted-foreground">
-          For a longer look at serverless Postgres providers, read the{" "}
-          <Link href={COMPARE_SERVERLESS} className={INLINE_LINK}>
-            comparison of free Postgres hosting
-          </Link>{" "}
-          and the{" "}
-          <Link href={COMPARE_NEON_PRICING} className={INLINE_LINK}>
-            Prisma Postgres vs Neon pricing
-          </Link>{" "}
-          post. Extensions and regions are in the{" "}
-          <Link href={DOCS_EXTENSIONS} className={INLINE_LINK}>
-            extensions
-          </Link>{" "}
-          and{" "}
-          <Link href={DOCS_REGIONS} className={INLINE_LINK}>
-            regions
-          </Link>{" "}
-          docs. Connection pooling is{" "}
-          <Link href={DOCS_POOLING} className={INLINE_LINK}>
-            built in
-          </Link>
-          .
-        </p>
-      </div>
-    </section>
+    <CompareLinks
+      intro="Comparing free Postgres options? Free tiers differ in storage, how many databases you get, and what happens when you are idle or reach a limit. Prisma Postgres includes 2 GB, up to 50 databases, unlimited data transfer and free app hosting on the same plan."
+      note={`For a longer look at serverless Postgres providers, read the [comparison of free Postgres hosting](${COMPARE_SERVERLESS}) and the [Prisma Postgres vs Neon pricing](${COMPARE_NEON_PRICING}) post. Extensions and regions are in the [extensions](${DOCS_EXTENSIONS}) and [regions](${DOCS_REGIONS}) docs. Connection pooling is [built in](${DOCS_POOLING}).`}
+    />
   );
 }
 
@@ -621,33 +297,18 @@ export function FreeFaq() {
 
 export function FreeCloser() {
   return (
-    <>
-      <section className="bg-white px-4 pb-4 sm:px-8">
-        <div className="mx-auto flex max-w-3xl flex-col items-start gap-3 rounded-2xl border border-black/[0.06] bg-white p-6 sm:flex-row sm:items-center sm:p-7">
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-foreground">Or run it in a terminal</p>
-            <p className="mt-1 text-[0.8125rem] text-muted-foreground">
-              A Postgres database and connection string in seconds. No account needed.
-            </p>
-          </div>
-          <div className="w-full sm:w-auto sm:min-w-[18rem]">
-            <CopyCommand command={CREATE_DB_COMMAND} tone="ink" />
-          </div>
-        </div>
-      </section>
-      <CtaBurst
-        headline="Create your free database"
-        headlineMaxWidth="max-w-[22ch]"
-        body="A managed PostgreSQL 17 database in seconds. Paste the connection string into any Postgres client, then claim it into a Free workspace when you want to keep it."
-        bodyMaxWidth="max-w-[68ch]"
-        checks={[
-          { label: "npx create-db, no account needed", color: "text-prism-cyan-500" },
-          { label: "2 GB, 50 databases, 200,000 operations", color: "text-prism-yellow-400" },
-          { label: "App hosting on the same Free plan", color: "text-prism-red-500" },
-        ]}
-        primaryCta={{ label: "Create a free database", href: CONSOLE_SIGN_UP_URL }}
-        secondaryCta={{ label: "See pricing", href: "/pricing" }}
-      />
-    </>
+    <ProductCta
+      cta={{
+        headline: "Create your free database",
+        body: "A managed PostgreSQL 17 database in seconds. Paste the connection string into any Postgres client, then claim it into a Free workspace when you want to keep it.",
+        benefits: [
+          "npx create-db, no account needed",
+          "2 GB, 50 databases, 200,000 operations",
+          "App hosting on the same Free plan",
+        ],
+        primaryCta: { label: "Create a free database", href: CONSOLE_SIGN_UP_URL },
+        secondaryCta: { label: "See pricing", href: "/pricing" },
+      }}
+    />
   );
 }
