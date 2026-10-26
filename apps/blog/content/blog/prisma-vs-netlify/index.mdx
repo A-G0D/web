@@ -2,7 +2,7 @@
 title: "Netlify alternatives for a full-stack TypeScript app with Postgres (2026)"
 slug: "prisma-vs-netlify"
 date: "2026-09-16"
-updatedAt: "2026-10-24"
+updatedAt: "2026-10-26"
 authors:
   - "Shane Neubauer"
 metaTitle: "Netlify alternatives for a full-stack TypeScript app with Postgres (2026)"
@@ -108,8 +108,9 @@ The profiles below say which of these each option answers.
 The profiles below say when each option is the better choice.
 
 **Prisma Compute and Prisma Postgres.** Best for: a TypeScript app and its Postgres database in
-one project from one vendor. Prisma Compute runs the app and Prisma Postgres the database,
-in one project, with the connection string injected instead of copied when you deploy with Composer,
+one project from one vendor. Prisma Compute has been generally available since 2026-08-28.
+Prisma Compute runs the app and Prisma Postgres the database, in one project, with the connection
+string injected instead of copied when you deploy with Composer,
 a database per branch that you or a Composer stage deploy create, and pooling included. Prisma ORM
 is optional: the app can connect with `pg`, Drizzle or Kysely instead. Starter is a $10 base with
 Compute usage metered on top. Compute runs TypeScript services on Bun: Node.js, Bun or Next.js apps, declared with
@@ -126,6 +127,9 @@ string as environment variables and can bill through your Vercel account. Prisma
 `DATABASE_URL` in your Vercel project, and Neon and Supabase are listed too. The database is still
 a second company's product, but it is not a separate bill or a copied connection string. Vercel
 Services, in beta, also let one backend in a project call another over an internal binding.
+[Vercel Daemons](https://vercel.com/docs/daemons), in public beta on all plans since 2026-10-15,
+run long-running background workers, such as queue consumers, from a container image. During the
+beta they run only in production, not in previews, and they receive no inbound HTTP.
 
 **Render.** Best for: a backend that needs long requests, WebSocket connections or a Docker
 image, next to managed Postgres. Long-running web services plus managed Postgres, declared in a
@@ -216,7 +220,7 @@ What you get from one vendor, which is usually the real question behind leaving.
 | | Netlify | Prisma | Vercel | Supabase | Render |
 | --- | --- | --- | --- | --- | --- |
 | App hosting | Yes | Yes | Yes | Edge Functions only | Yes |
-| Runtime | Node.js functions; Deno Edge Functions | Node.js, Bun or Next.js apps, run on Bun; they scale to zero when idle | Node.js, Bun, Python, and others | Deno-compatible Edge Functions | Node.js, Bun, and other native runtimes, or Docker |
+| Runtime | Node.js functions; Deno Edge Functions | Node.js, Bun or Next.js apps, run on Bun; they scale to zero when idle | Node.js, Bun, Python, and others; Daemons (public beta since 2026-10-15) run long-running background workers from a container image, in production only, with no inbound HTTP | Deno-compatible Edge Functions | Node.js, Bun, and other native runtimes, or Docker |
 | Longest request | 60 seconds; Background Functions up to 15 minutes | 60 seconds to first byte, then a started stream keeps going | 300 seconds by default, up to 800 on Pro and Enterprise; 30 minutes in beta on Pro and Enterprise for Node.js, Bun and Python functions | 150 seconds to respond; wall-clock limit 150 seconds on Free, 400 on paid plans | 100 minutes |
 | Realtime or WebSocket servers | No | No | WebSockets in Functions (generally available since 2026-10-20); no managed realtime service | Realtime service | WebSockets on web services; no managed realtime service |
 | Managed Postgres | Netlify Database, built on Neon | Prisma Postgres | No; add one from the Marketplace | Yes | Yes |
@@ -230,7 +234,7 @@ Sources for the table, by column:
 
 - Netlify: [functions configuration](https://docs.netlify.com/build/functions/configuration/), [Edge Functions](https://docs.netlify.com/build/edge-functions/overview/), [Netlify Database](https://docs.netlify.com/build/data-and-storage/netlify-database/), [Identity](https://docs.netlify.com/manage/security/secure-access-to-sites/identity/overview/), and [Image CDN](https://docs.netlify.com/build/image-cdn/overview/).
 - Prisma: [Compute FAQ](https://www.prisma.io/docs/compute/faq), [Compute limitations](https://www.prisma.io/docs/compute/limitations), [connection pooling](https://www.prisma.io/docs/postgres/database/connection-pooling), and [Object Store](https://www.prisma.io/docs/storage).
-- Vercel: [runtimes](https://vercel.com/docs/functions/runtimes), [Functions limits](https://vercel.com/docs/functions/limitations) (checked 2026-10-14), [WebSockets](https://vercel.com/docs/functions/websockets), [Marketplace storage](https://vercel.com/docs/marketplace-storage), and [Blob](https://vercel.com/docs/vercel-blob); for previews, [Neon on the Vercel Marketplace](https://vercel.com/marketplace/neon) and Neon's [Vercel integration guide](https://neon.com/docs/guides/vercel-overview) and [Vercel-Managed Integration](https://neon.com/docs/guides/vercel-managed-integration) (checked 2026-10-24).
+- Vercel: [runtimes](https://vercel.com/docs/functions/runtimes), [Functions limits](https://vercel.com/docs/functions/limitations) (checked 2026-10-14), [WebSockets](https://vercel.com/docs/functions/websockets), [Marketplace storage](https://vercel.com/docs/marketplace-storage), and [Blob](https://vercel.com/docs/vercel-blob); for previews, [Neon on the Vercel Marketplace](https://vercel.com/marketplace/neon) and Neon's [Vercel integration guide](https://neon.com/docs/guides/vercel-overview) and [Vercel-Managed Integration](https://neon.com/docs/guides/vercel-managed-integration) (checked 2026-10-24); for Daemons, the [Daemons docs](https://vercel.com/docs/daemons), the [public beta changelog](https://vercel.com/changelog/vercel-daemons-is-now-in-public-beta) and [Functions, containers and Daemons](https://vercel.com/kb/guide/vercel-functions-containers-daemons) (checked 2026-10-26).
 - Supabase: [Edge Functions limits](https://supabase.com/docs/guides/functions/limits) (checked 2026-10-14), [connecting to Postgres](https://supabase.com/docs/guides/database/connecting-to-postgres), [Storage CDN](https://supabase.com/docs/guides/storage/cdn/fundamentals), [branching](https://supabase.com/docs/guides/deployment/branching), and [pricing](https://supabase.com/pricing).
 - Render: [native runtimes](https://render.com/docs/native-runtimes), [Render vs Vercel](https://render.com/docs/render-vs-vercel-comparison), [WebSockets](https://render.com/docs/websocket), [connection pooling](https://render.com/docs/postgresql-connection-pooling), [static sites](https://render.com/docs/static-sites), and [preview environments](https://render.com/docs/preview-environments).
 
@@ -455,6 +459,7 @@ Prisma ORM works with Netlify Database, which is PostgreSQL built on Neon, and i
 
 ## Update history
 
+- 2026-10-26: the Prisma profile says Prisma Compute has been generally available since 2026-08-28, checked against the [Prisma changelog](https://www.prisma.io/changelog) on 2026-10-26; the Vercel profile and the Vercel runtime cell of the feature-parity table add Vercel Daemons (public beta since 2026-10-15, all plans), which run long-running background workers from a container image, only in production during the beta and with no inbound HTTP, checked against Vercel's [Daemons docs](https://vercel.com/docs/daemons), [changelog](https://vercel.com/changelog/vercel-daemons-is-now-in-public-beta) and [Functions, containers and Daemons guide](https://vercel.com/kb/guide/vercel-functions-containers-daemons) on 2026-10-26.
 - 2026-10-24: the WebSocket answer and the feature-parity table now say WebSockets in Vercel Functions are generally available (since 2026-10-20) instead of in beta, checked against Vercel's [WebSockets docs](https://vercel.com/docs/functions/websockets) and [changelog](https://vercel.com/changelog/websocket-support-is-now-generally-available) on 2026-10-24.
 - 2026-10-24: the "Why teams leave Netlify" bullet on unpredictable bills and a new "Usage-based bill you need to cap" row in "Pick by app type" now say how Prisma's spend limit, Railway's hard usage limit and Vercel's Spend Management cap a bill, and what Vercel's does not cover; the new row lists Vercel's Spend Management as a partial limit rather than a fit, because pausing stops only production deployments; the MVP row adds Railway's, Render's and Fly.io's free terms; each profile starts with "Best for"; the Render, Railway and Fly.io profiles each add a comparison with Prisma Compute and Prisma Postgres; the Vercel preview cell says Neon's integration creates a database branch for each preview deployment once Preview branching is turned on; the Netlify runtime line says "depends on Node.js behavior that Bun does not provide", as the rest of the post does; and the "more than the ORM" list starts with Compute. Checked against Prisma's, Vercel's, Neon's, Railway's, Render's and Fly.io's pricing and docs pages on 2026-10-24, and Vercel's Spend Management page again on 2026-10-25.
 - 2026-10-22: pointed the Railway docs link in the Railway profile at Railway's PostgreSQL page, because Railway's databases overview page returns 404; the statement is unchanged and was checked against that page on 2026-10-22.
