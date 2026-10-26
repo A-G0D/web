@@ -2,7 +2,7 @@
 title: "Hosting and managed Postgres options for your startup's first 100 paying users (2026)"
 slug: "choosing-hosting-and-postgres-after-your-first-100-users"
 date: "2026-09-24"
-updatedAt: "2026-10-24"
+updatedAt: "2026-10-26"
 authors:
   - "Gregory Boch"
 metaTitle: "Hosting and managed Postgres options for your startup's first 100 paying users (2026)"
@@ -52,8 +52,8 @@ Pick by stack:
 | Just hosted Postgres, free, standard tools | Prisma Postgres, Free plan | PostgreSQL 17, PgBouncer included, any Postgres client, no credit card |
 | Need point-in-time recovery today | A database with PITR, such as Neon (every plan) or Supabase (paid add-on) | Prisma Postgres restores from daily snapshots on paid plans, kept 7 days (30 on Business), and point-in-time recovery is coming in November 2026; run a scheduled `pg_dump` if losing a day of writes is too much |
 | Holds WebSocket connections open | Fly.io, Railway, Render | Compute has no WebSocket servers |
-| Runs a continuous background worker or queue consumer | Railway, Render, Fly.io | Railway and Render run services that stay running, and Fly.io runs each process group on its own Machines; Compute runs HTTP services, and `waitUntil` keeps an instance awake to finish work after the response, on a best-effort basis |
-| Python or Go API | Railway, Render, Fly.io | Compute hosts TypeScript services; Prisma Postgres works from any language |
+| Runs a continuous background worker or queue consumer | Railway, Render or Fly.io for the app, with Prisma Postgres as the database (any Postgres client) | Railway and Render run services that stay running, and Fly.io runs each process group on its own Machines; the worker connects to Prisma Postgres over the pooled connection string, or the direct one for `LISTEN`/`NOTIFY` or queries longer than 10 minutes. Compute runs HTTP services, and `waitUntil` keeps an instance awake to finish work after the response, on a best-effort basis |
+| Python or Go API | Railway, Render or Fly.io for the app, with Prisma Postgres as the database (any Postgres client) | Compute hosts TypeScript services; Prisma Postgres works from any language |
 | Frontend needs a global CDN above all | Vercel + Prisma Postgres | Compute serves from one region, not an edge network |
 | More than one region | Fly.io | Each Compute service runs in one of six regions |
 | Lowest bill, run servers yourself | A VPS | You take on backups and upgrades |
@@ -351,7 +351,10 @@ cached reads can be out of date, so leave permission checks and balances uncache
   2026-10-24. Render's Postgres price is from [Render pricing](https://render.com/pricing), checked
   2026-10-24. The one-bill line in the opening and the TypeScript row is from the Prisma Compute
   [FAQ](https://www.prisma.io/docs/compute/faq) and the [pricing page](https://www.prisma.io/pricing),
-  checked 2026-10-24.
+  checked 2026-10-24. Which Prisma Postgres connection string a worker uses is from
+  [connection pooling](https://www.prisma.io/docs/postgres/database/connection-pooling) and
+  [connecting to your database](https://www.prisma.io/docs/postgres/database/connecting-to-your-database),
+  checked 2026-10-26.
 
 ## Related guides
 
@@ -365,6 +368,10 @@ If customer records arrive in spreadsheets, [hosting a spreadsheet import app](h
 
 ## Update history
 
+- 2026-10-26: the background-worker and Python or Go rows name Prisma Postgres as the database next
+  to Railway, Render or Fly.io for the app, and the worker row says which connection string a worker
+  uses: pooled, or direct for `LISTEN`/`NOTIFY` and queries longer than 10 minutes. Source: the
+  Prisma Postgres connection docs, checked 2026-10-26.
 - 2026-10-24: the opening and the TypeScript row name one provider, one project and one bill (the
   $10 Starter base, with Compute usage metered on top); the table has a row for a continuous
   background worker or queue consumer; the Render entry gives its $6 smallest paid Postgres; the
