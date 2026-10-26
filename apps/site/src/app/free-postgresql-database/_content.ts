@@ -16,15 +16,15 @@
 
 export const FREE_POSTGRES_PATH = "/free-postgresql-database";
 
-export const FREE_POSTGRES_TITLE = "Free Postgres hosting with 2 GB storage | Prisma Postgres";
+export const FREE_POSTGRES_TITLE = "Free PostgreSQL database with 2 GB storage | Prisma Postgres";
 
 export const FREE_POSTGRES_DESCRIPTION =
-  "Free managed PostgreSQL 17 with 2 GB storage, 200,000 queries a month and up to 50 databases. No credit card, no time limit. Create one in seconds.";
+  "Create a free PostgreSQL database on Prisma Postgres. Managed PostgreSQL 17 with 2 GB of storage, 200,000 operations a month and up to 50 databases. No credit card and no time limit.";
 
-export const FREE_POSTGRES_H1 = "Free Postgres hosting, with 2 GB and 50 databases included";
+export const FREE_POSTGRES_H1 = "Create a free PostgreSQL database";
 
 export const FREE_POSTGRES_SUBHEADLINE =
-  "Managed PostgreSQL 17 with connection pooling, pgvector and six regions to choose from. 200,000 operations a month, no credit card and no time limit. Part of Prisma's infrastructure for TypeScript and AI apps, so you can host the app next to it for free too.";
+  "A free PostgreSQL database and its connection string, in seconds. No account needed.";
 
 export const FREE_POSTGRES_LAST_MODIFIED = "2026-10-21";
 export const FREE_POSTGRES_UPDATED_LABEL = "Last updated: 21 October 2026";
@@ -53,6 +53,11 @@ export type FreeFaqItem = {
 // Visible FAQ. Every answer here also feeds FAQPage JSON-LD (see page.tsx).
 // The brief's JSON-LD is the stripped form of these strings.
 export const FREE_POSTGRES_FAQ: FreeFaqItem[] = [
+  {
+    question: "How do I create a free PostgreSQL database?",
+    answer:
+      "Run [`npx create-db`](/docs/postgres/npx-create-db), or create one in the browser. You get a Postgres database and its connection string in seconds, with no account and no credit card. Claim it within 24 hours to keep it in a Free workspace, which includes 200,000 operations a month, 2 GB of storage and up to 50 databases.",
+  },
   {
     question: "Is Prisma Postgres really free?",
     answer:

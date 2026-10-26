@@ -13,17 +13,17 @@ import {
 const DASHES = /[\u2013\u2014]/;
 
 test("title, meta and H1 match the brief", () => {
-  assert.equal(FREE_POSTGRES_TITLE, "Free Postgres hosting with 2 GB storage | Prisma Postgres");
+  assert.equal(FREE_POSTGRES_TITLE, "Free PostgreSQL database with 2 GB storage | Prisma Postgres");
   assert.equal(
     FREE_POSTGRES_DESCRIPTION,
-    "Free managed PostgreSQL 17 with 2 GB storage, 200,000 queries a month and up to 50 databases. No credit card, no time limit. Create one in seconds.",
+    "Create a free PostgreSQL database on Prisma Postgres. Managed PostgreSQL 17 with 2 GB of storage, 200,000 operations a month and up to 50 databases. No credit card and no time limit.",
   );
-  assert.equal(FREE_POSTGRES_H1, "Free Postgres hosting, with 2 GB and 50 databases included");
+  assert.equal(FREE_POSTGRES_H1, "Create a free PostgreSQL database");
   assert.equal(FREE_POSTGRES_PATH, "/free-postgresql-database");
 });
 
 test("FAQ answers strip cleanly and match FAQPage JSON-LD", () => {
-  assert.equal(FREE_POSTGRES_FAQ.length, 11);
+  assert.equal(FREE_POSTGRES_FAQ.length, 12);
 
   const structured = createFaqStructuredData(
     FREE_POSTGRES_PATH,
