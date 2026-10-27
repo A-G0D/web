@@ -272,19 +272,29 @@ export const FREE_POSTGRES_TOUR = [
 
 export const FREE_POSTGRES_PROBLEM_HEADLINE = "How the free limit works";
 
-export const FREE_POSTGRES_PROBLEM_BODY = [
-  "The catch is stated here so you can decide before you build on it.",
-  "What counts. One query is one operation: a simple read, a write, or a join. 200,000 operations a month is about 6,600 queries a day. Idle time is not billed.",
-  "When the database is idle. Idle databases scale to zero and cost nothing. The next query wakes them. You do not wake one by hand.",
-  `At the operations limit. The workspace's databases stop accepting queries until the 1st of the next month, or until you upgrade. A one-time 24 hour restore in the Console lets you export first. On paid plans this never happens: extra operations are billed, with a spend limit you set. Read the [docs FAQ on the free limit](${DOCS_FREE_LIMIT}).`,
-] as const;
-
-export const FREE_POSTGRES_PROBLEM_OUTCOMES = [
-  { icon: "repeat", label: "One query is one operation" },
-  { icon: "server", label: "Idle databases scale to zero" },
-  { icon: "shield", label: "Queries stop at the monthly limit" },
-  { icon: "database", label: "A one-time 24 hour restore" },
-] as const;
+// The free-plan limit, in the order the section shows it. Same facts as the
+// earlier paragraphs: what a query counts as, the monthly and daily pace,
+// idle, the hard stop, the one-time restore, and what paid plans do instead.
+// Nothing here says what happens at 2 GB of storage.
+export const FREE_POSTGRES_LIMIT = {
+  intro: "The catch is stated here so you can decide before you build on it.",
+  countsTitle: "What counts",
+  countsLead: "One query is one operation: a simple read, a write, or a join.",
+  monthFigure: "200,000",
+  monthLabel: "operations a month",
+  dayFigure: "about 6,600",
+  dayLabel: "queries a day",
+  idleNotBilled: "Idle time is not billed.",
+  idleTitle: "Idle databases scale to zero",
+  idleBody:
+    "Idle databases scale to zero and cost nothing. The next query wakes them. You do not wake one by hand.",
+  capTitle: "Queries stop at the monthly limit",
+  capBody:
+    "The workspace's databases stop accepting queries until the 1st of the next month, or until you upgrade.",
+  restoreTitle: "A one-time 24 hour restore",
+  restoreBody: "A one-time 24 hour restore in the Console lets you export first.",
+  paid: `On paid plans this never happens: extra operations are billed, with a spend limit you set. Read the [docs FAQ on the free limit](${DOCS_FREE_LIMIT}).`,
+} as const;
 
 export const STORAGE_CONFIRM = "What happens when a database reaches 2 GB of storage.";
 export const CONNECTION_CONFIRM = "Whether upgrading a workspace keeps the same connection string.";
