@@ -332,36 +332,36 @@ export const FREE_POSTGRES_FEATURES_HEADLINE = "What a free PostgreSQL database 
 
 export const FREE_POSTGRES_FEATURES_BRIDGE = `A managed [Prisma Postgres](/postgres) workspace you can keep. These allowances match [pricing](/pricing). Prisma Postgres Free plan. ${FREE_POSTGRES_UPDATED_LABEL}. The [npx create-db docs](${DOCS_CREATE_DB}) cover flags, regions and claiming. Connecting later is a standard [Postgres connection string](${DOCS_CONNECT}).`;
 
-export type FreePostgresIncludedColumn = {
-  heading: string;
-  value: string;
-  /** Footnote marker shown on this column. */
+export type FreePostgresIncludedCard = {
+  /** The amount, or the short name when the allowance is not a number. */
+  title: string;
+  detail: string;
+  /** Footnote marker on this card. */
   note?: number;
 };
 
-// One wide row. Rules that qualify the plan sit in FREE_POSTGRES_INCLUDED_NOTES,
-// not in a column, a callout, or a second row.
-export const FREE_POSTGRES_INCLUDED_COLUMNS: readonly FreePostgresIncludedColumn[] = [
+// One card per allowance. Rules sit in FREE_POSTGRES_INCLUDED_NOTES.
+export const FREE_POSTGRES_INCLUDED_CARDS: readonly FreePostgresIncludedCard[] = [
   {
-    heading: "Operations",
-    value: "200,000 a month. One query is one operation.",
+    title: "200,000",
+    detail: "operations a month. One query is one operation.",
     note: 1,
   },
-  { heading: "Storage", value: "2 GB" },
-  { heading: "Databases", value: "Up to 50 per workspace" },
+  { title: "2 GB", detail: "of storage" },
+  { title: "Up to 50", detail: "databases per workspace" },
   {
-    heading: "Connections",
-    value: "10 pooled for your app and 10 direct for migrations, per database",
+    title: "10 and 10",
+    detail: "connections per database. Pooled for your app. Direct for migrations.",
   },
-  { heading: "Data transfer", value: "Unlimited" },
-  { heading: "Engine", value: "PostgreSQL 17 with SSL and built-in connection pooling" },
+  { title: "Unlimited", detail: "data transfer" },
+  { title: "PostgreSQL 17", detail: "with SSL and built-in connection pooling" },
   {
-    heading: "Extensions",
-    value: `[pgvector](${DOCS_EXTENSIONS}) and 46 other Postgres extensions`,
+    title: `[pgvector](${DOCS_EXTENSIONS})`,
+    detail: "and 46 other Postgres extensions",
   },
-  { heading: "Regions", value: `[Six regions](${DOCS_REGIONS}) in the US, Europe and Asia` },
-  { heading: "Query Insights", value: "Find slow queries" },
-  { heading: "Prisma Studio", value: "Browse rows" },
+  { title: `[Six regions](${DOCS_REGIONS})`, detail: "in the US, Europe and Asia" },
+  { title: "Query Insights", detail: "to find slow queries" },
+  { title: "Prisma Studio", detail: "to browse rows" },
 ];
 
 export const FREE_POSTGRES_INCLUDED_NOTES = [

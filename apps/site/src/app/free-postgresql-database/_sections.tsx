@@ -8,15 +8,7 @@ import type { ProductIllustrationName } from "@/components/product/illustrations
 import { CompareLinks } from "@/components/sections/compare-links";
 import { Faq } from "@/components/sections/faq";
 import { TestimonialsReveal } from "@/components/sections/testimonials-reveal";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { renderFaqAnswer } from "@/lib/faq-answer";
 import { PRODUCT_TESTIMONIALS_HEADING } from "@/lib/markdown/product";
 import {
@@ -34,7 +26,7 @@ import {
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_CHECKS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
-  FREE_POSTGRES_INCLUDED_COLUMNS,
+  FREE_POSTGRES_INCLUDED_CARDS,
   FREE_POSTGRES_INCLUDED_NOTES,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_PLATFORM_BODY,
@@ -48,40 +40,34 @@ import { FreePostgresTerminal } from "./_terminal";
 
 function FreePostgresIncluded() {
   return (
-    <Table aria-describedby="free-postgres-notes" className="min-w-[72rem] table-fixed">
-      <TableHeader>
-        <TableRow>
-          {FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => (
-            <TableHead key={column.heading} className="whitespace-normal align-bottom">
-              {column.heading}
-              {column.note ? (
-                <a href={`#free-postgres-note-${column.note}`} className="ml-0.5">
-                  <sup>{column.note}</sup>
-                </a>
-              ) : null}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          {FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => (
-            <TableCell key={column.heading} className="whitespace-normal align-top">
-              {renderFaqAnswer(column.value)}
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableBody>
-      <TableCaption id="free-postgres-notes" className="text-left">
-        <span className="flex flex-col items-start gap-1">
-          {FREE_POSTGRES_INCLUDED_NOTES.map((note) => (
-            <span key={note.n} id={`free-postgres-note-${note.n}`}>
-              <sup>{note.n}</sup> {note.text}
-            </span>
-          ))}
-        </span>
-      </TableCaption>
-    </Table>
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {FREE_POSTGRES_INCLUDED_CARDS.map((card) => (
+          <Card key={card.title} className="h-full gap-3 rounded-2xl py-5 shadow-none">
+            <CardHeader className="gap-1.5 px-5">
+              <CardTitle className="text-xl tabular-nums">
+                {renderFaqAnswer(card.title)}
+                {card.note ? (
+                  <a href={`#free-postgres-note-${card.note}`} className="ml-0.5">
+                    <sup className="text-sm">{card.note}</sup>
+                  </a>
+                ) : null}
+              </CardTitle>
+              <CardDescription className="text-pretty">
+                {renderFaqAnswer(card.detail)}
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        ))}
+      </div>
+      <div id="free-postgres-notes" className="flex flex-col gap-1 text-sm text-muted-foreground">
+        {FREE_POSTGRES_INCLUDED_NOTES.map((note) => (
+          <p key={note.n} id={`free-postgres-note-${note.n}`}>
+            <sup>{note.n}</sup> {note.text}
+          </p>
+        ))}
+      </div>
+    </div>
   );
 }
 

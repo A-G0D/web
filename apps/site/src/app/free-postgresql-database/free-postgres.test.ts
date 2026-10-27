@@ -13,7 +13,7 @@ import {
   FREE_POSTGRES_FAQ,
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_CHECKS,
-  FREE_POSTGRES_INCLUDED_COLUMNS,
+  FREE_POSTGRES_INCLUDED_CARDS,
   FREE_POSTGRES_INCLUDED_NOTES,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_PATH,
@@ -61,16 +61,16 @@ test("title, meta and H1 match the brief", () => {
   assert.ok(!FREE_POSTGRES_MARKDOWN_SUBHEADLINE.includes("Instant databases are deleted"));
   for (const line of FREE_POSTGRES_HERO_CHECKS) assert.ok(!DASHES.test(line));
   assert.deepEqual(
-    FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => column.heading),
+    FREE_POSTGRES_INCLUDED_CARDS.map((card) => card.title),
     [
-      "Operations",
-      "Storage",
-      "Databases",
-      "Connections",
-      "Data transfer",
-      "Engine",
-      "Extensions",
-      "Regions",
+      "200,000",
+      "2 GB",
+      "Up to 50",
+      "10 and 10",
+      "Unlimited",
+      "PostgreSQL 17",
+      `[pgvector](${"/docs/postgres/database/postgres-extensions"})`,
+      `[Six regions](${"/docs/postgres/faq#what-regions-is-prisma-postgres-available-in"})`,
       "Query Insights",
       "Prisma Studio",
     ],
@@ -83,12 +83,12 @@ test("title, meta and H1 match the brief", () => {
     ],
   );
   const includedCopy = [
-    ...FREE_POSTGRES_INCLUDED_COLUMNS.flatMap((column) => [column.heading, column.value]),
+    ...FREE_POSTGRES_INCLUDED_CARDS.flatMap((card) => [card.title, card.detail]),
     ...FREE_POSTGRES_INCLUDED_NOTES.map((note) => note.text),
   ].join("\n");
   assert.ok(!DASHES.test(includedCopy));
   assert.match(includedCopy, /One query is one operation/);
-  assert.match(includedCopy, /pooled for your app/);
+  assert.match(includedCopy, /Pooled for your app/);
   assert.match(includedCopy, /Daily backups start on Starter/);
   assert.match(includedCopy, /Operations reset/);
   assert.ok(!includedCopy.includes("read more"));
@@ -278,10 +278,10 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   const secondCheck = markdown.indexOf(FREE_POSTGRES_HERO_CHECKS[1]);
   assert.ok(instantLink >= 0 && accountLink > instantLink, "instant database is the first hero button");
   assert.ok(accountLink > instantLink && firstCheck > accountLink && secondCheck > firstCheck);
-  const includedTable = markdown.indexOf("| Operations | Storage | Databases |");
+  const includedCards = markdown.indexOf("**200,000.** operations a month. One query is one operation.");
   const resetNote = markdown.indexOf("1. Operations reset on the 1st of every month.");
   const backupNote = markdown.indexOf("2. No backups. Daily backups start on Starter.");
-  assert.ok(includedTable > secondCheck && resetNote > includedTable && backupNote > resetNote);
+  assert.ok(includedCards > secondCheck && resetNote > includedCards && backupNote > resetNote);
   assert.ok(!markdown.includes("### What you get"));
   assert.ok(!markdown.includes("**No backups.**"));
 
@@ -300,8 +300,8 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   assert.ok(!sections.includes("FREE_POSTGRES_MICROLINE"));
   assert.ok(!sections.includes("microline:"));
   assert.match(sections, /FreePostgresSubtitle/);
-  assert.match(sections, /TableHeader/);
-  assert.match(sections, /TableCaption/);
+  assert.match(sections, /CardTitle/);
+  assert.ok(!sections.includes("TableHeader"));
   assert.ok(!sections.includes("Alert"));
   assert.match(sections, /leadLayout="wide"/);
   assert.match(sections, /<strong className="font-semibold text-foreground">2 GB<\/strong>/);
