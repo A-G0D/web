@@ -40,9 +40,12 @@ function FreePostgresSubtitle() {
     <>
       <strong className="font-semibold text-foreground">2 GB</strong> of storage,{" "}
       <strong className="font-semibold text-foreground">200,000 operations</strong> a month, and{" "}
-      <strong className="font-semibold text-foreground">50 databases</strong>. No card, no time
-      limit on the Free workspace. Create an instant database is deleted after 24 hours unless you
-      claim it. Prisma Postgres works with any Postgres client.
+      <strong className="font-semibold text-foreground">50 databases</strong>. Prisma Postgres
+      works with any Postgres client.
+      <br />
+      Instant databases are deleted in 24 hours unless claimed.
+      <br />
+      A claimed database, and a database created in the Prisma Console, has no time limit.
     </>
   );
 }

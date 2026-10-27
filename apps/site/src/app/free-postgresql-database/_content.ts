@@ -24,11 +24,11 @@ export const FREE_POSTGRES_DESCRIPTION =
 export const FREE_POSTGRES_H1 = "Create a free PostgreSQL database";
 
 export const FREE_POSTGRES_SUBHEADLINE =
-  "2 GB of storage, 200,000 operations a month, and 50 databases. No card, no time limit on the Free workspace. Create an instant database is deleted after 24 hours unless you claim it. Prisma Postgres works with any Postgres client.";
+  "2 GB of storage, 200,000 operations a month, and 50 databases. Prisma Postgres works with any Postgres client.\nInstant databases are deleted in 24 hours unless claimed.\nA claimed database, and a database created in the Prisma Console, has no time limit.";
 
-/** Same sentence as the hero subtitle, with the three allowances in bold. */
+/** Same copy as the hero subtitle, with the three allowances in bold. The two expiry lines are hard breaks. */
 export const FREE_POSTGRES_MARKDOWN_SUBHEADLINE =
-  "**2 GB** of storage, **200,000 operations** a month, and **50 databases**. No card, no time limit on the Free workspace. Create an instant database is deleted after 24 hours unless you claim it. Prisma Postgres works with any Postgres client.";
+  "**2 GB** of storage, **200,000 operations** a month, and **50 databases**. Prisma Postgres works with any Postgres client.  \nInstant databases are deleted in 24 hours unless claimed.  \nA claimed database, and a database created in the Prisma Console, has no time limit.";
 
 export const FREE_POSTGRES_LAST_MODIFIED = "2026-10-21";
 export const FREE_POSTGRES_UPDATED_LABEL = "Last updated: 21 October 2026";
@@ -206,8 +206,6 @@ export const UPGRADE_POINTS = [
 
 // The filled hero button is the action the window types. Get started stays
 // the account path, as the outline button. The closer keeps its own label.
-// The no-card promise is said once, in the subtitle, and it describes the
-// Free workspace. The 24-hour deletion belongs to Create an instant database.
 export const FREE_POSTGRES_HERO_PRIMARY_CTA = {
   label: "Create an instant database",
   href: CREATE_DB_WEB_URL,
