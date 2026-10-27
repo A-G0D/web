@@ -1,5 +1,5 @@
 /* The plain terminal types the command, then opens the setup line, the
-   connection string, and the claim note. Each agent tab types the same
+   connection string, the claim note, and the claim URL. Each agent tab types the same
    command, then opens its tool line and the reply. The finished state is
    the default, so a reduced-motion visitor sees the active tab at once.
    Every tab is light. */
@@ -171,6 +171,10 @@
 
   .beat3 {
     animation-delay: 2.2s;
+  }
+
+  .beat4 {
+    animation-delay: 2.7s;
   }
 
   .toolBeat {

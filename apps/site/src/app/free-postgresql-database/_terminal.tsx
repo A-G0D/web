@@ -135,6 +135,11 @@ function PlainTerminal() {
           {FREE_POSTGRES_TERMINAL_CLAIM}
         </p>
       </div>
+      <div className={`${styles.reveal} ${styles.beat4}`}>
+        <p className={`${styles.inner} ${styles.follow} ${styles.wrap}`}>
+          {FREE_POSTGRES_CLI_CLAIM_URL}
+        </p>
+      </div>
     </>
   );
 }

@@ -41,11 +41,11 @@ test("title, meta and H1 match the brief", () => {
   assert.equal(FREE_POSTGRES_PATH, "/free-postgresql-database");
   assert.equal(
     FREE_POSTGRES_SUBHEADLINE,
-    "2 GB of storage, 200,000 operations a month, and 50 databases. Prisma Postgres works with any Postgres client.\nInstant databases are deleted in 24 hours unless claimed.\nA claimed database, and a database created in the Prisma Console, has no time limit.",
+    "2 GB of storage, 200,000 operations a month (one query each), and 50 databases. Prisma Postgres works with any Postgres client.\nInstant databases are deleted in 24 hours unless claimed.\nA claimed database, and a database created in the Prisma Console, has no time limit.",
   );
   assert.equal(
     FREE_POSTGRES_MARKDOWN_SUBHEADLINE,
-    "**2 GB** of storage, **200,000 operations** a month, and **50 databases**. Prisma Postgres works with any Postgres client.  \nInstant databases are deleted in 24 hours unless claimed.  \nA claimed database, and a database created in the Prisma Console, has no time limit.",
+    "**2 GB** of storage, **200,000 operations** a month (one query each), and **50 databases**. Prisma Postgres works with any Postgres client.  \nInstant databases are deleted in 24 hours unless claimed.  \nA claimed database, and a database created in the Prisma Console, has no time limit.",
   );
   assert.ok(!DASHES.test(FREE_POSTGRES_MARKDOWN_SUBHEADLINE));
   assert.deepEqual(FREE_POSTGRES_HERO_PRIMARY_CTA, {
@@ -169,6 +169,18 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   assert.ok(!DASHES.test(source));
 
   const markdown = renderFreePostgresqlDatabaseMarkdown();
+  assert.ok(
+    markdown.includes(
+      [
+        `$ ${CREATE_DB_COMMAND}`,
+        FREE_POSTGRES_TERMINAL_STATUS,
+        FREE_POSTGRES_CLI_CONNECTION,
+        FREE_POSTGRES_TERMINAL_CLAIM,
+        FREE_POSTGRES_CLI_CLAIM_URL,
+      ].join("\n"),
+    ),
+    "terminal transcript includes the claim URL after the warning",
+  );
   for (const line of [
     ...FREE_POSTGRES_TERMINAL_TABS,
     `$ ${CREATE_DB_COMMAND}`,
@@ -220,6 +232,7 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   assert.ok(instantLink >= 0 && accountLink > instantLink, "instant database is the first hero button");
 
   const sections = readFileSync(new URL("./_sections.tsx", import.meta.url), "utf8");
+  assert.match(sections, /one\s+query each/);
   assert.match(sections, /Instant databases are deleted in 24 hours unless claimed/);
   assert.match(
     sections,

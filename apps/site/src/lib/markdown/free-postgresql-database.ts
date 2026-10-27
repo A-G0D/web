@@ -60,6 +60,7 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
       FREE_POSTGRES_TERMINAL_STATUS,
       FREE_POSTGRES_CLI_CONNECTION,
       FREE_POSTGRES_TERMINAL_CLAIM,
+      FREE_POSTGRES_CLI_CLAIM_URL,
     ].join("\n"),
     [
       FREE_POSTGRES_CLAUDE.product,

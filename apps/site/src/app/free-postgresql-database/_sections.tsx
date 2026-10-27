@@ -39,7 +39,8 @@ function FreePostgresSubtitle() {
   return (
     <>
       <strong className="font-semibold text-foreground">2 GB</strong> of storage,{" "}
-      <strong className="font-semibold text-foreground">200,000 operations</strong> a month, and{" "}
+      <strong className="font-semibold text-foreground">200,000 operations</strong> a month (one
+      query each), and{" "}
       <strong className="font-semibold text-foreground">50 databases</strong>. Prisma Postgres
       works with any Postgres client.
       <br />
