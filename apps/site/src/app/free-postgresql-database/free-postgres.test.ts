@@ -243,7 +243,7 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   const firstCheck = markdown.indexOf(FREE_POSTGRES_HERO_CHECKS[0]);
   const secondCheck = markdown.indexOf(FREE_POSTGRES_HERO_CHECKS[1]);
   assert.ok(instantLink >= 0 && accountLink > instantLink, "instant database is the first hero button");
-  assert.ok(firstCheck >= 0 && secondCheck > firstCheck && instantLink > secondCheck);
+  assert.ok(accountLink > instantLink && firstCheck > accountLink && secondCheck > firstCheck);
 
   const sections = readFileSync(new URL("./_sections.tsx", import.meta.url), "utf8");
   assert.match(sections, /one\s+query each/);

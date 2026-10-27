@@ -30,7 +30,7 @@ export const FREE_POSTGRES_SUBHEADLINE =
 export const FREE_POSTGRES_MARKDOWN_SUBHEADLINE =
   "**2 GB** of storage, **200,000 operations** a month (one query each), and **50 databases**. Prisma Postgres works with any Postgres client.";
 
-/** Check lines under the subtitle, above the buttons. Cyan, then yellow. */
+/** Check lines under the buttons. Cyan, then yellow. */
 export const FREE_POSTGRES_HERO_CHECKS = [
   "Instant databases are deleted in 24 hours unless claimed.",
   "A claimed database, and a database created in the Prisma Console, has no time limit.",

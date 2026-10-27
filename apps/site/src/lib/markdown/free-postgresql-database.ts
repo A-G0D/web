@@ -54,8 +54,8 @@ export { FREE_POSTGRES_MARKDOWN_SUBHEADLINE };
  */
 export function renderFreePostgresqlDatabaseMarkdown(): string {
   return joinBlocks([
-    bulletList([...FREE_POSTGRES_HERO_CHECKS]),
     ctaList([FREE_POSTGRES_HERO_PRIMARY_CTA, FREE_POSTGRES_HERO_SECONDARY_CTA]),
+    bulletList([...FREE_POSTGRES_HERO_CHECKS]),
     bulletList([...FREE_POSTGRES_TERMINAL_TABS]),
     [
       `$ ${CREATE_DB_COMMAND}`,

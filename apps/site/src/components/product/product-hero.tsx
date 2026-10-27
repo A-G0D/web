@@ -97,9 +97,8 @@ export function ProductHero({
    */
   subheadline?: ReactNode;
   /**
-   * Check lines between the subtitle and the buttons. Omit it and the CTA
-   * still follows the subtitle. /postgres keeps its three benefits under the
-   * buttons and does not pass this.
+   * Check lines under the buttons. Omit it and the CTA still follows the
+   * subtitle. /postgres keeps its three benefits and does not pass this.
    */
   checks?: readonly string[];
 }) {
@@ -163,9 +162,6 @@ export function ProductHero({
               <p className="mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-muted-foreground">
                 {subheadline ?? hero.subheadline}
               </p>
-              {checks && checks.length > 0 ? (
-                <HeroChecks labels={checks} className="mt-5 flex flex-col gap-2.5" />
-              ) : null}
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <PrismButton href={hero.primaryCta.href} size="lg">
                   {hero.primaryCta.label}
@@ -174,6 +170,9 @@ export function ProductHero({
                   {hero.secondaryCta.label}
                 </PrismButtonOutline>
               </div>
+              {checks && checks.length > 0 ? (
+                <HeroChecks labels={checks} className="mt-8 flex flex-col gap-2.5" />
+              ) : null}
               {hero.microline ? (
                 <p className="mt-3.5 text-sm text-muted-foreground">{hero.microline}</p>
               ) : null}
