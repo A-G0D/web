@@ -24,7 +24,7 @@ export const FREE_POSTGRES_DESCRIPTION =
 export const FREE_POSTGRES_H1 = "Create a free PostgreSQL database";
 
 export const FREE_POSTGRES_SUBHEADLINE =
-  "A free PostgreSQL database and its connection string, in seconds. No account needed.";
+  "2 GB, 200,000 operations a month, and up to 50 databases. No card, no time limit. A connection string in seconds.";
 
 export const FREE_POSTGRES_LAST_MODIFIED = "2026-10-21";
 export const FREE_POSTGRES_UPDATED_LABEL = "Last updated: 21 October 2026";
@@ -235,14 +235,20 @@ export const FREE_POSTGRES_RELATED = {
   href: "/postgres",
 } as const;
 
-export const FREE_POSTGRES_PRIMARY_CTA = {
-  label: "Create a free database",
+// Hero buttons do two jobs. The closer keeps its own primary label.
+export const FREE_POSTGRES_HERO_PRIMARY_CTA = {
+  label: "Get started",
   href: CONSOLE_SIGN_UP_URL,
 } as const;
 
 export const FREE_POSTGRES_BROWSER_CTA = {
-  label: "Create in the browser",
+  label: "Create an instant database",
   href: CREATE_DB_WEB_URL,
+} as const;
+
+export const FREE_POSTGRES_PRIMARY_CTA = {
+  label: "Create a free database",
+  href: CONSOLE_SIGN_UP_URL,
 } as const;
 
 export const FREE_POSTGRES_PRICING_CTA = {

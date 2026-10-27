@@ -3,10 +3,16 @@ import test from "node:test";
 import { createFaqStructuredData } from "@/lib/structured-data";
 import { stripFaqAnswerMarkup } from "@/lib/faq-answer";
 import {
+  CONSOLE_SIGN_UP_URL,
+  CREATE_DB_WEB_URL,
+  FREE_POSTGRES_BROWSER_CTA,
   FREE_POSTGRES_DESCRIPTION,
   FREE_POSTGRES_FAQ,
   FREE_POSTGRES_H1,
+  FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_PATH,
+  FREE_POSTGRES_PRIMARY_CTA,
+  FREE_POSTGRES_SUBHEADLINE,
   FREE_POSTGRES_TITLE,
 } from "./_content";
 
@@ -20,6 +26,19 @@ test("title, meta and H1 match the brief", () => {
   );
   assert.equal(FREE_POSTGRES_H1, "Create a free PostgreSQL database");
   assert.equal(FREE_POSTGRES_PATH, "/free-postgresql-database");
+  assert.equal(
+    FREE_POSTGRES_SUBHEADLINE,
+    "2 GB, 200,000 operations a month, and up to 50 databases. No card, no time limit. A connection string in seconds.",
+  );
+  assert.deepEqual(FREE_POSTGRES_HERO_PRIMARY_CTA, {
+    label: "Get started",
+    href: CONSOLE_SIGN_UP_URL,
+  });
+  assert.deepEqual(FREE_POSTGRES_BROWSER_CTA, {
+    label: "Create an instant database",
+    href: CREATE_DB_WEB_URL,
+  });
+  assert.equal(FREE_POSTGRES_PRIMARY_CTA.label, "Create a free database");
 });
 
 test("FAQ answers strip cleanly and match FAQPage JSON-LD", () => {
@@ -55,4 +74,7 @@ test("user-visible content and FAQ schema have no em or en dashes", () => {
   assert.ok(!DASHES.test(FREE_POSTGRES_TITLE));
   assert.ok(!DASHES.test(FREE_POSTGRES_DESCRIPTION));
   assert.ok(!DASHES.test(FREE_POSTGRES_H1));
+  assert.ok(!DASHES.test(FREE_POSTGRES_SUBHEADLINE));
+  assert.ok(!DASHES.test(FREE_POSTGRES_HERO_PRIMARY_CTA.label));
+  assert.ok(!DASHES.test(FREE_POSTGRES_BROWSER_CTA.label));
 });
