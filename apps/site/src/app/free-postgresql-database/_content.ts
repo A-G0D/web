@@ -228,15 +228,28 @@ export const FREE_POSTGRES_PRICING_CTA = {
   href: "/pricing",
 } as const;
 
-// Hero terminal. Same shape as `npx create-db`, with obviously fake credentials.
-// Not a live password, project id, or claim URL.
-export const FREE_POSTGRES_TERMINAL_AGENTS = ["Claude", "Codex"] as const;
+// Hero window. First tab is a plain terminal. Second tab is a Claude Code
+// session. Both use obviously fake credentials, not a live password or claim URL.
+export const FREE_POSTGRES_TERMINAL_TABS = ["Terminal", "Claude"] as const;
 export const FREE_POSTGRES_CLI_CONNECTION =
-  "postgres://user:password@db.prisma.io:5432/postgres?sslmode=require";
+  "postgres://demo:sample@db.prisma.io:5432/postgres?sslmode=require";
 export const FREE_POSTGRES_CLI_CLAIM_URL =
-  "https://create-db.prisma.io/claim?projectID=proj_example";
+  "https://create-db.prisma.io/claim?projectID=proj_sample";
 export const FREE_POSTGRES_CLI_DELETE =
   "Database will be deleted on 28/10/2026, 16:52:18 if not claimed.";
+
+// Claude Code transcript. Region is one of the six documented regions, shown
+// as this example run's result. The claim sentence matches the FAQ.
+export const FREE_POSTGRES_CLAUDE = {
+  product: "Claude Code",
+  model: "Opus",
+  directory: "~/app",
+  tool: "Ran a shell command",
+  created: "The database was created.",
+  connectionLabel: "Connection string",
+  region: "eu-central-1 (Frankfurt)",
+  claim: "The database is deleted after 24 hours unless you claim it.",
+} as const;
 
 export const FREE_POSTGRES_CLI_BLOCKS = [
   "┌  Creating a Prisma Postgres database\n│",

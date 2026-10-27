@@ -1,11 +1,13 @@
-/* The CLI opens in four beats. The finished log is the default, so a
-   reduced-motion visitor sees the active tab's output at once. */
+/* The plain terminal opens in four beats. The Claude session types the
+   command, then shows the shell line and the reply. The finished state is
+   the default, so a reduced-motion visitor sees the active tab at once. */
 
 .log {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-size: 0.75rem;
   font-variant-ligatures: none;
   line-height: 1.45;
+  min-height: 22rem;
   overflow-x: auto;
 }
 
@@ -22,6 +24,94 @@
 .inner {
   min-height: 0;
   overflow: hidden;
+}
+
+.claude {
+  background: #262624;
+  color: #f4f1ea;
+}
+
+.session {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
+}
+
+.product {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.15rem;
+  color: #b7b1a6;
+}
+
+.promptRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.prompt {
+  color: #d97757;
+}
+
+.command {
+  display: inline-block;
+  overflow: hidden;
+  white-space: pre;
+  width: 13ch;
+  vertical-align: bottom;
+}
+
+.caret {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1.05em;
+  background: #f4f1ea;
+}
+
+.toolLine {
+  margin: 0;
+  color: #d8d2c8;
+}
+
+.dot {
+  color: #d97757;
+}
+
+.reply {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.reply p {
+  margin: 0;
+}
+
+.label {
+  display: block;
+  color: #b7b1a6;
+}
+
+.url {
+  overflow-wrap: anywhere;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -41,10 +131,39 @@
   .beat3 {
     animation-delay: 2.2s;
   }
+
+  .command {
+    width: 0;
+    animation: type 0.9s steps(13, end) 0.25s forwards;
+  }
+
+  .caret {
+    animation: blink 1s step-end 1.2s infinite;
+  }
+
+  .toolBeat {
+    animation-delay: 1.4s;
+  }
+
+  .replyBeat {
+    animation-delay: 2.05s;
+  }
 }
 
 @keyframes open {
   to {
     grid-template-rows: 1fr;
+  }
+}
+
+@keyframes type {
+  to {
+    width: 13ch;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
   }
 }
