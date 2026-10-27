@@ -48,9 +48,12 @@ function centreLastPair(count: number, i: number) {
 export function ProductFeatures({
   features,
   footer,
+  lead,
 }: Pick<ProductPageContent, "features"> & {
   /** Callout under the card grid. /free-postgresql-database uses it for an open engineering question. */
   footer?: ReactNode;
+  /** Sits under the heading, before the bridge. Unused on /postgres. */
+  lead?: ReactNode;
 }) {
   return (
     <section className="bg-white px-3 py-3 sm:px-4">
@@ -97,6 +100,7 @@ export function ProductFeatures({
                 {features.headline}
               </h2>
             </Reveal>
+            {lead ? <div className="mt-8 text-left">{lead}</div> : null}
             <Reveal delay={0.1}>
               <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
                 {/* Same no-op as card descriptions: plain bridges (the

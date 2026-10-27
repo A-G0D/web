@@ -14,6 +14,7 @@ import {
   FREE_POSTGRES_FEATURES_HEADLINE,
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_BENEFITS,
+  FREE_POSTGRES_INCLUDED,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_MICROLINE,
   FREE_POSTGRES_PLATFORM_BODY,
@@ -52,6 +53,12 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     heading(3, "Prisma Postgres at a glance"),
     bulletList(FREE_POSTGRES_TOUR.map((stop) => `**${stop.label}:** ${stop.caption}`)),
 
+    heading(2, FREE_POSTGRES_FEATURES_HEADLINE),
+    bulletList([...FREE_POSTGRES_INCLUDED]),
+    paragraphs(FREE_POSTGRES_FEATURES_BRIDGE),
+    bulletList(FREE_POSTGRES_FEATURE_ITEMS.map((item) => `**${item.name}:** ${item.description}`)),
+    paragraphs(`TO CONFIRM WITH ENGINEERING: ${CONNECTION_CONFIRM}`),
+
     heading(2, FREE_POSTGRES_PROBLEM_HEADLINE),
     paragraphs(FREE_POSTGRES_LIMIT.intro),
     heading(3, FREE_POSTGRES_LIMIT.countsTitle),
@@ -69,11 +76,6 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     paragraphs(FREE_POSTGRES_LIMIT.restoreBody),
     paragraphs(FREE_POSTGRES_LIMIT.paid),
     paragraphs(`TO CONFIRM WITH ENGINEERING: ${STORAGE_CONFIRM}`),
-
-    heading(2, FREE_POSTGRES_FEATURES_HEADLINE),
-    paragraphs(FREE_POSTGRES_FEATURES_BRIDGE),
-    bulletList(FREE_POSTGRES_FEATURE_ITEMS.map((item) => `**${item.name}:** ${item.description}`)),
-    paragraphs(`TO CONFIRM WITH ENGINEERING: ${CONNECTION_CONFIRM}`),
 
     heading(2, PRODUCT_PLATFORM_HEADING),
     paragraphs(FREE_POSTGRES_PLATFORM_BODY),

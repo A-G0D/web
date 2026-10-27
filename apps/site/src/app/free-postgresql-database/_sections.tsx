@@ -24,6 +24,7 @@ import {
   FREE_POSTGRES_FEATURES_HEADLINE,
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_BENEFITS,
+  FREE_POSTGRES_INCLUDED,
   FREE_POSTGRES_MICROLINE,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_PLATFORM_BODY,
@@ -159,9 +160,10 @@ export function EngineeringConfirm({ children }: { children: ReactNode }) {
   );
 }
 
-// Same section order as ProductPage (/postgres). Composed here, rather than
-// through ProductPage, so the limit section can be a deep link and the two
-// engineering callouts have a place inside those sections.
+// Same sections as /postgres, with the free-plan contents directly under the
+// hero. The limit comes after that, so the allowance is the first thing you
+// read and the catch comes second. Composed here so the limit section and the
+// engineering callouts stay on this page only.
 export function FreePostgresPage() {
   return (
     <>
@@ -186,7 +188,6 @@ export function FreePostgresPage() {
           })),
         }}
       />
-      <FreeLimit />
       <ProductFeatures
         features={{
           headline: FREE_POSTGRES_FEATURES_HEADLINE,
@@ -196,8 +197,18 @@ export function FreePostgresPage() {
             illustration: item.illustration as ProductIllustrationName,
           })),
         }}
+        lead={
+          <ul className="mx-auto grid max-w-3xl gap-x-10 gap-y-2.5 sm:grid-cols-2">
+            {FREE_POSTGRES_INCLUDED.map((item) => (
+              <li key={item} className="text-pretty text-base leading-snug text-foreground">
+                {renderFaqAnswer(item)}
+              </li>
+            ))}
+          </ul>
+        }
         footer={<EngineeringConfirm>{CONNECTION_CONFIRM}</EngineeringConfirm>}
       />
+      <FreeLimit />
       <ProductPlatform platform={{ body: FREE_POSTGRES_PLATFORM_BODY }} />
       <CompareLinks intro={FREE_POSTGRES_COMPARE_INTRO} note={FREE_POSTGRES_COMPARE_NOTE} />
       <Faq items={FREE_POSTGRES_FAQ} id="faq" />
