@@ -342,13 +342,16 @@ export type FreePostgresIncludedCard = {
 
 // The three headline allowances. Rules sit in FREE_POSTGRES_INCLUDED_NOTES.
 export const FREE_POSTGRES_INCLUDED_CARDS: readonly FreePostgresIncludedCard[] = [
-  { title: "2 GB", detail: "of storage" },
+  { title: "2 GB", detail: "of storage, enough for a real schema and sample rows." },
   {
     title: "200,000",
     detail: "operations a month. One query is one operation.",
     note: 1,
   },
-  { title: "Up to 50", detail: "databases per workspace" },
+  {
+    title: "Up to 50",
+    detail: "databases. A fresh database per app, branch, or experiment.",
+  },
 ];
 
 export type FreePostgresIncludedRow = {
@@ -359,22 +362,22 @@ export type FreePostgresIncludedRow = {
 export const FREE_POSTGRES_INCLUDED_ROWS: readonly FreePostgresIncludedRow[] = [
   {
     label: "Connections",
-    value: "10 pooled for your app and 10 direct for migrations, per database",
+    value: "10 pooled for the app, 10 direct for migrations, Studio, and pg_dump. Per database.",
   },
-  { label: "Data transfer", value: "Unlimited" },
-  { label: "Engine", value: "PostgreSQL 17 with SSL and built-in connection pooling" },
+  { label: "Data transfer", value: "Unlimited for the database." },
+  { label: "Postgres", value: "PostgreSQL 17, SSL, and connection pooling." },
   {
     label: "Extensions",
-    value: `[pgvector](${DOCS_EXTENSIONS}) and 46 other Postgres extensions`,
+    value: `[pgvector](${DOCS_EXTENSIONS}) for similarity search, plus pg_search, pg_trgm, and pgcrypto.`,
   },
-  { label: "Regions", value: `[Six regions](${DOCS_REGIONS}) in the US, Europe and Asia` },
+  { label: "Regions", value: `[Six regions](${DOCS_REGIONS}). Put the database near the app.` },
   { label: "Query Insights", value: "Shows which queries are slow and why." },
   { label: "Prisma Studio", value: "A data browser for viewing and editing rows." },
 ];
 
 export const FREE_POSTGRES_INCLUDED_NOTES = [
   { n: 1, text: "Operations reset on the 1st of every month." },
-  { n: 2, text: "No backups. Daily backups start on Starter." },
+  { n: 2, text: "No backups. Daily backups start on Starter and are kept for 7 days." },
 ] as const;
 
 export const FREE_POSTGRES_FEATURE_ITEMS = [

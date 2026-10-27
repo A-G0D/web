@@ -70,7 +70,7 @@ test("title, meta and H1 match the brief", () => {
     [
       "Connections",
       "Data transfer",
-      "Engine",
+      "Postgres",
       "Extensions",
       "Regions",
       "Query Insights",
@@ -81,7 +81,7 @@ test("title, meta and H1 match the brief", () => {
     FREE_POSTGRES_INCLUDED_NOTES.map((note) => note.text),
     [
       "Operations reset on the 1st of every month.",
-      "No backups. Daily backups start on Starter.",
+      "No backups. Daily backups start on Starter and are kept for 7 days.",
     ],
   );
   const includedCopy = [
@@ -93,7 +93,10 @@ test("title, meta and H1 match the brief", () => {
   assert.match(includedCopy, /One query is one operation/);
   assert.match(includedCopy, /Shows which queries are slow and why/);
   assert.match(includedCopy, /A data browser for viewing and editing rows/);
-  assert.match(includedCopy, /pooled for your app/);
+  assert.match(includedCopy, /pooled for the app/);
+  assert.match(includedCopy, /pg_dump/);
+  assert.match(includedCopy, /similarity search/);
+  assert.ok(!includedCopy.includes("PostGIS"));
   assert.match(includedCopy, /Daily backups start on Starter/);
   assert.match(includedCopy, /Operations reset/);
   assert.ok(!includedCopy.includes("read more"));
@@ -286,7 +289,9 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   const includedCards = markdown.indexOf("**2 GB.** of storage");
   const includedTable = markdown.indexOf("| Connections |");
   const resetNote = markdown.indexOf("1. Operations reset on the 1st of every month.");
-  const backupNote = markdown.indexOf("2. No backups. Daily backups start on Starter.");
+  const backupNote = markdown.indexOf(
+    "2. No backups. Daily backups start on Starter and are kept for 7 days.",
+  );
   assert.ok(
     includedCards > secondCheck &&
       includedTable > includedCards &&
