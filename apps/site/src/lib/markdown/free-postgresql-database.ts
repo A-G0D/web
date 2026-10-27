@@ -54,7 +54,7 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     bulletList(FREE_POSTGRES_TOUR.map((stop) => `**${stop.label}:** ${stop.caption}`)),
 
     heading(2, FREE_POSTGRES_FEATURES_HEADLINE),
-    bulletList([...FREE_POSTGRES_INCLUDED]),
+    bulletList(FREE_POSTGRES_INCLUDED.map(([value, detail]) => `${value} ${detail}`)),
     paragraphs(FREE_POSTGRES_FEATURES_BRIDGE),
     bulletList(FREE_POSTGRES_FEATURE_ITEMS.map((item) => `**${item.name}:** ${item.description}`)),
     paragraphs(`TO CONFIRM WITH ENGINEERING: ${CONNECTION_CONFIRM}`),

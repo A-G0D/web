@@ -198,10 +198,18 @@ export function FreePostgresPage() {
           })),
         }}
         lead={
-          <ul className="mx-auto grid max-w-3xl gap-x-10 gap-y-2.5 sm:grid-cols-2">
-            {FREE_POSTGRES_INCLUDED.map((item) => (
-              <li key={item} className="text-pretty text-base leading-snug text-foreground">
-                {renderFaqAnswer(item)}
+          <ul className="mx-auto max-w-3xl border-y border-black/[0.08]">
+            {FREE_POSTGRES_INCLUDED.map(([value, detail]) => (
+              <li
+                key={value}
+                className="grid grid-cols-1 items-baseline gap-x-8 gap-y-0.5 border-b border-black/[0.08] py-3 text-left last:border-b-0 sm:grid-cols-[13rem_minmax(0,1fr)]"
+              >
+                <span className="text-base font-medium tabular-nums text-foreground">
+                  {renderFaqAnswer(value)}
+                </span>
+                <span className="text-base text-pretty text-muted-foreground">
+                  {renderFaqAnswer(detail)}
+                </span>
               </li>
             ))}
           </ul>
