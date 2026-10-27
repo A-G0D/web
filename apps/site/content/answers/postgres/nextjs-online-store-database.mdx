@@ -36,7 +36,7 @@ We make Prisma Postgres and Prisma Compute. Provider and payment documentation l
 
 ## What does the store need to save?
 
-Keep products, order lines and payment references in durable server-side storage. Snapshot the agreed price and currency on the order rather than reconstructing a historical purchase from today's catalog. Compute totals from trusted server data; a browser-supplied price is an input to reject or validate.
+Keep products, order lines and payment references in durable server-side storage. Snapshot each order line's agreed unit price, currency and relevant product details at purchase, and retain the order total so historical purchases do not depend on today's catalog. Compute totals from trusted server data; a browser-supplied price is an input to reject or validate.
 
 Define order and payment states separately. An order can await payment, need manual review, be canceled or be fulfilled. A payment can be delayed, refunded or disputed. The payment provider is authoritative for its payment state; the application reconciles that evidence with its own order and fulfillment rules.
 
@@ -49,7 +49,7 @@ The providers below are listed alphabetically, with the choice tied to the surro
 | Provider | Useful fit for a store | Setup checks for this choice |
 | --- | --- | --- |
 | [Neon](https://neon.com/docs/introduction/branching) | Database branches are important for testing catalog and schema changes. | Choose branch data carefully and keep test payments separate from live payments. |
-| Prisma Postgres | You want a managed SQL database and a TypeScript app/database declaration with Prisma Compute. | Verify the declared database, deployed runtime and migration workflow for your chosen client. |
+| Prisma Postgres | You want a managed SQL database and a TypeScript app/database declaration with Prisma Compute. | Verify declared resources, runtime and migrations. No point-in-time recovery; assess the snapshot limits below. |
 | [Supabase](https://supabase.com/docs/guides/getting-started) | Its authentication, storage and data API fit your store architecture. | Configure authorization policies and keep privileged checkout decisions on the server. |
 
 If the real need is a ready-made commerce backend with merchandising, tax and fulfillment workflows, evaluate that product category before building those systems around a database. Managed Postgres provides the data layer for a custom store.

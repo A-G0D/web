@@ -48,7 +48,7 @@ These options are ordered alphabetically by app host. The database can remain Pr
 
 | App host | Useful fit | What to verify |
 | --- | --- | --- |
-| Prisma Compute | You want a TypeScript HTTP service and its Postgres dependency declared in one project. | The deployed Bun runtime, HTTP behavior and current service limits fit the server. |
+| Prisma Compute | You want a TypeScript HTTP service and its Postgres dependency declared in one project. | Runs on Bun, without WebSocket servers or a persistent writable filesystem. |
 | [Render](https://render.com/docs/web-services) | You want a separate conventional web service with your existing server start command. | Configure its server-side database connection and deployed region. |
 | [Vercel](https://vercel.com/docs/mcp) | Your MCP endpoint belongs in a supported web app, including one using its documented MCP handler. | Test the handler, authentication and execution limits on the deployed endpoint. |
 
