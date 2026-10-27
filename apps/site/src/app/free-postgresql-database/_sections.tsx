@@ -23,6 +23,7 @@ import {
   FREE_POSTGRES_FEATURES_BRIDGE,
   FREE_POSTGRES_FEATURES_HEADLINE,
   FREE_POSTGRES_H1,
+  FREE_POSTGRES_HERO_CHECKS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_INCLUDED,
   FREE_POSTGRES_LIMIT,
@@ -43,10 +44,6 @@ function FreePostgresSubtitle() {
       query each), and{" "}
       <strong className="font-semibold text-foreground">50 databases</strong>. Prisma Postgres
       works with any Postgres client.
-      <br />
-      Instant databases are deleted in 24 hours unless claimed.
-      <br />
-      A claimed database, and a database created in the Prisma Console, has no time limit.
     </>
   );
 }
@@ -193,6 +190,7 @@ export function FreePostgresPage() {
           secondaryCta: FREE_POSTGRES_HERO_SECONDARY_CTA,
         }}
         subheadline={<FreePostgresSubtitle />}
+        checks={FREE_POSTGRES_HERO_CHECKS}
       />
       <ProductFeatures
         features={{

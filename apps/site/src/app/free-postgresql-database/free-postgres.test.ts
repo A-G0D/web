@@ -12,6 +12,7 @@ import {
   FREE_POSTGRES_DESCRIPTION,
   FREE_POSTGRES_FAQ,
   FREE_POSTGRES_H1,
+  FREE_POSTGRES_HERO_CHECKS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_PATH,
   FREE_POSTGRES_PRIMARY_CTA,
@@ -41,12 +42,22 @@ test("title, meta and H1 match the brief", () => {
   assert.equal(FREE_POSTGRES_PATH, "/free-postgresql-database");
   assert.equal(
     FREE_POSTGRES_SUBHEADLINE,
-    "2 GB of storage, 200,000 operations a month (one query each), and 50 databases. Prisma Postgres works with any Postgres client.\nInstant databases are deleted in 24 hours unless claimed.\nA claimed database, and a database created in the Prisma Console, has no time limit.",
+    "2 GB of storage, 200,000 operations a month (one query each), and 50 databases. Prisma Postgres works with any Postgres client.",
   );
   assert.equal(
     FREE_POSTGRES_MARKDOWN_SUBHEADLINE,
-    "**2 GB** of storage, **200,000 operations** a month (one query each), and **50 databases**. Prisma Postgres works with any Postgres client.  \nInstant databases are deleted in 24 hours unless claimed.  \nA claimed database, and a database created in the Prisma Console, has no time limit.",
+    "**2 GB** of storage, **200,000 operations** a month (one query each), and **50 databases**. Prisma Postgres works with any Postgres client.",
   );
+  assert.deepEqual(
+    [...FREE_POSTGRES_HERO_CHECKS],
+    [
+      "Instant databases are deleted in 24 hours unless claimed.",
+      "A claimed database, and a database created in the Prisma Console, has no time limit.",
+    ],
+  );
+  assert.ok(!FREE_POSTGRES_SUBHEADLINE.includes("Instant databases are deleted"));
+  assert.ok(!FREE_POSTGRES_MARKDOWN_SUBHEADLINE.includes("Instant databases are deleted"));
+  for (const line of FREE_POSTGRES_HERO_CHECKS) assert.ok(!DASHES.test(line));
   assert.ok(!DASHES.test(FREE_POSTGRES_MARKDOWN_SUBHEADLINE));
   assert.deepEqual(FREE_POSTGRES_HERO_PRIMARY_CTA, {
     label: "Create an instant database",
@@ -229,14 +240,19 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   assert.ok(!markdown.includes("No credit card and no time limit."));
   const instantLink = markdown.indexOf(`[Create an instant database](${CREATE_DB_WEB_URL})`);
   const accountLink = markdown.indexOf(`[Get started](${CONSOLE_SIGN_UP_URL})`);
+  const firstCheck = markdown.indexOf(FREE_POSTGRES_HERO_CHECKS[0]);
+  const secondCheck = markdown.indexOf(FREE_POSTGRES_HERO_CHECKS[1]);
   assert.ok(instantLink >= 0 && accountLink > instantLink, "instant database is the first hero button");
+  assert.ok(firstCheck >= 0 && secondCheck > firstCheck && instantLink > secondCheck);
 
   const sections = readFileSync(new URL("./_sections.tsx", import.meta.url), "utf8");
   assert.match(sections, /one\s+query each/);
-  assert.match(sections, /Instant databases are deleted in 24 hours unless claimed/);
-  assert.match(
-    sections,
-    /A claimed database, and a database created in the Prisma Console, has no time limit/,
+  assert.match(sections, /checks=\{FREE_POSTGRES_HERO_CHECKS\}/);
+  assert.ok(!sections.includes("Instant databases are deleted in 24 hours unless claimed."));
+  assert.ok(
+    !sections.includes(
+      "A claimed database, and a database created in the Prisma Console, has no time limit.",
+    ),
   );
   assert.ok(!sections.includes("No card, no time limit on the Free workspace"));
   assert.ok(!sections.includes("Create an instant database is deleted after 24 hours unless you"));

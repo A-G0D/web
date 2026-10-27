@@ -24,11 +24,17 @@ export const FREE_POSTGRES_DESCRIPTION =
 export const FREE_POSTGRES_H1 = "Create a free PostgreSQL database";
 
 export const FREE_POSTGRES_SUBHEADLINE =
-  "2 GB of storage, 200,000 operations a month (one query each), and 50 databases. Prisma Postgres works with any Postgres client.\nInstant databases are deleted in 24 hours unless claimed.\nA claimed database, and a database created in the Prisma Console, has no time limit.";
+  "2 GB of storage, 200,000 operations a month (one query each), and 50 databases. Prisma Postgres works with any Postgres client.";
 
-/** Same copy as the hero subtitle, with the three allowances in bold. The two expiry lines are hard breaks. */
+/** Same copy as the hero subtitle, with the three allowances in bold. */
 export const FREE_POSTGRES_MARKDOWN_SUBHEADLINE =
-  "**2 GB** of storage, **200,000 operations** a month (one query each), and **50 databases**. Prisma Postgres works with any Postgres client.  \nInstant databases are deleted in 24 hours unless claimed.  \nA claimed database, and a database created in the Prisma Console, has no time limit.";
+  "**2 GB** of storage, **200,000 operations** a month (one query each), and **50 databases**. Prisma Postgres works with any Postgres client.";
+
+/** Check lines under the subtitle, above the buttons. Cyan, then yellow. */
+export const FREE_POSTGRES_HERO_CHECKS = [
+  "Instant databases are deleted in 24 hours unless claimed.",
+  "A claimed database, and a database created in the Prisma Console, has no time limit.",
+] as const;
 
 export const FREE_POSTGRES_LAST_MODIFIED = "2026-10-21";
 export const FREE_POSTGRES_UPDATED_LABEL = "Last updated: 21 October 2026";

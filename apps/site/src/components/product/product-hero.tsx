@@ -14,6 +14,22 @@ import type { ProductPageContent } from "./types";
 
 const CHECK_COLORS = ["text-prism-cyan-500", "text-prism-yellow-400", "text-prism-red-500"];
 
+function HeroChecks({ labels, className }: { labels: readonly string[]; className: string }) {
+  return (
+    <ul className={className}>
+      {labels.map((label, i) => (
+        <li
+          key={label}
+          className="flex items-start gap-2 text-[0.9375rem] font-semibold text-foreground"
+        >
+          <CheckBold className={cn("mt-0.5 size-4 shrink-0", CHECK_COLORS[i % 3])} aria-hidden />
+          {label}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 // Wraps the emphasized phrase in the glass-light glide (homepage hero idiom).
 // Falls back to the plain headline when the phrase isn't found.
 function Headline({ headline, emphasis }: { headline: string; emphasis?: string }) {
@@ -51,6 +67,7 @@ export function ProductHero({
   columns = "md:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]",
   belowBenefits,
   subheadline,
+  checks,
 }: Pick<ProductPageContent, "name" | "accent" | "hero"> & {
   // Optional custom hero visual. When provided, it replaces the illustration /
   // product tour / placeholder in the visual slot. `visualAspect={false}` lets
@@ -79,6 +96,12 @@ export function ProductHero({
    * sentence. Pages that omit it, including /postgres, render the string.
    */
   subheadline?: ReactNode;
+  /**
+   * Check lines between the subtitle and the buttons. Omit it and the CTA
+   * still follows the subtitle. /postgres keeps its three benefits under the
+   * buttons and does not pass this.
+   */
+  checks?: readonly string[];
 }) {
   const Illustration = hero.illustration ? PRODUCT_ILLUSTRATIONS[hero.illustration] : null;
 
@@ -140,6 +163,9 @@ export function ProductHero({
               <p className="mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-muted-foreground">
                 {subheadline ?? hero.subheadline}
               </p>
+              {checks && checks.length > 0 ? (
+                <HeroChecks labels={checks} className="mt-5 flex flex-col gap-2.5" />
+              ) : null}
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <PrismButton href={hero.primaryCta.href} size="lg">
                   {hero.primaryCta.label}
@@ -167,20 +193,10 @@ export function ProductHero({
                   not the type. Omitted entirely when the page has no benefits,
                   so the list and its rule are not an empty band. */}
               {hero.benefits ? (
-                <ul className="mt-8 flex flex-col gap-2.5 border-t border-black/[0.07] pt-7">
-                  {hero.benefits.map((label, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-2 text-[0.9375rem] font-semibold text-foreground"
-                    >
-                      <CheckBold
-                        className={cn("mt-0.5 size-4 shrink-0", CHECK_COLORS[i % 3])}
-                        aria-hidden
-                      />
-                      {label}
-                    </li>
-                  ))}
-                </ul>
+                <HeroChecks
+                  labels={hero.benefits}
+                  className="mt-8 flex flex-col gap-2.5 border-t border-black/[0.07] pt-7"
+                />
               ) : null}
               {belowBenefits ? <div className="mt-8 w-full">{belowBenefits}</div> : null}
             </div>
