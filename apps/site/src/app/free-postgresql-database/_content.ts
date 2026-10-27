@@ -368,8 +368,8 @@ export const FREE_POSTGRES_INCLUDED_ROWS: readonly FreePostgresIncludedRow[] = [
     value: `[pgvector](${DOCS_EXTENSIONS}) and 46 other Postgres extensions`,
   },
   { label: "Regions", value: `[Six regions](${DOCS_REGIONS}) in the US, Europe and Asia` },
-  { label: "Query Insights", value: "Find slow queries" },
-  { label: "Prisma Studio", value: "Browse rows" },
+  { label: "Query Insights", value: "Shows which queries are slow and why." },
+  { label: "Prisma Studio", value: "A data browser for viewing and editing rows." },
 ];
 
 export const FREE_POSTGRES_INCLUDED_NOTES = [

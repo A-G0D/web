@@ -91,6 +91,8 @@ test("title, meta and H1 match the brief", () => {
   ].join("\n");
   assert.ok(!DASHES.test(includedCopy));
   assert.match(includedCopy, /One query is one operation/);
+  assert.match(includedCopy, /Shows which queries are slow and why/);
+  assert.match(includedCopy, /A data browser for viewing and editing rows/);
   assert.match(includedCopy, /pooled for your app/);
   assert.match(includedCopy, /Daily backups start on Starter/);
   assert.match(includedCopy, /Operations reset/);
