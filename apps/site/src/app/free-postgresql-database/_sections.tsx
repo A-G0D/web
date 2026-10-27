@@ -72,7 +72,7 @@ function FreePostgresIncluded() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-44">Allowance</TableHead>
+            <TableHead className="w-44">Feature</TableHead>
             <TableHead>Included</TableHead>
           </TableRow>
         </TableHeader>

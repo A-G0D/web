@@ -125,7 +125,7 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
       FREE_POSTGRES_INCLUDED_CARDS.map((card) => `**${card.title}.** ${card.detail}`),
     ),
     [
-      "| Allowance | Included |",
+      "| Feature | Included |",
       "| --- | --- |",
       ...FREE_POSTGRES_INCLUDED_ROWS.map((row) => `| ${row.label} | ${row.value} |`),
     ].join("\n"),
