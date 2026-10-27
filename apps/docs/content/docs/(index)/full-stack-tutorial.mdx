@@ -275,7 +275,7 @@ model User {
   role      String   @default("member")
   posts     Post[]
   createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+  updatedAt temporal.UpdatedAtString
 }
 ```
 

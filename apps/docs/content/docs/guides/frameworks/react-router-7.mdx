@@ -111,7 +111,7 @@ model User {
   name      String?
   posts     Post[]
   createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+  updatedAt temporal.UpdatedAtString
 }
 
 model Post {
@@ -122,11 +122,11 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+  updatedAt temporal.UpdatedAtString
 }
 ```
 
-`TimestamptzString` and `temporal.updatedAtString()` are the Prisma ORM idioms for a `timestamptz` column that reaches your code as an ISO string, which is what a React Router loader can hand to the browser without extra serialization.
+`TimestamptzString` and `temporal.UpdatedAtString` are the Prisma ORM idioms for a `timestamptz` column that reaches your code as an ISO string, which is what a React Router loader can hand to the browser without extra serialization.
 
 Emit the contract again so `contract.json` and `contract.d.ts` match:
 

@@ -190,21 +190,29 @@ Each function makes a value for the field's type: `uuid()` works on `String`, `V
 
 An argument a function does not take, such as `uuid(5)`, `cuid(1)`, or `nanoid(300)`, is refused with `PSL_INVALID_GENERATOR_ARGUMENT`, and `cuid()` needs its version, `cuid(2)`. An argument written with a fraction, such as `nanoid(8.0)`, or in quotes, is refused with `PSL_VALUE_TYPE_INCOMPATIBLE`. The value a function writes must also fit its column: `uuid()` writes 36 characters, `ksuid()` 27, `ulid()` 26, `cuid(2)` 24, `nanoid()` 21, and `nanoid(n)` `n`, so `VarChar(5) @onCreate(uuid())` is refused when you run `contract emit`. A bare `Char` holds one character, and a bare `VarChar` has no limit.
 
-Prisma ORM 8 has no `@updatedAt`. To replace `@updatedAt`, write `updatedAt temporal.updatedAt()`:
+For the column of a generated identifier, write its type alias. `UuidString`, `Ulid`, `Nanoid`, `Cuid2` and `Ksuid` are `Char(36)`, `Char(26)`, `Char(21)`, `Char(24)` and `Char(27)`, as in `id Ulid @id @onCreate(ulid())`. The alias sets only the column, so the field writes `@id` and `@onCreate(...)` itself, and a foreign key that holds the identifier uses the alias alone, as in `authorId Ulid`. On SQLite, write the aliases in the `sql` namespace, such as `sql.Ulid`, and a fixed-length text column as `sql.Char(n)`. On PostgreSQL a new schema can store a UUID in the native `Uuid` column instead, as `id Uuid @id @onCreate(uuid(7))`.
+
+:::note[Upgrading from before `8.0.0-rc.21`]
+
+Field presets, such as `id.ulid()`, `nanoid({ size: 12 })`, `json()` and `temporal.updatedAt()`, are removed. `prisma contract emit` refuses each one with `PSL_UNRESOLVED_REFERENCE`, and the message gives the exact rewrite, such as `Ulid @id @onCreate(ulid())`, `Char(12)`, `Jsonb` or `temporal.UpdatedAt`. Each rewrite stores the same contract, so there is nothing to emit again, sign or migrate.
+
+:::
+
+Prisma ORM 8 has no `@updatedAt`. To replace `@updatedAt`, write `updatedAt temporal.UpdatedAt`:
 
 ```prisma
 model Post {
-  updatedAt temporal.updatedAt()
+  updatedAt temporal.UpdatedAt
 }
 ```
 
-Prisma ORM sets the field to the current time on every create and update, and you can still set it yourself on a write. `temporal.createdAt()` sets its field once, when the row is created. You do not import or declare `temporal`: it is a group of timestamp field types built into the contract syntax. On PostgreSQL the column is `timestamptz`.
+Prisma ORM sets the field to the current time on every create and update, and you can still set it yourself on a write. `temporal.CreatedAt` sets its field once, when the row is created. You do not import or declare `temporal`: it is a group of [named types](#named-types) built into the contract syntax. On PostgreSQL the column is `timestamptz`.
 
 Both take the time from your application's clock, not from the database, so the column has no database default, and a row you insert with raw SQL must supply the value. For a value the database generates, use `DateTime @default(now())` instead.
 
-`temporal.UpdatedAt`, without parentheses, is the same column written as a [named type](#named-types). Write `@onCreate(now()) @onUpdate(now())` yourself only for another type or a precision. The example at the top of this section writes them on a `DateTime` field only to show the attributes.
+`temporal.UpdatedAt` is written without parentheses. It stores the same column as `DateTime @onCreate(now()) @onUpdate(now())`. Write those attributes yourself only for another type or a precision. The example at the top of this section writes them on a `DateTime` field only to show the attributes.
 
-`temporal.createdAt()` and `temporal.updatedAt()` need a global `Temporal` for writes as well as reads. When your Node.js version has none, install `temporal-polyfill` and add `import "temporal-polyfill/full/global"` at the top of `src/prisma/db.ts`. `temporal.createdAtJsDate()` and `temporal.updatedAtJsDate()` work the same way, but with a JavaScript `Date` in place of a `Temporal` value.
+`temporal.CreatedAt` and `temporal.UpdatedAt` need a global `Temporal` for writes as well as reads. When your Node.js version has none, install `temporal-polyfill` and add `import "temporal-polyfill/full/global"` at the top of `src/prisma/db.ts`. `temporal.CreatedAtJsDate` and `temporal.UpdatedAtJsDate` work the same way, but with a JavaScript `Date` in place of a `Temporal` value.
 
 ### Columns of any database type
 
@@ -343,7 +351,7 @@ A mixin is a named set of members you write once and include in several blocks. 
 ```prisma
 model mixin Timestamps {
   createdAt DateTime @default(now())
-  updatedAt temporal.updatedAt()
+  updatedAt temporal.UpdatedAt
 
   @@index([createdAt])
 }
@@ -410,7 +418,7 @@ model Post {
 - A field may add any attribute its named type does not set. Here `updatedAt` adds `@default(now())`, a database default, so a row inserted outside Prisma ORM also gets a time. A field that repeats an attribute its named type already sets is refused with `PSL_DUPLICATE_ATTRIBUTE`.
 - A named type is built on a type or an enum, not on another named type.
 
-Prisma ORM provides two named types you do not declare: `temporal.CreatedAt`, set to the current time on create, and `temporal.UpdatedAt`, set on create and on every update. Write them without parentheses, as `createdAt` does above. They are the named-type form of `temporal.createdAt()` and `temporal.updatedAt()`, and store the same column: a `timestamptz` column on PostgreSQL. PostgreSQL also has `temporal.CreatedAtString` and `temporal.UpdatedAtString`, which give your code the time as a string, and `temporal.CreatedAtJsDate` and `temporal.UpdatedAtJsDate`, which give it a JavaScript `Date`. They take no arguments; for a precision, write the type and the attributes yourself, as `UpdatedAt` above does.
+Prisma ORM provides two named types you do not declare: `temporal.CreatedAt`, set to the current time on create, and `temporal.UpdatedAt`, set on create and on every update. Write them without parentheses, as `createdAt` does above. They store a `timestamptz` column on PostgreSQL. PostgreSQL also has `temporal.CreatedAtString` and `temporal.UpdatedAtString`, which give your code the time as a string, and `temporal.CreatedAtJsDate` and `temporal.UpdatedAtJsDate`, which give it a JavaScript `Date`. They take no arguments; for a precision, write the type and the attributes yourself, as `UpdatedAt` above does.
 
 Three types cover big integers, and they differ in what your code receives:
 

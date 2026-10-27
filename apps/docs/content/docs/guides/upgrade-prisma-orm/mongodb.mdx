@@ -132,7 +132,7 @@ You can use the [prisma-mongodb-upgrade](https://github.com/prisma/skills/tree/m
 | Id field | `id String @id @default(auto()) @map("_id") @db.ObjectId` | `id ObjectId @id @map("_id")` |
 | Scalar types | `Int`, `Float`, `Boolean`, `DateTime` | `Int64Number`, `Double`, `Bool`, `Date`. v6 stores an `Int` as a BSON long, and `Int64Number` keeps that: it reads as a `number` and writes a long. `Int32` stores a BSON int instead. The v6 names still work, with a `PSL_DEPRECATED_SCALAR_NAME` warning, and a later release removes them |
 | More scalar types | `BigInt`, `Decimal`, `Bytes`, `Json` | `Int64`, `Decimal128`, `Binary`, `Json`. A `Json` field holds only JSON values; type a field that holds other BSON values, such as a `Date`, as `Bson` |
-| Timestamps | `@default(now())`, `@updatedAt` | `createdAt temporal.createdAt()`, `updatedAt temporal.updatedAt()` |
+| Timestamps | `@default(now())`, `@updatedAt` | `createdAt temporal.CreatedAt`, `updatedAt temporal.UpdatedAt` |
 | Embedded document | `type Address { ... }` | `type Address { ... }` (unchanged) |
 | Index | `@@index(...)`, synced by `db push` | `@@index(...)` / `@@unique(...)`, applied by migrations |
 | Polymorphism | not supported | `@@discriminator(field)` on the base + `@@base(Base, "value")` on each variant. <br />See [Base models and variants](/orm/contract-authoring/psl-syntax#base-models-and-variants) |
