@@ -1,21 +1,17 @@
-/* The command types, then each result opens. The finished panel is the
-   default, so a reduced-motion visitor, and a browser with no animation,
-   sees every line at once. steps() must match the command's character count. */
+/* The CLI opens in four beats. The finished log is the default, so a
+   reduced-motion visitor sees the active tab's output at once. */
 
-.command {
+.log {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.75rem;
   font-variant-ligatures: none;
+  line-height: 1.45;
+  overflow-x: auto;
 }
 
-.type {
-  display: inline-block;
-  overflow: hidden;
-  white-space: nowrap;
-  vertical-align: bottom;
-}
-
-.caret {
-  display: none;
+.line {
+  margin: 0;
+  white-space: pre;
 }
 
 .reveal {
@@ -28,94 +24,27 @@
   overflow: hidden;
 }
 
-.row {
-  opacity: 1;
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  .type {
-    width: 0;
-    animation: type 0.91s steps(var(--chars), end) forwards;
-  }
-
-  .caret {
-    display: inline-block;
-    width: 0.55ch;
-    height: 0.95em;
-    margin-left: 0.12ch;
-    background: currentColor;
-    vertical-align: text-bottom;
-    animation:
-      blink 0.5s step-end 2,
-      hide 0.01s linear 1s forwards;
-  }
-
   .reveal {
     grid-template-rows: 0fr;
     animation: open 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  .status {
-    animation-delay: 1.05s;
+  .beat1 {
+    animation-delay: 0.7s;
   }
 
-  .url {
-    animation-delay: 1.6s;
+  .beat2 {
+    animation-delay: 1.45s;
   }
 
-  .claim {
+  .beat3 {
     animation-delay: 2.2s;
-  }
-
-  .rows {
-    animation-delay: 2.8s;
-  }
-
-  .row {
-    opacity: 0;
-    animation: row 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  .rowClaude {
-    animation-delay: 2.8s;
-  }
-
-  .rowCodex {
-    animation-delay: 3.25s;
-  }
-}
-
-@keyframes type {
-  to {
-    width: calc(var(--chars) * 1ch);
   }
 }
 
 @keyframes open {
   to {
     grid-template-rows: 1fr;
-  }
-}
-
-@keyframes row {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@keyframes hide {
-  to {
-    width: 0;
-    margin-left: 0;
-    opacity: 0;
   }
 }

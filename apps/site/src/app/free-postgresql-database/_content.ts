@@ -228,16 +228,37 @@ export const FREE_POSTGRES_PRICING_CTA = {
   href: "/pricing",
 } as const;
 
-// The hero terminal. The command is CREATE_DB_COMMAND. The connection string
-// is the placeholder shape already published for a missing DATABASE_URL, not a
-// live credential. The claim sentence is the fact already in the FAQ.
-export const FREE_POSTGRES_TERMINAL_STATUS = "Setting up a database";
-export const FREE_POSTGRES_TERMINAL_URL =
-  "postgres://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require";
-export const FREE_POSTGRES_TERMINAL_CLAIM =
-  "The database is deleted after 24 hours unless you claim it.";
-export const FREE_POSTGRES_AGENT_STORY = "Runs the command, gets the URL, and can use it.";
+// Hero terminal. Same shape as `npx create-db`, with obviously fake credentials.
+// Not a live password, project id, or claim URL.
 export const FREE_POSTGRES_TERMINAL_AGENTS = ["Claude", "Codex"] as const;
+export const FREE_POSTGRES_CLI_CONNECTION =
+  "postgres://user:password@db.prisma.io:5432/postgres?sslmode=require";
+export const FREE_POSTGRES_CLI_CLAIM_URL =
+  "https://create-db.prisma.io/claim?projectID=proj_example";
+export const FREE_POSTGRES_CLI_DELETE =
+  "Database will be deleted on 28/10/2026, 16:52:18 if not claimed.";
+
+export const FREE_POSTGRES_CLI_BLOCKS = [
+  "┌  Creating a Prisma Postgres database\n│",
+  "◇  Database created successfully!\n│",
+  [
+    "●  Database Connection",
+    "│",
+    "│    Connection String:",
+    "│",
+    `│    ${FREE_POSTGRES_CLI_CONNECTION}`,
+    "│",
+  ].join("\n"),
+  [
+    "◆  Claim Your Database",
+    "│",
+    "│    Keep your database for free:",
+    "│",
+    `│    ${FREE_POSTGRES_CLI_CLAIM_URL}`,
+    "│",
+    `│    ${FREE_POSTGRES_CLI_DELETE}`,
+  ].join("\n"),
+] as const;
 
 export const FREE_POSTGRES_PROBLEM_HEADLINE = "How the free limit works";
 

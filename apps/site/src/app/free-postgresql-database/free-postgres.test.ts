@@ -8,7 +8,6 @@ import {
   CONSOLE_SIGN_UP_URL,
   CREATE_DB_COMMAND,
   CREATE_DB_WEB_URL,
-  FREE_POSTGRES_AGENT_STORY,
   FREE_POSTGRES_BROWSER_CTA,
   FREE_POSTGRES_DESCRIPTION,
   FREE_POSTGRES_FAQ,
@@ -17,10 +16,11 @@ import {
   FREE_POSTGRES_PATH,
   FREE_POSTGRES_PRIMARY_CTA,
   FREE_POSTGRES_SUBHEADLINE,
+  FREE_POSTGRES_CLI_BLOCKS,
+  FREE_POSTGRES_CLI_CLAIM_URL,
+  FREE_POSTGRES_CLI_CONNECTION,
+  FREE_POSTGRES_CLI_DELETE,
   FREE_POSTGRES_TERMINAL_AGENTS,
-  FREE_POSTGRES_TERMINAL_CLAIM,
-  FREE_POSTGRES_TERMINAL_STATUS,
-  FREE_POSTGRES_TERMINAL_URL,
   FREE_POSTGRES_TITLE,
 } from "./_content";
 
@@ -85,45 +85,48 @@ test("user-visible content and FAQ schema have no em or en dashes", () => {
   assert.ok(!DASHES.test(FREE_POSTGRES_SUBHEADLINE));
   assert.ok(!DASHES.test(FREE_POSTGRES_HERO_PRIMARY_CTA.label));
   assert.ok(!DASHES.test(FREE_POSTGRES_BROWSER_CTA.label));
-  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_STATUS));
-  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_URL));
-  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_CLAIM));
-  assert.ok(!DASHES.test(FREE_POSTGRES_AGENT_STORY));
+  for (const block of FREE_POSTGRES_CLI_BLOCKS) assert.ok(!DASHES.test(block));
+  assert.ok(!DASHES.test(FREE_POSTGRES_CLI_CONNECTION));
+  assert.ok(!DASHES.test(FREE_POSTGRES_CLI_CLAIM_URL));
+  assert.ok(!DASHES.test(FREE_POSTGRES_CLI_DELETE));
 });
 
-test("the hero terminal states the instant path, and the markdown matches it", () => {
+test("the hero terminal matches the create-db CLI, and the markdown matches it", () => {
   assert.equal(CREATE_DB_COMMAND, "npx create-db");
-  assert.equal(FREE_POSTGRES_TERMINAL_STATUS, "Setting up a database");
-  assert.equal(
-    FREE_POSTGRES_TERMINAL_URL,
-    "postgres://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require",
-  );
-  assert.equal(
-    FREE_POSTGRES_TERMINAL_CLAIM,
-    "The database is deleted after 24 hours unless you claim it.",
-  );
   assert.deepEqual([...FREE_POSTGRES_TERMINAL_AGENTS], ["Claude", "Codex"]);
-  assert.equal(FREE_POSTGRES_AGENT_STORY, "Runs the command, gets the URL, and can use it.");
+  assert.equal(
+    FREE_POSTGRES_CLI_CONNECTION,
+    "postgres://user:password@db.prisma.io:5432/postgres?sslmode=require",
+  );
+  assert.equal(
+    FREE_POSTGRES_CLI_CLAIM_URL,
+    "https://create-db.prisma.io/claim?projectID=proj_example",
+  );
+  assert.equal(FREE_POSTGRES_CLI_BLOCKS[0], "┌  Creating a Prisma Postgres database\n│");
+  assert.equal(FREE_POSTGRES_CLI_BLOCKS[1], "◇  Database created successfully!\n│");
+  assert.ok(FREE_POSTGRES_CLI_BLOCKS[2].includes("●  Database Connection"));
+  assert.ok(FREE_POSTGRES_CLI_BLOCKS[2].includes("│    Connection String:"));
+  assert.ok(FREE_POSTGRES_CLI_BLOCKS[3].startsWith("◆  Claim Your Database"));
+  assert.ok(FREE_POSTGRES_CLI_BLOCKS[3].includes("│    Keep your database for free:"));
+  assert.ok(FREE_POSTGRES_CLI_BLOCKS[3].includes(FREE_POSTGRES_CLI_DELETE));
 
   const css = readFileSync(new URL("./_terminal.module.css", import.meta.url), "utf8");
   const source = readFileSync(new URL("./_terminal.tsx", import.meta.url), "utf8");
   assert.match(css, /@media \(prefers-reduced-motion: no-preference\)/);
-  assert.match(css, /steps\(var\(--chars\), end\)/);
-  assert.match(source, /CREATE_DB_COMMAND\.length/);
+  assert.match(source, /role="tablist"/);
+  assert.ok(!source.includes("<table"));
   assert.ok(!DASHES.test(css));
   assert.ok(!DASHES.test(source));
 
   const markdown = renderFreePostgresqlDatabaseMarkdown();
   for (const line of [
-    `$ ${CREATE_DB_COMMAND}`,
-    FREE_POSTGRES_TERMINAL_STATUS,
-    FREE_POSTGRES_TERMINAL_URL,
-    FREE_POSTGRES_TERMINAL_CLAIM,
-    `Claude: ${FREE_POSTGRES_AGENT_STORY}`,
-    `Codex: ${FREE_POSTGRES_AGENT_STORY}`,
+    ...FREE_POSTGRES_TERMINAL_AGENTS,
+    ...FREE_POSTGRES_CLI_BLOCKS.flatMap((block) => block.split("\n")),
   ]) {
     assert.ok(markdown.includes(line), `markdown missing: ${line}`);
   }
+  assert.ok(!markdown.includes("Runs the command, gets the URL, and can use it."));
+  assert.ok(!markdown.includes("postgres://USER:PASSWORD@HOST"));
 
   for (const gone of [
     "Prisma Postgres at a glance",
