@@ -332,53 +332,42 @@ export const FREE_POSTGRES_FEATURES_HEADLINE = "What a free PostgreSQL database 
 
 export const FREE_POSTGRES_FEATURES_BRIDGE = `A managed [Prisma Postgres](/postgres) workspace you can keep. These allowances match [pricing](/pricing). Prisma Postgres Free plan. ${FREE_POSTGRES_UPDATED_LABEL}. The [npx create-db docs](${DOCS_CREATE_DB}) cover flags, regions and claiming. Connecting later is a standard [Postgres connection string](${DOCS_CONNECT}).`;
 
-export type FreePostgresIncludedRow = { label: string; detail: string };
-
-export type FreePostgresIncludedGroup = {
-  title: string;
-  rows: readonly FreePostgresIncludedRow[];
-  /** An exclusion, rendered apart from the allowance rows so it is not a benefit. */
-  exclusion?: { title: string; detail: string };
+export type FreePostgresIncludedColumn = {
+  heading: string;
+  value: string;
+  /** Footnote marker shown on this column. */
+  note?: number;
 };
 
-// Three groups under the includes heading. The left cell is the amount or the
-// short name. The right cell is the rest of the sentence.
-export const FREE_POSTGRES_INCLUDED_GROUPS: readonly FreePostgresIncludedGroup[] = [
+// One wide row. Rules that qualify the plan sit in FREE_POSTGRES_INCLUDED_NOTES,
+// not in a column, a callout, or a second row.
+export const FREE_POSTGRES_INCLUDED_COLUMNS: readonly FreePostgresIncludedColumn[] = [
   {
-    title: "What you get",
-    rows: [
-      { label: "200,000", detail: "operations a month. One query is one operation." },
-      { label: "2 GB", detail: "of storage" },
-      { label: "Up to 50", detail: "databases per workspace" },
-      {
-        label: "10 and 10",
-        detail: "connections per database. Pooled for your app. Direct for migrations.",
-      },
-      { label: "Unlimited", detail: "data transfer" },
-    ],
+    heading: "Operations",
+    value: "200,000 a month. One query is one operation.",
+    note: 1,
   },
+  { heading: "Storage", value: "2 GB" },
+  { heading: "Databases", value: "Up to 50 per workspace" },
   {
-    title: "The rules",
-    rows: [{ label: "The 1st", detail: "of every month. Operations reset." }],
-    exclusion: {
-      title: "No backups",
-      detail: "Daily backups start on Starter.",
-    },
+    heading: "Connections",
+    value: "10 pooled for your app and 10 direct for migrations, per database",
   },
+  { heading: "Data transfer", value: "Unlimited" },
+  { heading: "Engine", value: "PostgreSQL 17 with SSL and built-in connection pooling" },
   {
-    title: "What else is included",
-    rows: [
-      { label: "PostgreSQL 17", detail: "with SSL and built-in connection pooling" },
-      {
-        label: `[pgvector](${DOCS_EXTENSIONS})`,
-        detail: "and 46 other Postgres extensions",
-      },
-      { label: `[Six regions](${DOCS_REGIONS})`, detail: "in the US, Europe and Asia" },
-      { label: "Query Insights", detail: "to find slow queries" },
-      { label: "Prisma Studio", detail: "to browse rows" },
-    ],
+    heading: "Extensions",
+    value: `[pgvector](${DOCS_EXTENSIONS}) and 46 other Postgres extensions`,
   },
+  { heading: "Regions", value: `[Six regions](${DOCS_REGIONS}) in the US, Europe and Asia` },
+  { heading: "Query Insights", value: "Find slow queries" },
+  { heading: "Prisma Studio", value: "Browse rows" },
 ];
+
+export const FREE_POSTGRES_INCLUDED_NOTES = [
+  { n: 1, text: "Operations reset on the 1st of every month." },
+  { n: 2, text: "No backups. Daily backups start on Starter." },
+] as const;
 
 export const FREE_POSTGRES_FEATURE_ITEMS = [
   {

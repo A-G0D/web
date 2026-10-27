@@ -8,8 +8,15 @@ import type { ProductIllustrationName } from "@/components/product/illustrations
 import { CompareLinks } from "@/components/sections/compare-links";
 import { Faq } from "@/components/sections/faq";
 import { TestimonialsReveal } from "@/components/sections/testimonials-reveal";
-import { Alert, AlertTitle } from "@/components/ui/alert";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { renderFaqAnswer } from "@/lib/faq-answer";
 import { PRODUCT_TESTIMONIALS_HEADING } from "@/lib/markdown/product";
 import {
@@ -27,7 +34,8 @@ import {
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_CHECKS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
-  FREE_POSTGRES_INCLUDED_GROUPS,
+  FREE_POSTGRES_INCLUDED_COLUMNS,
+  FREE_POSTGRES_INCLUDED_NOTES,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_PLATFORM_BODY,
   FREE_POSTGRES_PRICING_CTA,
@@ -40,34 +48,40 @@ import { FreePostgresTerminal } from "./_terminal";
 
 function FreePostgresIncluded() {
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 text-left">
-      {FREE_POSTGRES_INCLUDED_GROUPS.map((group) => (
-        <div key={group.title} className="flex flex-col gap-3">
-          <h3 className="text-lg font-semibold text-foreground">{group.title}</h3>
-          <Table>
-            <TableBody>
-              {group.rows.map((row) => (
-                <TableRow key={row.label}>
-                  <TableHead scope="row" className="w-52 whitespace-normal">
-                    {renderFaqAnswer(row.label)}
-                  </TableHead>
-                  <TableCell className="whitespace-normal text-muted-foreground">
-                    {renderFaqAnswer(row.detail)}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          {group.exclusion ? (
-            <Alert>
-              <AlertTitle className="line-clamp-none whitespace-normal">
-                {group.exclusion.title}. {group.exclusion.detail}
-              </AlertTitle>
-            </Alert>
-          ) : null}
-        </div>
-      ))}
-    </div>
+    <Table aria-describedby="free-postgres-notes" className="min-w-[72rem] table-fixed">
+      <TableHeader>
+        <TableRow>
+          {FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => (
+            <TableHead key={column.heading} className="whitespace-normal align-bottom">
+              {column.heading}
+              {column.note ? (
+                <a href={`#free-postgres-note-${column.note}`} className="ml-0.5">
+                  <sup>{column.note}</sup>
+                </a>
+              ) : null}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableRow>
+          {FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => (
+            <TableCell key={column.heading} className="whitespace-normal align-top">
+              {renderFaqAnswer(column.value)}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableBody>
+      <TableCaption id="free-postgres-notes" className="text-left">
+        <span className="flex flex-col items-start gap-1">
+          {FREE_POSTGRES_INCLUDED_NOTES.map((note) => (
+            <span key={note.n} id={`free-postgres-note-${note.n}`}>
+              <sup>{note.n}</sup> {note.text}
+            </span>
+          ))}
+        </span>
+      </TableCaption>
+    </Table>
   );
 }
 
@@ -237,6 +251,7 @@ export function FreePostgresPage() {
           })),
         }}
         lead={<FreePostgresIncluded />}
+        leadLayout="wide"
         footer={<EngineeringConfirm>{CONNECTION_CONFIRM}</EngineeringConfirm>}
       />
       <FreeLimit />

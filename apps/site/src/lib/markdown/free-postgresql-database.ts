@@ -23,7 +23,8 @@ import {
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_CHECKS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
-  FREE_POSTGRES_INCLUDED_GROUPS,
+  FREE_POSTGRES_INCLUDED_COLUMNS,
+  FREE_POSTGRES_INCLUDED_NOTES,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_MARKDOWN_SUBHEADLINE,
   FREE_POSTGRES_PLATFORM_BODY,
@@ -119,11 +120,12 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     ].join("\n"),
 
     heading(2, FREE_POSTGRES_FEATURES_HEADLINE),
-    ...FREE_POSTGRES_INCLUDED_GROUPS.flatMap((group) => [
-      heading(3, group.title),
-      bulletList(group.rows.map((row) => `${row.label} ${row.detail}`)),
-      group.exclusion ? `**${group.exclusion.title}.** ${group.exclusion.detail}` : undefined,
-    ]),
+    [
+      `| ${FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => column.heading).join(" | ")} |`,
+      `| ${FREE_POSTGRES_INCLUDED_COLUMNS.map(() => "---").join(" | ")} |`,
+      `| ${FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => column.value).join(" | ")} |`,
+    ].join("\n"),
+    FREE_POSTGRES_INCLUDED_NOTES.map((note) => `${note.n}. ${note.text}`).join("\n"),
     paragraphs(FREE_POSTGRES_FEATURES_BRIDGE),
     bulletList(FREE_POSTGRES_FEATURE_ITEMS.map((item) => `**${item.name}:** ${item.description}`)),
     paragraphs(`TO CONFIRM WITH ENGINEERING: ${CONNECTION_CONFIRM}`),

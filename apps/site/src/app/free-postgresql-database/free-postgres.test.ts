@@ -13,7 +13,8 @@ import {
   FREE_POSTGRES_FAQ,
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_CHECKS,
-  FREE_POSTGRES_INCLUDED_GROUPS,
+  FREE_POSTGRES_INCLUDED_COLUMNS,
+  FREE_POSTGRES_INCLUDED_NOTES,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_PATH,
   FREE_POSTGRES_PRIMARY_CTA,
@@ -60,20 +61,34 @@ test("title, meta and H1 match the brief", () => {
   assert.ok(!FREE_POSTGRES_MARKDOWN_SUBHEADLINE.includes("Instant databases are deleted"));
   for (const line of FREE_POSTGRES_HERO_CHECKS) assert.ok(!DASHES.test(line));
   assert.deepEqual(
-    FREE_POSTGRES_INCLUDED_GROUPS.map((group) => group.title),
-    ["What you get", "The rules", "What else is included"],
+    FREE_POSTGRES_INCLUDED_COLUMNS.map((column) => column.heading),
+    [
+      "Operations",
+      "Storage",
+      "Databases",
+      "Connections",
+      "Data transfer",
+      "Engine",
+      "Extensions",
+      "Regions",
+      "Query Insights",
+      "Prisma Studio",
+    ],
   );
-  const includedCopy = FREE_POSTGRES_INCLUDED_GROUPS.flatMap((group) => [
-    group.title,
-    ...group.rows.flatMap((row) => [row.label, row.detail]),
-    group.exclusion?.title,
-    group.exclusion?.detail,
-  ])
-    .filter((line): line is string => Boolean(line))
-    .join("\n");
+  assert.deepEqual(
+    FREE_POSTGRES_INCLUDED_NOTES.map((note) => note.text),
+    [
+      "Operations reset on the 1st of every month.",
+      "No backups. Daily backups start on Starter.",
+    ],
+  );
+  const includedCopy = [
+    ...FREE_POSTGRES_INCLUDED_COLUMNS.flatMap((column) => [column.heading, column.value]),
+    ...FREE_POSTGRES_INCLUDED_NOTES.map((note) => note.text),
+  ].join("\n");
   assert.ok(!DASHES.test(includedCopy));
   assert.match(includedCopy, /One query is one operation/);
-  assert.match(includedCopy, /Pooled for your app/);
+  assert.match(includedCopy, /pooled for your app/);
   assert.match(includedCopy, /Daily backups start on Starter/);
   assert.match(includedCopy, /Operations reset/);
   assert.ok(!includedCopy.includes("read more"));
@@ -263,11 +278,12 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   const secondCheck = markdown.indexOf(FREE_POSTGRES_HERO_CHECKS[1]);
   assert.ok(instantLink >= 0 && accountLink > instantLink, "instant database is the first hero button");
   assert.ok(accountLink > instantLink && firstCheck > accountLink && secondCheck > firstCheck);
-  const whatYouGet = markdown.indexOf("### What you get");
-  const theRules = markdown.indexOf("### The rules");
-  const whatElse = markdown.indexOf("### What else is included");
-  const noBackups = markdown.indexOf("**No backups.**");
-  assert.ok(whatYouGet > secondCheck && theRules > whatYouGet && noBackups > theRules && whatElse > noBackups);
+  const includedTable = markdown.indexOf("| Operations | Storage | Databases |");
+  const resetNote = markdown.indexOf("1. Operations reset on the 1st of every month.");
+  const backupNote = markdown.indexOf("2. No backups. Daily backups start on Starter.");
+  assert.ok(includedTable > secondCheck && resetNote > includedTable && backupNote > resetNote);
+  assert.ok(!markdown.includes("### What you get"));
+  assert.ok(!markdown.includes("**No backups.**"));
 
   const sections = readFileSync(new URL("./_sections.tsx", import.meta.url), "utf8");
   assert.match(sections, /one\s+query each/);
@@ -284,6 +300,10 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   assert.ok(!sections.includes("FREE_POSTGRES_MICROLINE"));
   assert.ok(!sections.includes("microline:"));
   assert.match(sections, /FreePostgresSubtitle/);
+  assert.match(sections, /TableHeader/);
+  assert.match(sections, /TableCaption/);
+  assert.ok(!sections.includes("Alert"));
+  assert.match(sections, /leadLayout="wide"/);
   assert.match(sections, /<strong className="font-semibold text-foreground">2 GB<\/strong>/);
   assert.ok(!sections.includes("FREE_POSTGRES_RELATED"));
   assert.ok(!sections.includes("related:"));

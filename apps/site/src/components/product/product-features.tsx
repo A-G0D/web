@@ -49,11 +49,17 @@ export function ProductFeatures({
   features,
   footer,
   lead,
+  leadLayout = "prose",
 }: Pick<ProductPageContent, "features"> & {
   /** Callout under the card grid. /free-postgresql-database uses it for an open engineering question. */
   footer?: ReactNode;
   /** Sits under the heading, before the bridge. Unused on /postgres. */
   lead?: ReactNode;
+  /**
+   * `prose` keeps the lead in the heading column. `wide` lets one page span
+   * the section for a table. Other pages omit it.
+   */
+  leadLayout?: "prose" | "wide";
 }) {
   return (
     <section className="bg-white px-3 py-3 sm:px-4">
@@ -100,16 +106,30 @@ export function ProductFeatures({
                 {features.headline}
               </h2>
             </Reveal>
-            {lead ? <div className="mt-8 text-left">{lead}</div> : null}
-            <Reveal delay={0.1}>
-              <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
-                {/* Same no-op as card descriptions: plain bridges (the
-                    /postgres page) render verbatim, and a bridge that names
-                    a page with `[label](/path)` becomes a link. */}
-                {renderFaqAnswer(features.bridge)}
-              </p>
-            </Reveal>
+            {lead && leadLayout !== "wide" ? <div className="mt-8 text-left">{lead}</div> : null}
+            {leadLayout === "wide" ? null : (
+              <Reveal delay={0.1}>
+                <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
+                  {/* Same no-op as card descriptions: plain bridges (the
+                      /postgres page) render verbatim, and a bridge that names
+                      a page with `[label](/path)` becomes a link. */}
+                  {renderFaqAnswer(features.bridge)}
+                </p>
+              </Reveal>
+            )}
           </div>
+          {leadLayout === "wide" ? (
+            <>
+              {lead ? <div className="mt-8 text-left">{lead}</div> : null}
+              <div className="mx-auto max-w-3xl text-center max-md:text-left">
+                <Reveal delay={0.1}>
+                  <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">
+                    {renderFaqAnswer(features.bridge)}
+                  </p>
+                </Reveal>
+              </div>
+            </>
+          ) : null}
           <div
             className={cn("mt-14 grid gap-5", COLUMNS[features.items.length] ?? "md:grid-cols-2")}
           >
