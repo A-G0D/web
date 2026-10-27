@@ -50,19 +50,22 @@ import { FreePostgresTerminal } from "./_terminal";
 function FreePostgresIncluded() {
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {FREE_POSTGRES_INCLUDED_CARDS.map((card) => (
-          <Card key={card.title} className="h-full gap-3 rounded-2xl py-5 shadow-none">
-            <CardHeader className="gap-1.5 px-5">
-              <CardTitle className="text-xl tabular-nums">
+          <Card
+            key={card.title}
+            className="h-full gap-4 rounded-2xl border-prism-cyan-100 bg-prism-cyan-50 py-10 shadow-none"
+          >
+            <CardHeader className="gap-3 px-8">
+              <CardTitle className="text-5xl font-bold leading-none tabular-nums text-prism-cyan-700 sm:text-6xl">
                 {renderFaqAnswer(card.title)}
                 {card.note ? (
                   <a href={`#free-postgres-note-${card.note}`} className="ml-0.5">
-                    <sup className="text-sm">{card.note}</sup>
+                    <sup className="text-2xl">{card.note}</sup>
                   </a>
                 ) : null}
               </CardTitle>
-              <CardDescription className="text-pretty">
+              <CardDescription className="text-pretty text-lg font-bold leading-snug text-foreground sm:text-xl">
                 {renderFaqAnswer(card.detail)}
               </CardDescription>
             </CardHeader>
