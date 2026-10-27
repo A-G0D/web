@@ -229,14 +229,16 @@ export const FREE_POSTGRES_PRICING_CTA = {
 } as const;
 
 // Hero window. First tab is a plain terminal. Second tab is a Claude Code
-// session. Both use obviously fake credentials, not a live password or claim URL.
+// session on the same light surface. Credentials are fake, not a live password
+// or claim URL.
 export const FREE_POSTGRES_TERMINAL_TABS = ["Terminal", "Claude"] as const;
+export const FREE_POSTGRES_TERMINAL_STATUS = "Setting up a database";
+export const FREE_POSTGRES_TERMINAL_CLAIM =
+  "The database is deleted after 24 hours unless you claim it.";
 export const FREE_POSTGRES_CLI_CONNECTION =
   "postgres://demo:sample@db.prisma.io:5432/postgres?sslmode=require";
 export const FREE_POSTGRES_CLI_CLAIM_URL =
   "https://create-db.prisma.io/claim?projectID=proj_sample";
-export const FREE_POSTGRES_CLI_DELETE =
-  "Database will be deleted on 28/10/2026, 16:52:18 if not claimed.";
 
 // Claude Code transcript. Region is one of the six documented regions, shown
 // as this example run's result. The claim sentence matches the FAQ.
@@ -248,30 +250,8 @@ export const FREE_POSTGRES_CLAUDE = {
   created: "The database was created.",
   connectionLabel: "Connection string",
   region: "eu-central-1 (Frankfurt)",
-  claim: "The database is deleted after 24 hours unless you claim it.",
+  claim: FREE_POSTGRES_TERMINAL_CLAIM,
 } as const;
-
-export const FREE_POSTGRES_CLI_BLOCKS = [
-  "┌  Creating a Prisma Postgres database\n│",
-  "◇  Database created successfully!\n│",
-  [
-    "●  Database Connection",
-    "│",
-    "│    Connection String:",
-    "│",
-    `│    ${FREE_POSTGRES_CLI_CONNECTION}`,
-    "│",
-  ].join("\n"),
-  [
-    "◆  Claim Your Database",
-    "│",
-    "│    Keep your database for free:",
-    "│",
-    `│    ${FREE_POSTGRES_CLI_CLAIM_URL}`,
-    "│",
-    `│    ${FREE_POSTGRES_CLI_DELETE}`,
-  ].join("\n"),
-] as const;
 
 export const FREE_POSTGRES_PROBLEM_HEADLINE = "How the free limit works";
 

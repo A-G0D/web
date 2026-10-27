@@ -17,10 +17,10 @@ import {
   FREE_POSTGRES_PRIMARY_CTA,
   FREE_POSTGRES_SUBHEADLINE,
   FREE_POSTGRES_CLAUDE,
-  FREE_POSTGRES_CLI_BLOCKS,
   FREE_POSTGRES_CLI_CLAIM_URL,
   FREE_POSTGRES_CLI_CONNECTION,
-  FREE_POSTGRES_CLI_DELETE,
+  FREE_POSTGRES_TERMINAL_CLAIM,
+  FREE_POSTGRES_TERMINAL_STATUS,
   FREE_POSTGRES_TERMINAL_TABS,
   FREE_POSTGRES_TITLE,
 } from "./_content";
@@ -86,18 +86,23 @@ test("user-visible content and FAQ schema have no em or en dashes", () => {
   assert.ok(!DASHES.test(FREE_POSTGRES_SUBHEADLINE));
   assert.ok(!DASHES.test(FREE_POSTGRES_HERO_PRIMARY_CTA.label));
   assert.ok(!DASHES.test(FREE_POSTGRES_BROWSER_CTA.label));
-  for (const block of FREE_POSTGRES_CLI_BLOCKS) assert.ok(!DASHES.test(block));
+  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_STATUS));
+  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_CLAIM));
   assert.ok(!DASHES.test(FREE_POSTGRES_CLI_CONNECTION));
   assert.ok(!DASHES.test(FREE_POSTGRES_CLI_CLAIM_URL));
-  assert.ok(!DASHES.test(FREE_POSTGRES_CLI_DELETE));
   for (const line of Object.values(FREE_POSTGRES_CLAUDE)) assert.ok(!DASHES.test(line));
 });
 
-test("the hero terminal matches the create-db CLI, and the markdown matches it", () => {
+test("the hero window is a plain terminal plus a light Claude session", () => {
   assert.equal(CREATE_DB_COMMAND, "npx create-db");
   assert.equal(CREATE_DB_COMMAND.length, 13);
   assert.deepEqual([...FREE_POSTGRES_TERMINAL_TABS], ["Terminal", "Claude"]);
   assert.equal(FREE_POSTGRES_TERMINAL_TABS[0], "Terminal");
+  assert.equal(FREE_POSTGRES_TERMINAL_STATUS, "Setting up a database");
+  assert.equal(
+    FREE_POSTGRES_TERMINAL_CLAIM,
+    "The database is deleted after 24 hours unless you claim it.",
+  );
   assert.equal(
     FREE_POSTGRES_CLI_CONNECTION,
     "postgres://demo:sample@db.prisma.io:5432/postgres?sslmode=require",
@@ -106,38 +111,37 @@ test("the hero terminal matches the create-db CLI, and the markdown matches it",
     FREE_POSTGRES_CLI_CLAIM_URL,
     "https://create-db.prisma.io/claim?projectID=proj_sample",
   );
-  assert.equal(FREE_POSTGRES_CLI_BLOCKS[0], "┌  Creating a Prisma Postgres database\n│");
-  assert.equal(FREE_POSTGRES_CLI_BLOCKS[1], "◇  Database created successfully!\n│");
-  assert.ok(FREE_POSTGRES_CLI_BLOCKS[2].includes("●  Database Connection"));
-  assert.ok(FREE_POSTGRES_CLI_BLOCKS[2].includes("│    Connection String:"));
-  assert.ok(FREE_POSTGRES_CLI_BLOCKS[3].startsWith("◆  Claim Your Database"));
-  assert.ok(FREE_POSTGRES_CLI_BLOCKS[3].includes("│    Keep your database for free:"));
-  assert.ok(FREE_POSTGRES_CLI_BLOCKS[3].includes(FREE_POSTGRES_CLI_DELETE));
   assert.equal(FREE_POSTGRES_CLAUDE.product, "Claude Code");
   assert.equal(FREE_POSTGRES_CLAUDE.model, "Opus");
   assert.equal(FREE_POSTGRES_CLAUDE.directory, "~/app");
   assert.equal(FREE_POSTGRES_CLAUDE.tool, "Ran a shell command");
-  assert.equal(
-    FREE_POSTGRES_CLAUDE.claim,
-    "The database is deleted after 24 hours unless you claim it.",
-  );
+  assert.equal(FREE_POSTGRES_CLAUDE.claim, FREE_POSTGRES_TERMINAL_CLAIM);
   assert.equal(FREE_POSTGRES_CLAUDE.region, "eu-central-1 (Frankfurt)");
 
   const css = readFileSync(new URL("./_terminal.module.css", import.meta.url), "utf8");
   const source = readFileSync(new URL("./_terminal.tsx", import.meta.url), "utf8");
   assert.match(css, /@media \(prefers-reduced-motion: no-preference\)/);
   assert.match(css, /steps\(13, end\)/);
+  assert.ok(!css.includes("#262624"));
   assert.match(source, /role="tablist"/);
+  assert.match(source, /\$ /);
   assert.match(source, /❯/);
+  assert.match(source, /ClaudeSpark/);
   assert.ok(!source.includes("<table"));
   assert.ok(!source.includes("Codex"));
+  assert.ok(!source.includes("┌"));
+  assert.ok(!source.includes("◇"));
+  assert.ok(!source.includes("◆"));
   assert.ok(!DASHES.test(css));
   assert.ok(!DASHES.test(source));
 
   const markdown = renderFreePostgresqlDatabaseMarkdown();
   for (const line of [
     ...FREE_POSTGRES_TERMINAL_TABS,
-    ...FREE_POSTGRES_CLI_BLOCKS.flatMap((block) => block.split("\n")),
+    `$ ${CREATE_DB_COMMAND}`,
+    FREE_POSTGRES_TERMINAL_STATUS,
+    FREE_POSTGRES_CLI_CONNECTION,
+    FREE_POSTGRES_TERMINAL_CLAIM,
     FREE_POSTGRES_CLAUDE.product,
     FREE_POSTGRES_CLAUDE.model,
     FREE_POSTGRES_CLAUDE.directory,
@@ -145,13 +149,13 @@ test("the hero terminal matches the create-db CLI, and the markdown matches it",
     FREE_POSTGRES_CLAUDE.tool,
     FREE_POSTGRES_CLAUDE.created,
     FREE_POSTGRES_CLAUDE.connectionLabel,
-    FREE_POSTGRES_CLI_CONNECTION,
     `Region: ${FREE_POSTGRES_CLAUDE.region}`,
-    FREE_POSTGRES_CLAUDE.claim,
     FREE_POSTGRES_CLI_CLAIM_URL,
   ]) {
     assert.ok(markdown.includes(line), `markdown missing: ${line}`);
   }
+  assert.ok(!markdown.includes("┌"));
+  assert.ok(!markdown.includes("Database created successfully!"));
   assert.ok(!markdown.includes("Runs the command, gets the URL, and can use it."));
   assert.ok(!markdown.includes("postgres://USER:PASSWORD@HOST"));
 
