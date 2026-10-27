@@ -158,21 +158,24 @@ export function ProductHero({
               {/* Benefits support the CTA rather than delaying it. They sit
                   below it now, so they can carry their original weight without
                   competing — it's the position that was pushing the CTA down,
-                  not the type. */}
-              <ul className="mt-8 flex flex-col gap-2.5 border-t border-black/[0.07] pt-7">
-                {hero.benefits.map((label, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-2 text-[0.9375rem] font-semibold text-foreground"
-                  >
-                    <CheckBold
-                      className={cn("mt-0.5 size-4 shrink-0", CHECK_COLORS[i % 3])}
-                      aria-hidden
-                    />
-                    {label}
-                  </li>
-                ))}
-              </ul>
+                  not the type. Omitted entirely when the page has no benefits,
+                  so the list and its rule are not an empty band. */}
+              {hero.benefits ? (
+                <ul className="mt-8 flex flex-col gap-2.5 border-t border-black/[0.07] pt-7">
+                  {hero.benefits.map((label, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-2 text-[0.9375rem] font-semibold text-foreground"
+                    >
+                      <CheckBold
+                        className={cn("mt-0.5 size-4 shrink-0", CHECK_COLORS[i % 3])}
+                        aria-hidden
+                      />
+                      {label}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
               {belowBenefits ? <div className="mt-8 w-full">{belowBenefits}</div> : null}
             </div>
 

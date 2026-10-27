@@ -283,7 +283,7 @@ test("the product pages inherit their copy from the page's own content object", 
     assert.ok(document.includes(content.cta.headline), `${path}: cta headline missing`);
     assert.ok(document.includes(content.platform.body), `${path}: platform body missing`);
 
-    for (const benefit of content.hero.benefits) {
+    for (const benefit of content.hero.benefits ?? []) {
       assert.ok(document.includes(benefit), `${path}: hero benefit missing: ${benefit}`);
     }
     for (const item of content.features.items) {

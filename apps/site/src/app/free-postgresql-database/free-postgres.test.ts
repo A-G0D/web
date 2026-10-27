@@ -2,9 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { createFaqStructuredData } from "@/lib/structured-data";
 import { stripFaqAnswerMarkup } from "@/lib/faq-answer";
+import { renderFreePostgresqlDatabaseMarkdown } from "@/lib/markdown/free-postgresql-database";
 import {
   CONSOLE_SIGN_UP_URL,
+  CREATE_DB_COMMAND,
   CREATE_DB_WEB_URL,
+  FREE_POSTGRES_AGENT_STORY,
   FREE_POSTGRES_BROWSER_CTA,
   FREE_POSTGRES_DESCRIPTION,
   FREE_POSTGRES_FAQ,
@@ -13,6 +16,10 @@ import {
   FREE_POSTGRES_PATH,
   FREE_POSTGRES_PRIMARY_CTA,
   FREE_POSTGRES_SUBHEADLINE,
+  FREE_POSTGRES_TERMINAL_AGENTS,
+  FREE_POSTGRES_TERMINAL_CLAIM,
+  FREE_POSTGRES_TERMINAL_STATUS,
+  FREE_POSTGRES_TERMINAL_URL,
   FREE_POSTGRES_TITLE,
 } from "./_content";
 
@@ -77,4 +84,47 @@ test("user-visible content and FAQ schema have no em or en dashes", () => {
   assert.ok(!DASHES.test(FREE_POSTGRES_SUBHEADLINE));
   assert.ok(!DASHES.test(FREE_POSTGRES_HERO_PRIMARY_CTA.label));
   assert.ok(!DASHES.test(FREE_POSTGRES_BROWSER_CTA.label));
+  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_STATUS));
+  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_URL));
+  assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_CLAIM));
+  assert.ok(!DASHES.test(FREE_POSTGRES_AGENT_STORY));
+});
+
+test("the hero terminal states the instant path, and the markdown matches it", () => {
+  assert.equal(CREATE_DB_COMMAND, "npx create-db");
+  assert.equal(FREE_POSTGRES_TERMINAL_STATUS, "Setting up a database");
+  assert.equal(
+    FREE_POSTGRES_TERMINAL_URL,
+    "postgres://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require",
+  );
+  assert.equal(
+    FREE_POSTGRES_TERMINAL_CLAIM,
+    "The database is deleted after 24 hours unless you claim it.",
+  );
+  assert.deepEqual([...FREE_POSTGRES_TERMINAL_AGENTS], ["Claude", "Codex"]);
+  assert.equal(FREE_POSTGRES_AGENT_STORY, "Runs the command, gets the URL, and can use it.");
+
+  const markdown = renderFreePostgresqlDatabaseMarkdown();
+  for (const line of [
+    `$ ${CREATE_DB_COMMAND}`,
+    FREE_POSTGRES_TERMINAL_STATUS,
+    FREE_POSTGRES_TERMINAL_URL,
+    FREE_POSTGRES_TERMINAL_CLAIM,
+    `Claude: ${FREE_POSTGRES_AGENT_STORY}`,
+    `Codex: ${FREE_POSTGRES_AGENT_STORY}`,
+  ]) {
+    assert.ok(markdown.includes(line), `markdown missing: ${line}`);
+  }
+
+  for (const gone of [
+    "Prisma Postgres at a glance",
+    "A Postgres database and its connection string, with pooling built in.",
+    "Browse and edit rows in the browser with Prisma Studio.",
+    "See which queries are slow with Query Insights.",
+    "Create a database. Run npx create-db, or create one in the Console.",
+    "Paste it into your app. Set it as DATABASE_URL.",
+    "Claim it within 24 hours. Open the claim link and sign in. The database moves into your Free workspace",
+  ]) {
+    assert.ok(!markdown.includes(gone), `old hero copy still in markdown: ${gone}`);
+  }
 });

@@ -166,21 +166,6 @@ export const FREE_PLAN_FACTS = [
   },
 ] as const;
 
-export const START_STEPS = [
-  {
-    title: "Create a database",
-    body: "Run `npx create-db`, or create one in the Console. You get a connection string straight away.",
-  },
-  {
-    title: "Paste it into your app",
-    body: "Set it as `DATABASE_URL`. Any Postgres client works: Prisma ORM, Drizzle, Kysely, node-postgres or psql.",
-  },
-  {
-    title: "Claim it within 24 hours",
-    body: "Open the claim link and sign in. The database moves into your Free workspace and stays under that plan's limits.",
-  },
-] as const;
-
 export const BUILD_CARDS = [
   {
     title: "Side projects and prototypes",
@@ -215,19 +200,6 @@ export const UPGRADE_POINTS = [
   },
 ] as const;
 
-// Benefit lines are the start steps with the backticks removed. ProductHero
-// renders benefits as plain text, so a markdown code span would show the
-// ticks. The step title stays in front of the body so neither is dropped.
-function plainStep(step: { title: string; body: string }) {
-  return `${step.title}. ${step.body.replaceAll("`", "")}`;
-}
-
-export const FREE_POSTGRES_HERO_BENEFITS = [
-  plainStep(START_STEPS[0]),
-  plainStep(START_STEPS[1]),
-  plainStep(START_STEPS[2]),
-] as const;
-
 export const FREE_POSTGRES_MICROLINE = "No credit card and no time limit.";
 
 export const FREE_POSTGRES_RELATED = {
@@ -256,25 +228,16 @@ export const FREE_POSTGRES_PRICING_CTA = {
   href: "/pricing",
 } as const;
 
-// Tour captions name Studio and Query Insights once. They do not claim
-// deploy-on-push previews or daily backups, which the Free plan does not include.
-export const FREE_POSTGRES_TOUR = [
-  {
-    label: "Database",
-    caption: "A Postgres database and its connection string, with pooling built in.",
-    illustration: "databasePanel",
-  },
-  {
-    label: "Studio",
-    caption: "Browse and edit rows in the browser with Prisma Studio.",
-    illustration: "studioTable",
-  },
-  {
-    label: "Query Insights",
-    caption: "See which queries are slow with Query Insights.",
-    illustration: "queryInsights",
-  },
-] as const;
+// The hero terminal. The command is CREATE_DB_COMMAND. The connection string
+// is the placeholder shape already published for a missing DATABASE_URL, not a
+// live credential. The claim sentence is the fact already in the FAQ.
+export const FREE_POSTGRES_TERMINAL_STATUS = "Setting up a database";
+export const FREE_POSTGRES_TERMINAL_URL =
+  "postgres://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require";
+export const FREE_POSTGRES_TERMINAL_CLAIM =
+  "The database is deleted after 24 hours unless you claim it.";
+export const FREE_POSTGRES_AGENT_STORY = "Runs the command, gets the URL, and can use it.";
+export const FREE_POSTGRES_TERMINAL_AGENTS = ["Claude", "Codex"] as const;
 
 export const FREE_POSTGRES_PROBLEM_HEADLINE = "How the free limit works";
 

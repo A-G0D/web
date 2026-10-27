@@ -23,7 +23,6 @@ import {
   FREE_POSTGRES_FEATURES_BRIDGE,
   FREE_POSTGRES_FEATURES_HEADLINE,
   FREE_POSTGRES_H1,
-  FREE_POSTGRES_HERO_BENEFITS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_INCLUDED,
   FREE_POSTGRES_MICROLINE,
@@ -34,9 +33,9 @@ import {
   FREE_POSTGRES_PROBLEM_HEADLINE,
   FREE_POSTGRES_RELATED,
   FREE_POSTGRES_SUBHEADLINE,
-  FREE_POSTGRES_TOUR,
   STORAGE_CONFIRM,
 } from "./_content";
+import { FreePostgresTerminal } from "./_terminal";
 
 function LimitFigure({ figure, label }: { figure: string; label: string }) {
   return (
@@ -171,22 +170,15 @@ export function FreePostgresPage() {
       <ProductHero
         name="Prisma Postgres"
         accent="postgres"
+        visual={<FreePostgresTerminal />}
+        visualAspect={false}
         hero={{
           headline: FREE_POSTGRES_H1,
           subheadline: FREE_POSTGRES_SUBHEADLINE,
-          benefits: [
-            FREE_POSTGRES_HERO_BENEFITS[0],
-            FREE_POSTGRES_HERO_BENEFITS[1],
-            FREE_POSTGRES_HERO_BENEFITS[2],
-          ],
           primaryCta: FREE_POSTGRES_HERO_PRIMARY_CTA,
           secondaryCta: FREE_POSTGRES_BROWSER_CTA,
           microline: FREE_POSTGRES_MICROLINE,
           related: FREE_POSTGRES_RELATED,
-          tour: FREE_POSTGRES_TOUR.map((stop) => ({
-            ...stop,
-            illustration: stop.illustration as ProductIllustrationName,
-          })),
         }}
       />
       <ProductFeatures

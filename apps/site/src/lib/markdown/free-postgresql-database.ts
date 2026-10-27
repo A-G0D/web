@@ -12,8 +12,8 @@ import {
   FREE_POSTGRES_FEATURE_ITEMS,
   FREE_POSTGRES_FEATURES_BRIDGE,
   FREE_POSTGRES_FEATURES_HEADLINE,
+  FREE_POSTGRES_AGENT_STORY,
   FREE_POSTGRES_H1,
-  FREE_POSTGRES_HERO_BENEFITS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_INCLUDED,
   FREE_POSTGRES_LIMIT,
@@ -24,8 +24,12 @@ import {
   FREE_POSTGRES_PROBLEM_HEADLINE,
   FREE_POSTGRES_RELATED,
   FREE_POSTGRES_SUBHEADLINE,
-  FREE_POSTGRES_TOUR,
+  FREE_POSTGRES_TERMINAL_AGENTS,
+  FREE_POSTGRES_TERMINAL_CLAIM,
+  FREE_POSTGRES_TERMINAL_STATUS,
+  FREE_POSTGRES_TERMINAL_URL,
   STORAGE_CONFIRM,
+  CREATE_DB_COMMAND,
 } from "@/app/free-postgresql-database/_content";
 import { bulletList, ctaList, heading, joinBlocks, paragraphs } from "./blocks";
 import { COMPARE_PRISMA_HEADING } from "./compare-links";
@@ -50,9 +54,17 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     ctaList([FREE_POSTGRES_HERO_PRIMARY_CTA, FREE_POSTGRES_BROWSER_CTA]),
     FREE_POSTGRES_MICROLINE,
     `[${FREE_POSTGRES_RELATED.label}](${FREE_POSTGRES_RELATED.href})`,
-    bulletList([...FREE_POSTGRES_HERO_BENEFITS]),
-    heading(3, "Prisma Postgres at a glance"),
-    bulletList(FREE_POSTGRES_TOUR.map((stop) => `**${stop.label}:** ${stop.caption}`)),
+    [
+      "```",
+      `$ ${CREATE_DB_COMMAND}`,
+      FREE_POSTGRES_TERMINAL_STATUS,
+      FREE_POSTGRES_TERMINAL_URL,
+      "```",
+    ].join("\n"),
+    FREE_POSTGRES_TERMINAL_CLAIM,
+    bulletList(
+      FREE_POSTGRES_TERMINAL_AGENTS.map((name) => `${name}: ${FREE_POSTGRES_AGENT_STORY}`),
+    ),
 
     heading(2, FREE_POSTGRES_FEATURES_HEADLINE),
     bulletList(FREE_POSTGRES_INCLUDED.map(([value, detail]) => `${value} ${detail}`)),
