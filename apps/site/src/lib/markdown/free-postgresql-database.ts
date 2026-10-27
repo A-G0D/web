@@ -25,6 +25,7 @@ import {
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_INCLUDED_CARDS,
   FREE_POSTGRES_INCLUDED_NOTES,
+  FREE_POSTGRES_INCLUDED_ROWS,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_MARKDOWN_SUBHEADLINE,
   FREE_POSTGRES_PLATFORM_BODY,
@@ -123,6 +124,11 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     bulletList(
       FREE_POSTGRES_INCLUDED_CARDS.map((card) => `**${card.title}.** ${card.detail}`),
     ),
+    [
+      "| Allowance | Included |",
+      "| --- | --- |",
+      ...FREE_POSTGRES_INCLUDED_ROWS.map((row) => `| ${row.label} | ${row.value} |`),
+    ].join("\n"),
     FREE_POSTGRES_INCLUDED_NOTES.map((note) => `${note.n}. ${note.text}`).join("\n"),
     paragraphs(FREE_POSTGRES_FEATURES_BRIDGE),
     bulletList(FREE_POSTGRES_FEATURE_ITEMS.map((item) => `**${item.name}:** ${item.description}`)),

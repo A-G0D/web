@@ -340,28 +340,36 @@ export type FreePostgresIncludedCard = {
   note?: number;
 };
 
-// One card per allowance. Rules sit in FREE_POSTGRES_INCLUDED_NOTES.
+// The three headline allowances. Rules sit in FREE_POSTGRES_INCLUDED_NOTES.
 export const FREE_POSTGRES_INCLUDED_CARDS: readonly FreePostgresIncludedCard[] = [
+  { title: "2 GB", detail: "of storage" },
   {
     title: "200,000",
     detail: "operations a month. One query is one operation.",
     note: 1,
   },
-  { title: "2 GB", detail: "of storage" },
   { title: "Up to 50", detail: "databases per workspace" },
+];
+
+export type FreePostgresIncludedRow = {
+  label: string;
+  value: string;
+};
+
+export const FREE_POSTGRES_INCLUDED_ROWS: readonly FreePostgresIncludedRow[] = [
   {
-    title: "10 and 10",
-    detail: "connections per database. Pooled for your app. Direct for migrations.",
+    label: "Connections",
+    value: "10 pooled for your app and 10 direct for migrations, per database",
   },
-  { title: "Unlimited", detail: "data transfer" },
-  { title: "PostgreSQL 17", detail: "with SSL and built-in connection pooling" },
+  { label: "Data transfer", value: "Unlimited" },
+  { label: "Engine", value: "PostgreSQL 17 with SSL and built-in connection pooling" },
   {
-    title: `[pgvector](${DOCS_EXTENSIONS})`,
-    detail: "and 46 other Postgres extensions",
+    label: "Extensions",
+    value: `[pgvector](${DOCS_EXTENSIONS}) and 46 other Postgres extensions`,
   },
-  { title: `[Six regions](${DOCS_REGIONS})`, detail: "in the US, Europe and Asia" },
-  { title: "Query Insights", detail: "to find slow queries" },
-  { title: "Prisma Studio", detail: "to browse rows" },
+  { label: "Regions", value: `[Six regions](${DOCS_REGIONS}) in the US, Europe and Asia` },
+  { label: "Query Insights", value: "Find slow queries" },
+  { label: "Prisma Studio", value: "Browse rows" },
 ];
 
 export const FREE_POSTGRES_INCLUDED_NOTES = [

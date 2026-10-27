@@ -9,6 +9,14 @@ import { CompareLinks } from "@/components/sections/compare-links";
 import { Faq } from "@/components/sections/faq";
 import { TestimonialsReveal } from "@/components/sections/testimonials-reveal";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { renderFaqAnswer } from "@/lib/faq-answer";
 import { PRODUCT_TESTIMONIALS_HEADING } from "@/lib/markdown/product";
 import {
@@ -28,6 +36,7 @@ import {
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_INCLUDED_CARDS,
   FREE_POSTGRES_INCLUDED_NOTES,
+  FREE_POSTGRES_INCLUDED_ROWS,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_PLATFORM_BODY,
   FREE_POSTGRES_PRICING_CTA,
@@ -40,8 +49,8 @@ import { FreePostgresTerminal } from "./_terminal";
 
 function FreePostgresIncluded() {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {FREE_POSTGRES_INCLUDED_CARDS.map((card) => (
           <Card key={card.title} className="h-full gap-3 rounded-2xl py-5 shadow-none">
             <CardHeader className="gap-1.5 px-5">
@@ -60,6 +69,22 @@ function FreePostgresIncluded() {
           </Card>
         ))}
       </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-44">Allowance</TableHead>
+            <TableHead>Included</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {FREE_POSTGRES_INCLUDED_ROWS.map((row) => (
+            <TableRow key={row.label}>
+              <TableCell className="font-medium whitespace-normal">{row.label}</TableCell>
+              <TableCell className="whitespace-normal">{renderFaqAnswer(row.value)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
       <div id="free-postgres-notes" className="flex flex-col gap-1 text-sm text-muted-foreground">
         {FREE_POSTGRES_INCLUDED_NOTES.map((note) => (
           <p key={note.n} id={`free-postgres-note-${note.n}`}>
