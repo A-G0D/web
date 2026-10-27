@@ -118,7 +118,7 @@ Deploy on push takes two more steps: connect the repository with `npx prisma git
 
 ## Where Prisma Postgres + Compute is the wrong choice
 
-Prisma Postgres keeps daily snapshots on paid plans, taken only on days with activity, for 7 days on Starter and Pro and 30 on Business, and you can restore one in place, keeping the connection strings, or into a new database; changes after the last snapshot may not be restorable, and point-in-time recovery is coming in November 2026. It has no preview that copies production data: a preview database starts with none. And each Compute service runs in one region, chosen from six. Neon covers the first two and Fly.io the third. The Compute FAQ keeps the full list under [Where it has trade-offs](https://www.prisma.io/docs/compute/faq#where-it-has-trade-offs).
+Prisma Postgres keeps daily snapshots on paid plans, taken only on days with activity, for 7 days on Starter and Pro and 30 on Business, and you can restore one in place, keeping the connection strings, or into a new database. Changes after the last snapshot may not be restorable, and point-in-time recovery is coming in November 2026. It has no preview that copies production data: a preview database starts with none. And each Compute service runs in one region, chosen from six. Neon covers the first two and Fly.io the third. The Compute FAQ keeps the full list under [Where it has trade-offs](https://www.prisma.io/docs/compute/faq#where-it-has-trade-offs).
 
 ## How to move from Neon
 
