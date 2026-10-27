@@ -169,70 +169,25 @@ function ClaudeSession() {
   );
 }
 
-// Drawn Claude Code creature: a starburst with a face. Not the asterisk
-// logo and not the wordmark.
+// Claw'd, traced from the reference: a 12 by 8 pixel creature. Square head,
+// two black square eyes, a body that steps out, four short legs. No face.
 function ClaudeMascot() {
   return (
-    <svg viewBox="0 0 64 64" aria-hidden="true" className={styles.mascot}>
+    <svg viewBox="0 0 12 8" aria-hidden="true" className={styles.mascot}>
       <g fill="#D97757">
-        <path d="M32 2.5c2.6 5.4 4.4 10.6 3.6 15.4-1.4.5-2.6.1-3.6-1-1 .1-2.2 1.5-3.6 1C27.6 13.1 29.4 7.9 32 2.5z" />
-        <path
-          transform="rotate(30 32 32)"
-          d="M32 6.5c2 4.2 3.2 8 2.6 11.6-1 .4-1.8 0-2.6-.8-.8.8-1.6 1.2-2.6.8-.6-3.6.6-7.4 2.6-11.6z"
-        />
-        <path
-          transform="rotate(60 32 32)"
-          d="M32 2.5c2.6 5.4 4.4 10.6 3.6 15.4-1.4.5-2.6.1-3.6-1-1 .1-2.2 1.5-3.6 1C27.6 13.1 29.4 7.9 32 2.5z"
-        />
-        <path
-          transform="rotate(90 32 32)"
-          d="M32 6.5c2 4.2 3.2 8 2.6 11.6-1 .4-1.8 0-2.6-.8-.8.8-1.6 1.2-2.6.8-.6-3.6.6-7.4 2.6-11.6z"
-        />
-        <path
-          transform="rotate(120 32 32)"
-          d="M32 2.5c2.6 5.4 4.4 10.6 3.6 15.4-1.4.5-2.6.1-3.6-1-1 .1-2.2 1.5-3.6 1C27.6 13.1 29.4 7.9 32 2.5z"
-        />
-        <path
-          transform="rotate(150 32 32)"
-          d="M32 6.5c2 4.2 3.2 8 2.6 11.6-1 .4-1.8 0-2.6-.8-.8.8-1.6 1.2-2.6.8-.6-3.6.6-7.4 2.6-11.6z"
-        />
-        <path
-          transform="rotate(180 32 32)"
-          d="M32 2.5c2.6 5.4 4.4 10.6 3.6 15.4-1.4.5-2.6.1-3.6-1-1 .1-2.2 1.5-3.6 1C27.6 13.1 29.4 7.9 32 2.5z"
-        />
-        <path
-          transform="rotate(210 32 32)"
-          d="M32 6.5c2 4.2 3.2 8 2.6 11.6-1 .4-1.8 0-2.6-.8-.8.8-1.6 1.2-2.6.8-.6-3.6.6-7.4 2.6-11.6z"
-        />
-        <path
-          transform="rotate(240 32 32)"
-          d="M32 2.5c2.6 5.4 4.4 10.6 3.6 15.4-1.4.5-2.6.1-3.6-1-1 .1-2.2 1.5-3.6 1C27.6 13.1 29.4 7.9 32 2.5z"
-        />
-        <path
-          transform="rotate(270 32 32)"
-          d="M32 6.5c2 4.2 3.2 8 2.6 11.6-1 .4-1.8 0-2.6-.8-.8.8-1.6 1.2-2.6.8-.6-3.6.6-7.4 2.6-11.6z"
-        />
-        <path
-          transform="rotate(300 32 32)"
-          d="M32 2.5c2.6 5.4 4.4 10.6 3.6 15.4-1.4.5-2.6.1-3.6-1-1 .1-2.2 1.5-3.6 1C27.6 13.1 29.4 7.9 32 2.5z"
-        />
-        <path
-          transform="rotate(330 32 32)"
-          d="M32 6.5c2 4.2 3.2 8 2.6 11.6-1 .4-1.8 0-2.6-.8-.8.8-1.6 1.2-2.6.8-.6-3.6.6-7.4 2.6-11.6z"
-        />
+        <rect x="2" y="0" width="8" height="1" />
+        <rect x="2" y="1" width="1" height="1" />
+        <rect x="4" y="1" width="4" height="1" />
+        <rect x="9" y="1" width="1" height="1" />
+        <rect x="0" y="2" width="12" height="2" />
+        <rect x="2" y="4" width="8" height="2" />
+        <rect x="2" y="6" width="1" height="2" />
+        <rect x="4" y="6" width="1" height="2" />
+        <rect x="7" y="6" width="1" height="2" />
+        <rect x="9" y="6" width="1" height="2" />
       </g>
-      <circle cx="32" cy="33" r="14.5" fill="#F6C9AA" />
-      <ellipse cx="26.4" cy="31.2" rx="2.2" ry="2.9" fill="#3A2418" />
-      <ellipse cx="37.6" cy="31.2" rx="2.2" ry="2.9" fill="#3A2418" />
-      <circle cx="27.1" cy="30.2" r="0.7" fill="#fff" />
-      <circle cx="38.3" cy="30.2" r="0.7" fill="#fff" />
-      <path
-        d="M27.6 36.2c1.3 1.7 2.7 2.4 4.4 2.4s3.1-.7 4.4-2.4"
-        fill="none"
-        stroke="#3A2418"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
+      <rect x="3" y="1" width="1" height="1" fill="#111111" />
+      <rect x="8" y="1" width="1" height="1" fill="#111111" />
     </svg>
   );
 }
