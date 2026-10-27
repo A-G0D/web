@@ -50,6 +50,7 @@ export function ProductHero({
   headlineMeasure = "max-w-[min(16ch,100%)]",
   columns = "md:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)]",
   belowBenefits,
+  subheadline,
 }: Pick<ProductPageContent, "name" | "accent" | "hero"> & {
   // Optional custom hero visual. When provided, it replaces the illustration /
   // product tour / placeholder in the visual slot. `visualAspect={false}` lets
@@ -73,6 +74,11 @@ export function ProductHero({
    * the CTA follows the subheadline so it clears the fold at 1440x800.
    */
   belowBenefits?: ReactNode;
+  /**
+   * Replaces `hero.subheadline` when a page needs emphasis inside the
+   * sentence. Pages that omit it, including /postgres, render the string.
+   */
+  subheadline?: ReactNode;
 }) {
   const Illustration = hero.illustration ? PRODUCT_ILLUSTRATIONS[hero.illustration] : null;
 
@@ -132,7 +138,7 @@ export function ProductHero({
                 <Headline headline={hero.headline} emphasis={hero.headlineEmphasis} />
               </h1>
               <p className="mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-muted-foreground">
-                {hero.subheadline}
+                {subheadline ?? hero.subheadline}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <PrismButton href={hero.primaryCta.href} size="lg">

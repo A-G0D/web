@@ -24,7 +24,11 @@ export const FREE_POSTGRES_DESCRIPTION =
 export const FREE_POSTGRES_H1 = "Create a free PostgreSQL database";
 
 export const FREE_POSTGRES_SUBHEADLINE =
-  "2 GB, 200,000 operations a month, and up to 50 databases. No card, no time limit. A connection string in seconds.";
+  "2 GB of storage, 200,000 operations a month, and 50 databases. No card, no time limit. Prisma Postgres works with any Postgres client.";
+
+/** Same sentence as the hero subtitle, with the three allowances in bold. */
+export const FREE_POSTGRES_MARKDOWN_SUBHEADLINE =
+  "**2 GB** of storage, **200,000 operations** a month, and **50 databases**. No card, no time limit. Prisma Postgres works with any Postgres client.";
 
 export const FREE_POSTGRES_LAST_MODIFIED = "2026-10-21";
 export const FREE_POSTGRES_UPDATED_LABEL = "Last updated: 21 October 2026";
@@ -202,11 +206,6 @@ export const UPGRADE_POINTS = [
 
 export const FREE_POSTGRES_MICROLINE = "No credit card and no time limit.";
 
-export const FREE_POSTGRES_RELATED = {
-  label: "Prisma Postgres works with any Postgres client.",
-  href: "/postgres",
-} as const;
-
 // Hero buttons do two jobs. The closer keeps its own primary label.
 export const FREE_POSTGRES_HERO_PRIMARY_CTA = {
   label: "Get started",
@@ -228,10 +227,16 @@ export const FREE_POSTGRES_PRICING_CTA = {
   href: "/pricing",
 } as const;
 
-// Hero window. First tab is a plain terminal. Second tab is a Claude Code
-// session on the same light surface. Credentials are fake, not a live password
-// or claim URL.
-export const FREE_POSTGRES_TERMINAL_TABS = ["Terminal", "Claude"] as const;
+// Hero window. First tab is a plain terminal. Then Claude, Codex, Cursor, and
+// Copilot, each on the same light surface. Credentials are fake, not a live
+// password or claim URL.
+export const FREE_POSTGRES_TERMINAL_TABS = [
+  "Terminal",
+  "Claude",
+  "Codex",
+  "Cursor",
+  "Copilot",
+] as const;
 export const FREE_POSTGRES_TERMINAL_STATUS = "Setting up a database";
 export const FREE_POSTGRES_TERMINAL_CLAIM =
   "The database is deleted after 24 hours unless you claim it.";
@@ -247,6 +252,42 @@ export const FREE_POSTGRES_CLAUDE = {
   model: "Opus",
   directory: "~/app",
   tool: "Ran a shell command",
+  created: "The database was created.",
+  connectionLabel: "Connection string",
+  region: "eu-central-1 (Frankfurt)",
+  claim: FREE_POSTGRES_TERMINAL_CLAIM,
+} as const;
+
+// Codex CLI session. The model line names the product surface, not a version.
+export const FREE_POSTGRES_CODEX = {
+  product: "OpenAI Codex",
+  model: "CLI",
+  directory: "~/app",
+  tool: "Ran a shell command",
+  created: "The database was created.",
+  connectionLabel: "Connection string",
+  region: "eu-central-1 (Frankfurt)",
+  claim: FREE_POSTGRES_TERMINAL_CLAIM,
+} as const;
+
+// Cursor agent panel. The user message is the command. The tool line is Terminal.
+export const FREE_POSTGRES_CURSOR = {
+  product: "Cursor",
+  mode: "Agent",
+  directory: "~/app",
+  tool: "Terminal",
+  created: "The database was created.",
+  connectionLabel: "Connection string",
+  region: "eu-central-1 (Frankfurt)",
+  claim: FREE_POSTGRES_TERMINAL_CLAIM,
+} as const;
+
+// GitHub Copilot chat. The user message sits on the right. The reply runs the command.
+export const FREE_POSTGRES_COPILOT = {
+  product: "GitHub Copilot",
+  mode: "Chat",
+  directory: "~/app",
+  tool: "Ran a terminal command",
   created: "The database was created.",
   connectionLabel: "Connection string",
   region: "eu-central-1 (Frankfurt)",

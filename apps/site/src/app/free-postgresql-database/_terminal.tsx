@@ -1,11 +1,15 @@
 "use client";
 
 import { useState, type KeyboardEvent } from "react";
+import { OpenAILogo } from "../stack/agent-logos";
 import {
   CREATE_DB_COMMAND,
   FREE_POSTGRES_CLAUDE,
   FREE_POSTGRES_CLI_CLAIM_URL,
   FREE_POSTGRES_CLI_CONNECTION,
+  FREE_POSTGRES_CODEX,
+  FREE_POSTGRES_COPILOT,
+  FREE_POSTGRES_CURSOR,
   FREE_POSTGRES_TERMINAL_CLAIM,
   FREE_POSTGRES_TERMINAL_STATUS,
   FREE_POSTGRES_TERMINAL_TABS,
@@ -13,7 +17,7 @@ import {
 import styles from "./_terminal.module.css";
 
 // Same frame as the product tour card. Free page only. The plain terminal is
-// the default tab. Switching to Claude replays that session.
+// the default tab. Switching tabs replays that session.
 const FRAME =
   "flex flex-col overflow-hidden rounded-2xl border border-border bg-card text-left shadow-[0_1px_2px_rgba(21,21,21,0.04),0_8px_16px_-4px_rgba(21,21,21,0.06),0_32px_64px_-16px_rgba(21,21,21,0.14)]";
 
@@ -59,7 +63,7 @@ export function FreePostgresTerminal() {
         role="tablist"
         aria-label="Run npx create-db"
         onKeyDown={onTabKeyDown}
-        className="flex items-center gap-1 border-b border-border/70 bg-muted/40 px-2 py-2"
+        className="flex items-center gap-1 overflow-x-auto border-b border-border/70 bg-muted/40 px-2 py-2"
       >
         {FREE_POSTGRES_TERMINAL_TABS.map((name) => {
           const selected = name === tab;
@@ -75,8 +79,8 @@ export function FreePostgresTerminal() {
               onClick={() => select(name)}
               className={
                 selected
-                  ? "rounded-md bg-card px-3 py-1 text-sm font-medium text-foreground shadow-sm"
-                  : "rounded-md px-3 py-1 text-sm font-medium text-muted-foreground"
+                  ? "shrink-0 whitespace-nowrap rounded-md bg-card px-2.5 py-1 text-sm font-medium text-foreground shadow-sm"
+                  : "shrink-0 whitespace-nowrap rounded-md px-2.5 py-1 text-sm font-medium text-muted-foreground"
               }
             >
               {name}
@@ -90,7 +94,19 @@ export function FreePostgresTerminal() {
         aria-labelledby={`free-pg-tab-${tab}`}
         className={`${styles.log} px-4 py-4 text-foreground sm:px-5 sm:py-5`}
       >
-        <div key={`${tab}-${run}`}>{tab === "Claude" ? <ClaudeSession /> : <PlainTerminal />}</div>
+        <div key={`${tab}-${run}`}>
+          {tab === "Claude" ? (
+            <ClaudeSession />
+          ) : tab === "Codex" ? (
+            <CodexSession />
+          ) : tab === "Cursor" ? (
+            <CursorSession />
+          ) : tab === "Copilot" ? (
+            <CopilotSession />
+          ) : (
+            <PlainTerminal />
+          )}
+        </div>
       </div>
     </figure>
   );
@@ -188,6 +204,156 @@ function ClaudeMascot() {
       </g>
       <rect x="3" y="1" width="1" height="1" fill="#111111" />
       <rect x="8" y="1" width="1" height="1" fill="#111111" />
+    </svg>
+  );
+}
+
+function CodexSession() {
+  return (
+    <div className={styles.session}>
+      <div className={styles.header}>
+        <OpenAILogo className={styles.mark} />
+        <div>
+          <div className={styles.product}>{FREE_POSTGRES_CODEX.product}</div>
+          <div className={`${styles.meta} text-muted-foreground`}>
+            <span>{FREE_POSTGRES_CODEX.model}</span>
+            <span>{FREE_POSTGRES_CODEX.directory}</span>
+          </div>
+        </div>
+      </div>
+      <div className={styles.promptRow}>
+        <span className={styles.codexPrompt} aria-hidden="true">
+          ›
+        </span>
+        <span className={`${styles.typed} ${styles.typedLate}`}>{CREATE_DB_COMMAND}</span>
+        <span className={styles.caret} aria-hidden="true" />
+      </div>
+      <div className={`${styles.reveal} ${styles.toolBeat}`}>
+        <div className={`${styles.inner} ${styles.shell}`}>
+          <p className={styles.toolLine}>{FREE_POSTGRES_CODEX.tool}</p>
+          <p className={`${styles.shellCommand} text-muted-foreground`}>$ {CREATE_DB_COMMAND}</p>
+        </div>
+      </div>
+      <div className={`${styles.reveal} ${styles.replyBeat}`}>
+        <CreatedReply
+          created={FREE_POSTGRES_CODEX.created}
+          connectionLabel={FREE_POSTGRES_CODEX.connectionLabel}
+          region={FREE_POSTGRES_CODEX.region}
+          claim={FREE_POSTGRES_CODEX.claim}
+        />
+      </div>
+    </div>
+  );
+}
+
+function CursorSession() {
+  return (
+    <div className={styles.session}>
+      <div className={styles.header}>
+        <CursorMark />
+        <div>
+          <div className={styles.product}>{FREE_POSTGRES_CURSOR.product}</div>
+          <div className={`${styles.meta} text-muted-foreground`}>
+            <span>{FREE_POSTGRES_CURSOR.mode}</span>
+            <span>{FREE_POSTGRES_CURSOR.directory}</span>
+          </div>
+        </div>
+      </div>
+      <div className={styles.userBubble}>
+        <span className={`${styles.typed} ${styles.typedLate}`}>{CREATE_DB_COMMAND}</span>
+        <span className={styles.caret} aria-hidden="true" />
+      </div>
+      <div className={`${styles.reveal} ${styles.toolBeat}`}>
+        <p className={`${styles.inner} ${styles.toolLine}`}>{FREE_POSTGRES_CURSOR.tool}</p>
+      </div>
+      <div className={`${styles.reveal} ${styles.replyBeat}`}>
+        <CreatedReply
+          created={FREE_POSTGRES_CURSOR.created}
+          connectionLabel={FREE_POSTGRES_CURSOR.connectionLabel}
+          region={FREE_POSTGRES_CURSOR.region}
+          claim={FREE_POSTGRES_CURSOR.claim}
+        />
+      </div>
+    </div>
+  );
+}
+
+function CopilotSession() {
+  return (
+    <div className={styles.session}>
+      <div className={styles.header}>
+        <CopilotMark />
+        <div>
+          <div className={styles.product}>{FREE_POSTGRES_COPILOT.product}</div>
+          <div className={`${styles.meta} text-muted-foreground`}>
+            <span>{FREE_POSTGRES_COPILOT.mode}</span>
+            <span>{FREE_POSTGRES_COPILOT.directory}</span>
+          </div>
+        </div>
+      </div>
+      <div className={styles.copilotBubble}>
+        <span className={`${styles.typed} ${styles.typedLate}`}>{CREATE_DB_COMMAND}</span>
+        <span className={styles.caret} aria-hidden="true" />
+      </div>
+      <div className={`${styles.reveal} ${styles.toolBeat}`}>
+        <p className={`${styles.inner} ${styles.toolLine}`}>{FREE_POSTGRES_COPILOT.tool}</p>
+      </div>
+      <div className={`${styles.reveal} ${styles.replyBeat}`}>
+        <CreatedReply
+          created={FREE_POSTGRES_COPILOT.created}
+          connectionLabel={FREE_POSTGRES_COPILOT.connectionLabel}
+          region={FREE_POSTGRES_COPILOT.region}
+          claim={FREE_POSTGRES_COPILOT.claim}
+        />
+      </div>
+    </div>
+  );
+}
+
+function CreatedReply({
+  created,
+  connectionLabel,
+  region,
+  claim,
+}: {
+  created: string;
+  connectionLabel: string;
+  region: string;
+  claim: string;
+}) {
+  return (
+    <div className={`${styles.reply} ${styles.inner}`}>
+      <p>{created}</p>
+      <p>
+        <span className={`${styles.label} text-muted-foreground`}>{connectionLabel}</span>
+        <span className={styles.wrap}>{FREE_POSTGRES_CLI_CONNECTION}</span>
+      </p>
+      <p>Region: {region}</p>
+      <p>{claim}</p>
+      <p className={styles.wrap}>{FREE_POSTGRES_CLI_CLAIM_URL}</p>
+    </div>
+  );
+}
+
+function CursorMark() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.mark}>
+      <path
+        fill="#111111"
+        d="M4.2 3.2 19.6 11c.9.5.8 1.8-.2 2.1l-6.4 1.9-2 6.3c-.3 1-1.6 1.1-2.1.2L3.2 5.4c-.5-.9.4-1.9 1-2.2Z"
+      />
+    </svg>
+  );
+}
+
+function CopilotMark() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.mark}>
+      <path
+        fill="#24292f"
+        d="M6 3.5h8.2c2.4 0 4.3 1.9 4.3 4.3v5.4c0 2.4-1.9 4.3-4.3 4.3H10l-3.6 2.6v-2.6H6c-2.4 0-4.3-1.9-4.3-4.3V7.8C1.7 5.4 3.6 3.5 6 3.5Z"
+      />
+      <path fill="#ffffff" d="M6.2 9.2h2v2h-2zm3.6 0h2v2h-2zm3.6 0h2v2h-2z" />
     </svg>
   );
 }

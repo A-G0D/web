@@ -31,11 +31,21 @@ import {
   FREE_POSTGRES_PRICING_CTA,
   FREE_POSTGRES_PRIMARY_CTA,
   FREE_POSTGRES_PROBLEM_HEADLINE,
-  FREE_POSTGRES_RELATED,
   FREE_POSTGRES_SUBHEADLINE,
   STORAGE_CONFIRM,
 } from "./_content";
 import { FreePostgresTerminal } from "./_terminal";
+
+function FreePostgresSubtitle() {
+  return (
+    <>
+      <strong className="font-semibold text-foreground">2 GB</strong> of storage,{" "}
+      <strong className="font-semibold text-foreground">200,000 operations</strong> a month, and{" "}
+      <strong className="font-semibold text-foreground">50 databases</strong>. No card, no time
+      limit. Prisma Postgres works with any Postgres client.
+    </>
+  );
+}
 
 function LimitFigure({ figure, label }: { figure: string; label: string }) {
   return (
@@ -178,8 +188,8 @@ export function FreePostgresPage() {
           primaryCta: FREE_POSTGRES_HERO_PRIMARY_CTA,
           secondaryCta: FREE_POSTGRES_BROWSER_CTA,
           microline: FREE_POSTGRES_MICROLINE,
-          related: FREE_POSTGRES_RELATED,
         }}
+        subheadline={<FreePostgresSubtitle />}
       />
       <ProductFeatures
         features={{
