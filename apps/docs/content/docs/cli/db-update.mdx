@@ -109,4 +109,4 @@ npx prisma db update --db "$DATABASE_URL" --dry-run --json | jq 'select(.kind ==
 
 For reviewable database changes in version control, use [`migration plan`](/cli/migration-plan) and [`db migrate`](/cli/db-migrate).
 
-Use `db update` for local development, preview environments, and workflows where direct reconciliation is acceptable.
+Use `db update` on any database whose migration history does not need to be kept, such as a local, development, preview, or staging database, shared or not. A database that changes only through migrations, such as production, must not use it, because it leaves no migration behind.
