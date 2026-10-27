@@ -95,12 +95,13 @@ The error reads the database's record of applied migrations and says what happen
 
 ```text
 $ npx prisma db migrate --db "$DATABASE_URL"
-✖ The database is at a contract that is not in the migration graph (MIGRATION.MARKER_MISMATCH)
-  why  The database's marker names 267755c4…, which no migration in migrations/app starts or ends at. After 9f1e02ab…, the last graph contract it reached, it applied 20261013T0910_request_description, which is no longer on disk.
-  next Unless this database changes only through migrations, as production does, move it with db update; its data stays:
-         prisma db update --to 4b1c…e09a --dry-run --db <url>
-         prisma db update --to 4b1c…e09a --db <url>
-       Otherwise plan a migration from 9f1e02ab… to its current contract, then one to 4b1c…e09a, and deploy again.
+✘ [MIGRATION.MARKER_MISMATCH] The database is at a contract that is not in the migration graph
+  why: The database's marker names 267755c4…, which no migration in migrations/app starts or ends at. After 9f1e02ab…, the last graph contract it reached, it applied 20261013T0910_request_description, which is no longer on disk.
+→ Unless this database changes only through migrations, as production does, move it with db update; its data stays:
+→ Preview the changes: prisma db update --to 4b1c…e09a --dry-run --db <url>
+→ Reconcile the database: prisma db update --to 4b1c…e09a --db <url>
+→ Otherwise plan a migration from 9f1e02ab… to its current contract, then one to 4b1c…e09a, and deploy again.
+  docs: https://docs.prisma.io/docs/orm/v8/reference/error-reference#MIGRATION.MARKER_MISMATCH
 ```
 
 With `--json`, the error's `meta` holds `markerHash`, `targetHash`, and, when the database's record shows them, `lastGraphHash`, the last contract state in your history that the database reached, and `missingMigrations`, the migrations it applied after that which are no longer on disk.
