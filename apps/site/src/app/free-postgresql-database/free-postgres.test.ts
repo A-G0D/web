@@ -13,6 +13,7 @@ import {
   FREE_POSTGRES_FAQ,
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_CHECKS,
+  FREE_POSTGRES_INCLUDED_GROUPS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_PATH,
   FREE_POSTGRES_PRIMARY_CTA,
@@ -58,6 +59,24 @@ test("title, meta and H1 match the brief", () => {
   assert.ok(!FREE_POSTGRES_SUBHEADLINE.includes("Instant databases are deleted"));
   assert.ok(!FREE_POSTGRES_MARKDOWN_SUBHEADLINE.includes("Instant databases are deleted"));
   for (const line of FREE_POSTGRES_HERO_CHECKS) assert.ok(!DASHES.test(line));
+  assert.deepEqual(
+    FREE_POSTGRES_INCLUDED_GROUPS.map((group) => group.title),
+    ["What you get", "The rules", "What else is included"],
+  );
+  const includedCopy = FREE_POSTGRES_INCLUDED_GROUPS.flatMap((group) => [
+    group.title,
+    ...group.rows.flatMap((row) => [row.label, row.detail]),
+    group.exclusion?.title,
+    group.exclusion?.detail,
+  ])
+    .filter((line): line is string => Boolean(line))
+    .join("\n");
+  assert.ok(!DASHES.test(includedCopy));
+  assert.match(includedCopy, /One query is one operation/);
+  assert.match(includedCopy, /Pooled for your app/);
+  assert.match(includedCopy, /Daily backups start on Starter/);
+  assert.match(includedCopy, /Operations reset/);
+  assert.ok(!includedCopy.includes("read more"));
   assert.ok(!DASHES.test(FREE_POSTGRES_MARKDOWN_SUBHEADLINE));
   assert.deepEqual(FREE_POSTGRES_HERO_PRIMARY_CTA, {
     label: "Create an instant database",
@@ -244,6 +263,11 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   const secondCheck = markdown.indexOf(FREE_POSTGRES_HERO_CHECKS[1]);
   assert.ok(instantLink >= 0 && accountLink > instantLink, "instant database is the first hero button");
   assert.ok(accountLink > instantLink && firstCheck > accountLink && secondCheck > firstCheck);
+  const whatYouGet = markdown.indexOf("### What you get");
+  const theRules = markdown.indexOf("### The rules");
+  const whatElse = markdown.indexOf("### What else is included");
+  const noBackups = markdown.indexOf("**No backups.**");
+  assert.ok(whatYouGet > secondCheck && theRules > whatYouGet && noBackups > theRules && whatElse > noBackups);
 
   const sections = readFileSync(new URL("./_sections.tsx", import.meta.url), "utf8");
   assert.match(sections, /one\s+query each/);

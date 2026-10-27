@@ -23,7 +23,7 @@ import {
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_CHECKS,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
-  FREE_POSTGRES_INCLUDED,
+  FREE_POSTGRES_INCLUDED_GROUPS,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_MARKDOWN_SUBHEADLINE,
   FREE_POSTGRES_PLATFORM_BODY,
@@ -119,7 +119,11 @@ export function renderFreePostgresqlDatabaseMarkdown(): string {
     ].join("\n"),
 
     heading(2, FREE_POSTGRES_FEATURES_HEADLINE),
-    bulletList(FREE_POSTGRES_INCLUDED.map(([value, detail]) => `${value} ${detail}`)),
+    ...FREE_POSTGRES_INCLUDED_GROUPS.flatMap((group) => [
+      heading(3, group.title),
+      bulletList(group.rows.map((row) => `${row.label} ${row.detail}`)),
+      group.exclusion ? `**${group.exclusion.title}.** ${group.exclusion.detail}` : undefined,
+    ]),
     paragraphs(FREE_POSTGRES_FEATURES_BRIDGE),
     bulletList(FREE_POSTGRES_FEATURE_ITEMS.map((item) => `**${item.name}:** ${item.description}`)),
     paragraphs(`TO CONFIRM WITH ENGINEERING: ${CONNECTION_CONFIRM}`),

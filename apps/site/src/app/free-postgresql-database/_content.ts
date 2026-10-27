@@ -332,22 +332,53 @@ export const FREE_POSTGRES_FEATURES_HEADLINE = "What a free PostgreSQL database 
 
 export const FREE_POSTGRES_FEATURES_BRIDGE = `A managed [Prisma Postgres](/postgres) workspace you can keep. These allowances match [pricing](/pricing). Prisma Postgres Free plan. ${FREE_POSTGRES_UPDATED_LABEL}. The [npx create-db docs](${DOCS_CREATE_DB}) cover flags, regions and claiming. Connecting later is a standard [Postgres connection string](${DOCS_CONNECT}).`;
 
-// The plan, in the order it is read under the includes heading. Each pair is
-// [what you scan, the rest of the sentence]. Joined with a space, these are
-// the only place those allowances are stated outside the FAQ.
-export const FREE_POSTGRES_INCLUDED = [
-  ["200,000", "operations a month"],
-  ["Usage resets", "on the 1st of every month"],
-  ["2 GB", "of storage"],
-  ["Up to 50", "databases"],
-  ["10 pooled and 10 direct", "connections per database"],
-  ["Unlimited", "data transfer"],
-  ["No backups", "on Free"],
-  ["PostgreSQL 17", "with SSL and built-in connection pooling"],
-  [`[pgvector](${DOCS_EXTENSIONS})`, "and 46 other extensions"],
-  [`[Six regions](${DOCS_REGIONS})`, "in the US, Europe and Asia"],
-  ["Query Insights", "and Prisma Studio"],
-] as const;
+export type FreePostgresIncludedRow = { label: string; detail: string };
+
+export type FreePostgresIncludedGroup = {
+  title: string;
+  rows: readonly FreePostgresIncludedRow[];
+  /** An exclusion, rendered apart from the allowance rows so it is not a benefit. */
+  exclusion?: { title: string; detail: string };
+};
+
+// Three groups under the includes heading. The left cell is the amount or the
+// short name. The right cell is the rest of the sentence.
+export const FREE_POSTGRES_INCLUDED_GROUPS: readonly FreePostgresIncludedGroup[] = [
+  {
+    title: "What you get",
+    rows: [
+      { label: "200,000", detail: "operations a month. One query is one operation." },
+      { label: "2 GB", detail: "of storage" },
+      { label: "Up to 50", detail: "databases per workspace" },
+      {
+        label: "10 and 10",
+        detail: "connections per database. Pooled for your app. Direct for migrations.",
+      },
+      { label: "Unlimited", detail: "data transfer" },
+    ],
+  },
+  {
+    title: "The rules",
+    rows: [{ label: "The 1st", detail: "of every month. Operations reset." }],
+    exclusion: {
+      title: "No backups",
+      detail: "Daily backups start on Starter.",
+    },
+  },
+  {
+    title: "What else is included",
+    rows: [
+      { label: "PostgreSQL 17", detail: "with SSL and built-in connection pooling" },
+      {
+        label: `[pgvector](${DOCS_EXTENSIONS})`,
+        detail: "and 46 other Postgres extensions",
+      },
+      { label: `[Six regions](${DOCS_REGIONS})`, detail: "in the US, Europe and Asia" },
+      { label: "Query Insights", detail: "to find slow queries" },
+      { label: "Prisma Studio", detail: "to browse rows" },
+    ],
+  },
+];
 
 export const FREE_POSTGRES_FEATURE_ITEMS = [
   {
