@@ -214,3 +214,130 @@ export const UPGRADE_POINTS = [
     body: "50 million operations, 100 GB of storage, 30-day backups, HIPAA with a BAA, SOC 2 Type II and ISO 27001.",
   },
 ] as const;
+
+// Benefit lines are the start steps with the backticks removed. ProductHero
+// renders benefits as plain text, so a markdown code span would show the
+// ticks. The step title stays in front of the body so neither is dropped.
+function plainStep(step: { title: string; body: string }) {
+  return `${step.title}. ${step.body.replaceAll("`", "")}`;
+}
+
+export const FREE_POSTGRES_HERO_BENEFITS = [
+  plainStep(START_STEPS[0]),
+  plainStep(START_STEPS[1]),
+  plainStep(START_STEPS[2]),
+] as const;
+
+export const FREE_POSTGRES_MICROLINE = "No credit card and no time limit.";
+
+export const FREE_POSTGRES_RELATED = {
+  label: "Prisma Postgres works with any Postgres client.",
+  href: "/postgres",
+} as const;
+
+export const FREE_POSTGRES_PRIMARY_CTA = {
+  label: "Create a free database",
+  href: CONSOLE_SIGN_UP_URL,
+} as const;
+
+export const FREE_POSTGRES_BROWSER_CTA = {
+  label: "Create in the browser",
+  href: CREATE_DB_WEB_URL,
+} as const;
+
+export const FREE_POSTGRES_PRICING_CTA = {
+  label: "See pricing",
+  href: "/pricing",
+} as const;
+
+// Tour captions name Studio and Query Insights once. They do not claim
+// deploy-on-push previews or daily backups, which the Free plan does not include.
+export const FREE_POSTGRES_TOUR = [
+  {
+    label: "Database",
+    caption: "A Postgres database and its connection string, with pooling built in.",
+    illustration: "databasePanel",
+  },
+  {
+    label: "Studio",
+    caption: "Browse and edit rows in the browser with Prisma Studio.",
+    illustration: "studioTable",
+  },
+  {
+    label: "Query Insights",
+    caption: "See which queries are slow with Query Insights.",
+    illustration: "queryInsights",
+  },
+] as const;
+
+export const FREE_POSTGRES_PROBLEM_HEADLINE = "How the free limit works";
+
+export const FREE_POSTGRES_PROBLEM_BODY = [
+  "The catch is stated here so you can decide before you build on it.",
+  "What counts. One query is one operation: a simple read, a write, or a join. 200,000 operations a month is about 6,600 queries a day. Idle time is not billed.",
+  "When the database is idle. Idle databases scale to zero and cost nothing. The next query wakes them. You do not wake one by hand.",
+  `At the operations limit. The workspace's databases stop accepting queries until the 1st of the next month, or until you upgrade. A one-time 24 hour restore in the Console lets you export first. On paid plans this never happens: extra operations are billed, with a spend limit you set. Read the [docs FAQ on the free limit](${DOCS_FREE_LIMIT}).`,
+] as const;
+
+export const FREE_POSTGRES_PROBLEM_OUTCOMES = [
+  { icon: "repeat", label: "One query is one operation" },
+  { icon: "server", label: "Idle databases scale to zero" },
+  { icon: "shield", label: "Queries stop at the monthly limit" },
+  { icon: "database", label: "A one-time 24 hour restore" },
+] as const;
+
+export const STORAGE_CONFIRM = "What happens when a database reaches 2 GB of storage.";
+export const CONNECTION_CONFIRM = "Whether upgrading a workspace keeps the same connection string.";
+
+export const FREE_POSTGRES_FEATURES_HEADLINE = "What a free PostgreSQL database includes";
+
+export const FREE_POSTGRES_FEATURES_BRIDGE = `A managed [Prisma Postgres](/postgres) workspace you can keep. These allowances match [pricing](/pricing). Prisma Postgres Free plan. ${FREE_POSTGRES_UPDATED_LABEL}. The [npx create-db docs](${DOCS_CREATE_DB}) cover flags, regions and claiming. Connecting later is a standard [Postgres connection string](${DOCS_CONNECT}).`;
+
+export const FREE_POSTGRES_FEATURE_ITEMS = [
+  {
+    name: "200,000 operations a month",
+    description: "Usage resets on the 1st of every month.",
+    illustration: "spendLimits",
+  },
+  {
+    name: "2 GB and up to 50 databases",
+    description:
+      "10 pooled and 10 direct connections per database. Data transfer is unlimited. No backups on Free.",
+    illustration: "isolatedBranches",
+  },
+  {
+    name: "PostgreSQL 17",
+    description: `SSL and built-in [connection pooling](${DOCS_POOLING}). [pgvector](${DOCS_EXTENSIONS}) and 46 other supported extensions. [Six regions](${DOCS_REGIONS}), in the US, Europe and Asia.`,
+    illustration: "noLockIn",
+  },
+  {
+    name: "What developers build on it",
+    description:
+      "The Free plan is for work that needs a real hosted Postgres: a side project, an embedding demo, a throwaway database for an agent, or a separate database per test. A real Postgres for the weekend idea, not SQLite, with standard SQL. Store embeddings and run similarity search without a separate vector database. Claude Code, Cursor and Codex can create databases through MCP or `npx create-db --json`. Give each experiment its own database.",
+    illustration: "runApps",
+  },
+  {
+    name: "When to upgrade",
+    description: `Stay on Free while that allowance is enough. Move up when you need backups, a spend limit, or more room. The full grid is on [pricing](/pricing); [everything Prisma Postgres includes](/postgres) is on the product page. Starter, $10 a month: ${UPGRADE_POINTS[0].body} Pro, $49 a month: ${UPGRADE_POINTS[1].body} Business, $129 a month: ${UPGRADE_POINTS[2].body} See [HIPAA on the Business plan](/postgres/hipaa).`,
+    illustration: "compliance",
+  },
+] as const;
+
+export const FREE_POSTGRES_PLATFORM_BODY =
+  "Host your app for free, too. The same Free plan includes [Prisma Compute](/compute) for Node.js, Bun and Next.js apps: 1 million requests, 360 GB-hours of memory, 4 active vCPU-hours and 10 GB of outbound bandwidth a month. App and database live in one project, with one config. Declare the app and the database together. An idle app scales to zero.";
+
+export const FREE_POSTGRES_COMPARE_INTRO =
+  "Comparing free Postgres options? Free tiers differ in storage, how many databases you get, and what happens when you are idle or reach a limit.";
+
+export const FREE_POSTGRES_COMPARE_NOTE = `For a longer look at serverless Postgres providers, read the [comparison of free Postgres hosting](${COMPARE_SERVERLESS}) and the [Prisma Postgres vs Neon pricing](${COMPARE_NEON_PRICING}) post. Extensions and regions are in the [extensions](${DOCS_EXTENSIONS}) and [regions](${DOCS_REGIONS}) docs. Connection pooling is [built in](${DOCS_POOLING}).`;
+
+export const FREE_POSTGRES_CLOSER_HEADLINE = "Create your free database";
+
+export const FREE_POSTGRES_CLOSER_BODY =
+  "A managed PostgreSQL 17 database in seconds. Paste the connection string into any Postgres client, then claim it into a Free workspace when you want to keep it.";
+
+export const FREE_POSTGRES_CLOSER_BENEFITS = [
+  "npx create-db, no account needed",
+  "Works with any Postgres client",
+  "Claim it within 24 hours",
+] as const;

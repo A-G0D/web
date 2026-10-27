@@ -7,18 +7,7 @@ import {
   FREE_POSTGRES_PATH,
   FREE_POSTGRES_TITLE,
 } from "./_content";
-import {
-  FreeBuilds,
-  FreeCloser,
-  FreeCompare,
-  FreeCompute,
-  FreeFaq,
-  FreeLimits,
-  FreePostgresHero,
-  FreeStartSteps,
-  FreeUpgrade,
-  FreeWhatYouGet,
-} from "./_sections";
+import { FreePostgresPage } from "./_sections";
 
 export const metadata = createPageMetadata({
   title: FREE_POSTGRES_TITLE,
@@ -41,16 +30,7 @@ export default function FreePostgresqlDatabasePage() {
   return (
     <>
       <JsonLd id="free-postgresql-database-faq-structured-data" data={faqStructuredData} />
-      <FreePostgresHero />
-      <FreeWhatYouGet />
-      <FreeStartSteps />
-      <FreeBuilds />
-      <FreeCompute />
-      <FreeLimits />
-      <FreeUpgrade />
-      <FreeCompare />
-      <FreeFaq />
-      <FreeCloser />
+      <FreePostgresPage />
     </>
   );
 }

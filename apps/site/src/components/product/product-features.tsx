@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { GlassPrismSpin } from "@/components/brand/glass-prism-spin";
 import { LearnMore } from "@/components/brand/learn-more";
 import { Texture } from "@/components/brand/texture";
@@ -44,7 +45,13 @@ function centreLastPair(count: number, i: number) {
 // (~2:3): the prism-tinted illustration block fills the card above the
 // content, the feature's abstraction filling the block, inside the homepage
 // stack's wrapped panel.
-export function ProductFeatures({ features }: Pick<ProductPageContent, "features">) {
+export function ProductFeatures({
+  features,
+  footer,
+}: Pick<ProductPageContent, "features"> & {
+  /** Callout under the card grid. /free-postgresql-database uses it for an open engineering question. */
+  footer?: ReactNode;
+}) {
   return (
     <section className="bg-white px-3 py-3 sm:px-4">
       <div className="relative mx-auto max-w-[96rem] overflow-hidden rounded-[1.5rem] border border-black/[0.06] bg-white">
@@ -154,6 +161,7 @@ export function ProductFeatures({ features }: Pick<ProductPageContent, "features
               );
             })}
           </div>
+          {footer ? <div className="mx-auto mt-10 max-w-3xl text-left">{footer}</div> : null}
         </div>
       </div>
     </section>
