@@ -160,9 +160,9 @@ A table without a model stays in your database, and later migrations leave it al
 
 ### Date and time columns
 
-`contract infer` gives a `timestamptz` column the type `TimestamptzString`, a `timestamp` column `TimestampString`, a `date` column `DateString`, and a `time` column `TimeString`. Prisma ORM returns the values of these columns as the text PostgreSQL prints, such as `2026-09-30 07:36:38.60182+02`, so your app needs no `Temporal`.
+`contract infer` gives a `timestamptz` column the type `TimestamptzString`, a `timestamp` column `TimestampString`, a `date` column `DateString`, and a `time` column `TimeString`. Prisma ORM returns the values of these columns as ISO 8601 strings, the same on every server, so a `timestamptz` value is the instant in UTC, such as `2026-09-30T05:36:38.60182Z`. Your app needs no `Temporal`.
 
-To get `Temporal` objects instead, the new date and time API of JavaScript, change the type of each such field in the contract: `TimestamptzString` becomes `Timestamptz`, `TimestampString` becomes `Timestamp`, `DateString` becomes `Date`, and `TimeString` becomes `Time`. The column in the database stays as it is. Node.js 26 has `Temporal` built in. Node.js 24 and older do not, and there the first query that reads such a column fails with `RUNTIME.TEMPORAL_UNAVAILABLE`. On Node.js 24 or older, install the `temporal-polyfill` package:
+To get `Temporal` objects instead, the new date and time API of JavaScript, change the type of each such field in the contract: `TimestamptzString` becomes `TimestamptzTemporal`, `TimestampString` becomes `TimestampTemporal`, `DateString` becomes `Date`, and `TimeString` becomes `Time`. The column in the database stays as it is. Node.js 26 has `Temporal` built in. Node.js 24 and older do not, and there the first query that reads such a column fails with `RUNTIME.TEMPORAL_UNAVAILABLE`. On Node.js 24 or older, install the `temporal-polyfill` package:
 
 ```npm
 npm install temporal-polyfill

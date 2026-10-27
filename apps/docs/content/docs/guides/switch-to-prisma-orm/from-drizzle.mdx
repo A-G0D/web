@@ -338,7 +338,7 @@ Rename the models to singular PascalCase and keep every `@@map`, so the table na
 
 ### 3.2. Timestamps are strings
 
-`contract infer` typed both timestamp fields `TimestamptzString`. It keeps the `timestamptz` column exactly as it is and hands your code the value as a string, so your app needs no `Temporal`. Drizzle gave you a `Date` here, so a JSON response changes from `"2026-09-10T15:32:51.298Z"` to `"2026-09-10 21:32:51.298482+06"`. If a client depends on the ISO form, convert with `new Date(value).toISOString()` at the edge.
+`contract infer` typed both timestamp fields `TimestamptzString`. It keeps the `timestamptz` column exactly as it is and hands your code the value as an ISO 8601 string in UTC, so your app needs no `Temporal`. Drizzle gave you a `Date` here, so a JSON response changes from `"2026-09-10T15:32:51.298Z"` to `"2026-09-10T15:32:51.298482Z"`, which keeps the microseconds PostgreSQL stores. If a client depends on exactly three digits of a second, convert with `new Date(value).toISOString()` at the edge.
 
 ### 3.3. Add direct many-to-many fields
 
@@ -502,25 +502,25 @@ curl http://localhost:3000/api/users
 ```json no-copy
 [
   {
-    "createdAt": "2026-09-10 21:32:51.298482+06",
+    "createdAt": "2026-09-10T15:32:51.298482Z",
     "email": "alice@prisma.io",
     "id": 1,
     "name": "Alice",
     "role": "ADMIN",
     "profile": { "bio": "Writes about databases", "id": 1, "userId": 1 },
     "posts": [
-      { "authorId": 1, "content": "First post", "createdAt": "2026-09-10 21:32:51.929589+06", "id": 1, "published": true, "title": "Hello Drizzle" }
+      { "authorId": 1, "content": "First post", "createdAt": "2026-09-10T15:32:51.929589Z", "id": 1, "published": true, "title": "Hello Drizzle" }
     ]
   },
   {
-    "createdAt": "2026-09-10 21:32:51.298482+06",
+    "createdAt": "2026-09-10T15:32:51.298482Z",
     "email": "bob@prisma.io",
     "id": 2,
     "name": "Bob",
     "role": "USER",
     "profile": null,
     "posts": [
-      { "authorId": 2, "content": null, "createdAt": "2026-09-10 21:32:51.929589+06", "id": 2, "published": false, "title": "Typed queries" }
+      { "authorId": 2, "content": null, "createdAt": "2026-09-10T15:32:51.929589Z", "id": 2, "published": false, "title": "Typed queries" }
     ]
   }
 ]
@@ -571,11 +571,11 @@ curl http://localhost:3000/api/posts
   {
     "authorId": 1,
     "content": "First post",
-    "createdAt": "2026-09-10 21:32:51.929589+06",
+    "createdAt": "2026-09-10T15:32:51.929589Z",
     "id": 1,
     "published": true,
     "title": "Hello Drizzle",
-    "author": { "createdAt": "2026-09-10 21:32:51.298482+06", "email": "alice@prisma.io", "id": 1, "name": "Alice", "role": "ADMIN" },
+    "author": { "createdAt": "2026-09-10T15:32:51.298482Z", "email": "alice@prisma.io", "id": 1, "name": "Alice", "role": "ADMIN" },
     "categories": [
       { "id": 1, "name": "databases" },
       { "id": 2, "name": "typescript" }
@@ -584,11 +584,11 @@ curl http://localhost:3000/api/posts
   {
     "authorId": 2,
     "content": null,
-    "createdAt": "2026-09-10 21:32:51.929589+06",
+    "createdAt": "2026-09-10T15:32:51.929589Z",
     "id": 2,
     "published": false,
     "title": "Typed queries",
-    "author": { "createdAt": "2026-09-10 21:32:51.298482+06", "email": "bob@prisma.io", "id": 2, "name": "Bob", "role": "USER" },
+    "author": { "createdAt": "2026-09-10T15:32:51.298482Z", "email": "bob@prisma.io", "id": 2, "name": "Bob", "role": "USER" },
     "categories": [{ "id": 2, "name": "typescript" }]
   }
 ]
@@ -655,7 +655,7 @@ curl -X POST http://localhost:3000/api/posts \
 ```
 
 ```json no-copy
-{ "authorId": 1, "content": "Migration notes", "createdAt": "2026-09-10 21:58:28.179323+06", "id": 5, "published": false, "title": "Drizzle to Prisma" }
+{ "authorId": 1, "content": "Migration notes", "createdAt": "2026-09-10T15:58:28.179323Z", "id": 5, "published": false, "title": "Drizzle to Prisma" }
 ```
 
 Optional fields are explicit: pass `null` for a nullable column you do not set, as `content` shows. The users route follows the same pattern with two plain creates, `User.create(...)` and then `Profile.create({ userId: user.id, bio })`.
@@ -722,8 +722,8 @@ curl -X DELETE http://localhost:3000/api/posts/5
 ```
 
 ```json no-copy
-{ "authorId": 2, "content": null, "createdAt": "2026-09-10 21:32:51.929589+06", "id": 2, "published": true, "title": "Typed queries" }
-{ "authorId": 1, "content": "Migration notes", "createdAt": "2026-09-10 21:58:28.179323+06", "id": 5, "published": false, "title": "Drizzle to Prisma" }
+{ "authorId": 2, "content": null, "createdAt": "2026-09-10T15:32:51.929589Z", "id": 2, "published": true, "title": "Typed queries" }
+{ "authorId": 1, "content": "Migration notes", "createdAt": "2026-09-10T15:58:28.179323Z", "id": 5, "published": false, "title": "Drizzle to Prisma" }
 { "error": "Not found" }
 ```
 
@@ -803,7 +803,7 @@ await db.orm.public.Post.where({ id: postId }).update({
 
 :::warning
 
-If you edit the contract after signing, `db verify` fails with `CONTRACT.MARKER_MISMATCH` (`Contract storageHash does not match database marker`). When the database still matches the new contract, as with a type change from `TimestamptzString` to `Timestamptz`, run `contract emit` and then `db sign` again; the signature moves from the old hash to the new one. When the change needs new columns or tables, use `db update` or `migration plan` instead of re-signing.
+If you edit the contract after signing, `db verify` fails with `CONTRACT.MARKER_MISMATCH` (`Contract storageHash does not match database marker`). When the database still matches the new contract, as with a type change from `TimestamptzString` to `TimestamptzTemporal`, run `contract emit` and then `db sign` again; the signature moves from the old hash to the new one. When the change needs new columns or tables, use `db update` or `migration plan` instead of re-signing.
 
 :::
 

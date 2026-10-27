@@ -198,7 +198,7 @@ model Post {
 }
 ```
 
-Review the file before you go on. The `timestamptz` columns come back as `TimestamptzString`, which reads and writes PostgreSQL's own text form, such as `"2026-09-10 21:32:51.298482+06"`, so your code needs no `Temporal`. TypeORM and Sequelize gave you a `Date` there, so convert with `new Date(value)` where your code needs one.
+Review the file before you go on. The `timestamptz` columns come back as `TimestamptzString`, which reads the value as an ISO 8601 string in UTC, such as `"2026-09-10T15:32:51.298482Z"`, so your code needs no `Temporal`. TypeORM and Sequelize gave you a `Date` there, so convert with `new Date(value)` where your code needs one.
 
 This is also the moment to delete from `contract.prisma` the models you do not want Prisma ORM to use yet, or to rename a model while keeping its `@@map`. The [PSL syntax](/orm/contract-authoring/psl-syntax) page lists the attributes.
 
