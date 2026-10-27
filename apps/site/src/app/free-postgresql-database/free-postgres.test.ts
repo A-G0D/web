@@ -126,7 +126,9 @@ test("the hero window is a plain terminal plus a light Claude session", () => {
   assert.match(source, /role="tablist"/);
   assert.match(source, /\$ /);
   assert.match(source, /❯/);
-  assert.match(source, /ClaudeSpark/);
+  assert.match(source, /ClaudeMascot/);
+  assert.ok(!source.includes("m11.744"));
+  assert.match(source, /#F6C9AA/);
   assert.ok(!source.includes("<table"));
   assert.ok(!source.includes("Codex"));
   assert.ok(!source.includes("┌"));
