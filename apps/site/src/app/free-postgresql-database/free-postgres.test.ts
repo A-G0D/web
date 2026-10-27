@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { createFaqStructuredData } from "@/lib/structured-data";
 import { stripFaqAnswerMarkup } from "@/lib/faq-answer";
@@ -103,6 +104,14 @@ test("the hero terminal states the instant path, and the markdown matches it", (
   );
   assert.deepEqual([...FREE_POSTGRES_TERMINAL_AGENTS], ["Claude", "Codex"]);
   assert.equal(FREE_POSTGRES_AGENT_STORY, "Runs the command, gets the URL, and can use it.");
+
+  const css = readFileSync(new URL("./_terminal.module.css", import.meta.url), "utf8");
+  const source = readFileSync(new URL("./_terminal.tsx", import.meta.url), "utf8");
+  assert.match(css, /@media \(prefers-reduced-motion: no-preference\)/);
+  assert.match(css, /steps\(var\(--chars\), end\)/);
+  assert.match(source, /CREATE_DB_COMMAND\.length/);
+  assert.ok(!DASHES.test(css));
+  assert.ok(!DASHES.test(source));
 
   const markdown = renderFreePostgresqlDatabaseMarkdown();
   for (const line of [
