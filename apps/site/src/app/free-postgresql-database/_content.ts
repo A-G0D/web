@@ -204,18 +204,18 @@ export const UPGRADE_POINTS = [
   },
 ] as const;
 
-// Hero buttons do two jobs. The closer keeps its own primary label.
+// The filled hero button is the action the window types. Get started stays
+// the account path, as the outline button. The closer keeps its own label.
 // The no-card promise is said once, in the subtitle, and it describes the
-// Free workspace (Get started). The 24-hour deletion belongs to Create an
-// instant database, which the subtitle names and the window still warns about.
+// Free workspace. The 24-hour deletion belongs to Create an instant database.
 export const FREE_POSTGRES_HERO_PRIMARY_CTA = {
-  label: "Get started",
-  href: CONSOLE_SIGN_UP_URL,
-} as const;
-
-export const FREE_POSTGRES_BROWSER_CTA = {
   label: "Create an instant database",
   href: CREATE_DB_WEB_URL,
+} as const;
+
+export const FREE_POSTGRES_HERO_SECONDARY_CTA = {
+  label: "Get started",
+  href: CONSOLE_SIGN_UP_URL,
 } as const;
 
 export const FREE_POSTGRES_PRIMARY_CTA = {

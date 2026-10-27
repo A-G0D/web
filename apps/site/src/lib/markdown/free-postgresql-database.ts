@@ -2,7 +2,7 @@ import { COMPARE_PRISMA_LINKS } from "@/components/sections/compare-links-data";
 import { TESTIMONIALS } from "@/components/sections/testimonials-data";
 import {
   CONNECTION_CONFIRM,
-  FREE_POSTGRES_BROWSER_CTA,
+  FREE_POSTGRES_HERO_SECONDARY_CTA,
   FREE_POSTGRES_CLOSER_BENEFITS,
   FREE_POSTGRES_CLOSER_BODY,
   FREE_POSTGRES_CLOSER_HEADLINE,
@@ -53,7 +53,7 @@ export { FREE_POSTGRES_MARKDOWN_SUBHEADLINE };
  */
 export function renderFreePostgresqlDatabaseMarkdown(): string {
   return joinBlocks([
-    ctaList([FREE_POSTGRES_HERO_PRIMARY_CTA, FREE_POSTGRES_BROWSER_CTA]),
+    ctaList([FREE_POSTGRES_HERO_PRIMARY_CTA, FREE_POSTGRES_HERO_SECONDARY_CTA]),
     bulletList([...FREE_POSTGRES_TERMINAL_TABS]),
     [
       `$ ${CREATE_DB_COMMAND}`,

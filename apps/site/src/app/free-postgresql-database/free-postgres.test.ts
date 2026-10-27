@@ -8,7 +8,7 @@ import {
   CONSOLE_SIGN_UP_URL,
   CREATE_DB_COMMAND,
   CREATE_DB_WEB_URL,
-  FREE_POSTGRES_BROWSER_CTA,
+  FREE_POSTGRES_HERO_SECONDARY_CTA,
   FREE_POSTGRES_DESCRIPTION,
   FREE_POSTGRES_FAQ,
   FREE_POSTGRES_H1,
@@ -49,12 +49,12 @@ test("title, meta and H1 match the brief", () => {
   );
   assert.ok(!DASHES.test(FREE_POSTGRES_MARKDOWN_SUBHEADLINE));
   assert.deepEqual(FREE_POSTGRES_HERO_PRIMARY_CTA, {
-    label: "Get started",
-    href: CONSOLE_SIGN_UP_URL,
-  });
-  assert.deepEqual(FREE_POSTGRES_BROWSER_CTA, {
     label: "Create an instant database",
     href: CREATE_DB_WEB_URL,
+  });
+  assert.deepEqual(FREE_POSTGRES_HERO_SECONDARY_CTA, {
+    label: "Get started",
+    href: CONSOLE_SIGN_UP_URL,
   });
   assert.equal(FREE_POSTGRES_PRIMARY_CTA.label, "Create a free database");
 });
@@ -95,7 +95,7 @@ test("user-visible content and FAQ schema have no em or en dashes", () => {
   assert.ok(!DASHES.test(FREE_POSTGRES_SUBHEADLINE));
   assert.ok(!DASHES.test(FREE_POSTGRES_MARKDOWN_SUBHEADLINE));
   assert.ok(!DASHES.test(FREE_POSTGRES_HERO_PRIMARY_CTA.label));
-  assert.ok(!DASHES.test(FREE_POSTGRES_BROWSER_CTA.label));
+  assert.ok(!DASHES.test(FREE_POSTGRES_HERO_SECONDARY_CTA.label));
   assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_STATUS));
   assert.ok(!DASHES.test(FREE_POSTGRES_TERMINAL_CLAIM));
   assert.ok(!DASHES.test(FREE_POSTGRES_CLI_CONNECTION));
@@ -215,6 +215,9 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   assert.ok(!markdown.includes("[Prisma Postgres works with any Postgres client.](/postgres)"));
   assert.ok(!markdown.includes("A connection string in seconds."));
   assert.ok(!markdown.includes("No credit card and no time limit."));
+  const instantLink = markdown.indexOf(`[Create an instant database](${CREATE_DB_WEB_URL})`);
+  const accountLink = markdown.indexOf(`[Get started](${CONSOLE_SIGN_UP_URL})`);
+  assert.ok(instantLink >= 0 && accountLink > instantLink, "instant database is the first hero button");
 
   const sections = readFileSync(new URL("./_sections.tsx", import.meta.url), "utf8");
   assert.match(sections, /No card, no time\s+limit on the Free workspace/);
