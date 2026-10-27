@@ -304,8 +304,8 @@ export const FREE_POSTGRES_FEATURES_HEADLINE = "What a free PostgreSQL database 
 export const FREE_POSTGRES_FEATURES_BRIDGE = `A managed [Prisma Postgres](/postgres) workspace you can keep. These allowances match [pricing](/pricing). Prisma Postgres Free plan. ${FREE_POSTGRES_UPDATED_LABEL}. The [npx create-db docs](${DOCS_CREATE_DB}) cover flags, regions and claiming. Connecting later is a standard [Postgres connection string](${DOCS_CONNECT}).`;
 
 // The plan, in the order it is read under the includes heading. Each pair is
-// [what you scan, the rest of the sentence]. Joined with a space, the words
-// are the same allowances as before. The feature cards repeat them in pictures.
+// [what you scan, the rest of the sentence]. Joined with a space, these are
+// the only place those allowances are stated outside the FAQ.
 export const FREE_POSTGRES_INCLUDED = [
   ["200,000", "operations a month"],
   ["Usage resets", "on the 1st of every month"],
@@ -321,22 +321,6 @@ export const FREE_POSTGRES_INCLUDED = [
 ] as const;
 
 export const FREE_POSTGRES_FEATURE_ITEMS = [
-  {
-    name: "200,000 operations a month",
-    description: "Usage resets on the 1st of every month.",
-    illustration: "spendLimits",
-  },
-  {
-    name: "2 GB and up to 50 databases",
-    description:
-      "10 pooled and 10 direct connections per database. Data transfer is unlimited. No backups on Free.",
-    illustration: "isolatedBranches",
-  },
-  {
-    name: "PostgreSQL 17",
-    description: `SSL and built-in [connection pooling](${DOCS_POOLING}). [pgvector](${DOCS_EXTENSIONS}) and 46 other supported extensions. [Six regions](${DOCS_REGIONS}), in the US, Europe and Asia.`,
-    illustration: "noLockIn",
-  },
   {
     name: "What developers build on it",
     description:
