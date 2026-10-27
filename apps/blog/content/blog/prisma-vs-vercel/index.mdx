@@ -115,7 +115,7 @@ The root module adds a second check. If it binds `storefront` to a service that 
 
 Databases are declared the same way. A service lists a `postgres()` dependency typed by your **data contract**, the `contract.prisma` schema file that replaced `schema.prisma` in ORM 8. The module that owns the database provisions it. The [deploy applies the database's migrations](https://www.prisma.io/docs/composer/databases) before the service starts, and it refuses to connect a service to a database whose schema does not match the contract the service was compiled against.
 
-You do not need any of this to start. A single service deploys to Prisma Compute from a Git push without Composer, and you can add Composer when a second service appears.
+You do not need contracts or several services to start, but a Git push deploys through Composer: the [prisma/cloud-deploy-action](https://github.com/prisma/cloud-deploy-action) workflow runs `prisma deploy` on a Composer module (`module.ts` by default), so a single service needs a one-service module to deploy on push, and the [porting guide](https://www.prisma.io/docs/composer/porting-an-app) shows the three server changes that involves. When a second service appears, add it to the module.
 
 ## Previews and their databases
 
