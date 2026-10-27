@@ -52,12 +52,9 @@ function FreePostgresIncluded() {
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {FREE_POSTGRES_INCLUDED_CARDS.map((card) => (
-          <Card
-            key={card.title}
-            className="h-full gap-4 rounded-2xl border-prism-cyan-100 bg-prism-cyan-50 py-10 shadow-none"
-          >
+          <Card key={card.title} className="h-full gap-4 rounded-2xl py-10 shadow-none">
             <CardHeader className="gap-3 px-8">
-              <CardTitle className="text-5xl font-bold leading-none tabular-nums text-prism-cyan-700 sm:text-6xl">
+              <CardTitle className="text-5xl font-bold leading-none tabular-nums text-foreground sm:text-6xl">
                 {renderFaqAnswer(card.title)}
                 {card.note ? (
                   <a href={`#free-postgres-note-${card.note}`} className="ml-0.5">
