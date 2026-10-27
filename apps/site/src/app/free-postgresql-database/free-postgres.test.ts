@@ -41,11 +41,11 @@ test("title, meta and H1 match the brief", () => {
   assert.equal(FREE_POSTGRES_PATH, "/free-postgresql-database");
   assert.equal(
     FREE_POSTGRES_SUBHEADLINE,
-    "2 GB of storage, 200,000 operations a month, and 50 databases. No card, no time limit. Prisma Postgres works with any Postgres client.",
+    "2 GB of storage, 200,000 operations a month, and 50 databases. No card, no time limit on the Free workspace. Create an instant database is deleted after 24 hours unless you claim it. Prisma Postgres works with any Postgres client.",
   );
   assert.equal(
     FREE_POSTGRES_MARKDOWN_SUBHEADLINE,
-    "**2 GB** of storage, **200,000 operations** a month, and **50 databases**. No card, no time limit. Prisma Postgres works with any Postgres client.",
+    "**2 GB** of storage, **200,000 operations** a month, and **50 databases**. No card, no time limit on the Free workspace. Create an instant database is deleted after 24 hours unless you claim it. Prisma Postgres works with any Postgres client.",
   );
   assert.ok(!DASHES.test(FREE_POSTGRES_MARKDOWN_SUBHEADLINE));
   assert.deepEqual(FREE_POSTGRES_HERO_PRIMARY_CTA, {
@@ -214,8 +214,17 @@ test("the hero window is a plain terminal plus light agent sessions", () => {
   }
   assert.ok(!markdown.includes("[Prisma Postgres works with any Postgres client.](/postgres)"));
   assert.ok(!markdown.includes("A connection string in seconds."));
+  assert.ok(!markdown.includes("No credit card and no time limit."));
 
   const sections = readFileSync(new URL("./_sections.tsx", import.meta.url), "utf8");
+  assert.match(sections, /No card, no time\s+limit on the Free workspace/);
+  assert.match(
+    sections,
+    /Create an instant database is deleted after 24 hours unless you\s+claim it/,
+  );
+  assert.ok(!sections.includes("No credit card and no time limit."));
+  assert.ok(!sections.includes("FREE_POSTGRES_MICROLINE"));
+  assert.ok(!sections.includes("microline:"));
   assert.match(sections, /FreePostgresSubtitle/);
   assert.match(sections, /<strong className="font-semibold text-foreground">2 GB<\/strong>/);
   assert.ok(!sections.includes("FREE_POSTGRES_RELATED"));

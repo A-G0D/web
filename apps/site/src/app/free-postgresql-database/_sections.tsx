@@ -25,7 +25,6 @@ import {
   FREE_POSTGRES_H1,
   FREE_POSTGRES_HERO_PRIMARY_CTA,
   FREE_POSTGRES_INCLUDED,
-  FREE_POSTGRES_MICROLINE,
   FREE_POSTGRES_LIMIT,
   FREE_POSTGRES_PLATFORM_BODY,
   FREE_POSTGRES_PRICING_CTA,
@@ -42,7 +41,8 @@ function FreePostgresSubtitle() {
       <strong className="font-semibold text-foreground">2 GB</strong> of storage,{" "}
       <strong className="font-semibold text-foreground">200,000 operations</strong> a month, and{" "}
       <strong className="font-semibold text-foreground">50 databases</strong>. No card, no time
-      limit. Prisma Postgres works with any Postgres client.
+      limit on the Free workspace. Create an instant database is deleted after 24 hours unless you
+      claim it. Prisma Postgres works with any Postgres client.
     </>
   );
 }
@@ -187,7 +187,6 @@ export function FreePostgresPage() {
           subheadline: FREE_POSTGRES_SUBHEADLINE,
           primaryCta: FREE_POSTGRES_HERO_PRIMARY_CTA,
           secondaryCta: FREE_POSTGRES_BROWSER_CTA,
-          microline: FREE_POSTGRES_MICROLINE,
         }}
         subheadline={<FreePostgresSubtitle />}
       />
