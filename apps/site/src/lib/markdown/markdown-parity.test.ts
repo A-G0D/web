@@ -317,7 +317,7 @@ test("/stack inherits its copy from the page's own content module", async () => 
 
   expect(hero.headline, "hero headline");
   expect(hero.subheadline, "hero subheadline");
-  for (const benefit of hero.benefits) expect(benefit, "hero benefit");
+  for (const benefit of hero.benefits ?? []) expect(benefit, "hero benefit");
   for (const link of [hero.primaryCta, hero.secondaryCta]) {
     expect(`[${link.label}](${link.href})`, "hero CTA");
   }
